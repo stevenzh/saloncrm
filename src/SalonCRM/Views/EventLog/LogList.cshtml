@@ -1,0 +1,62 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvffSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "EventLog",
+            Action = "LogList",
+            HostID = ViewData["HostID"],
+            TypeID = ViewData["TypeID"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"]
+        };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.Columns.Add("LogId", "ID");
+        settings.Columns.Add("HostName", "商户");
+        settings.Columns.Add("BranchName", "门店");
+        settings.Columns.Add("Member.Name", "客户");
+        settings.Columns.Add("UserName", "操作用户");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "TypeId";
+            column.Caption = "日志类型";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Text";
+                p.ValueField = "Value";
+                p.ValueType = typeof(string);
+                p.DataSource = ViewBag.EventTypeList;
+            });
+        });
+        settings.Columns.Add("Level", "日志级别");
+        settings.Columns.Add("Level", "日志级别");
+        settings.Columns.Add("Content", "操作内容");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CreatedDate";
+            column.Caption = "操作时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd HH:mm:ss";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.Width = 80;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("查看", "Details", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "LogId")
+                }, new { target = "_self" }).ToHtmlString());
+
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsPager.PageSize = 20;
+
+    }).Bind(Model).GetHtml()

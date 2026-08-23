@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "项目销售、消耗详细";
+}
+@model SalonCRM.Models.ProjectQModel
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1>@("【" + Model.ProjectName +"】" + ViewBag.Title)</h1>
+</div>
+<div class="main-content">
+    @using (Html.BeginForm("Details", "ProjectStat", FormMethod.Post))
+    {
+        <table class="">
+            <tr style="height: 45px;">
+                <td style="padding-right: 4px">门店</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.BranchID,
+                     settings =>
+                     {
+                         settings.Name = "BranchId";
+                         settings.Width = 180;
+                         settings.Properties.TextField = "Text";
+                         settings.Properties.ValueField = "Value";
+                         settings.Properties.ValueType = typeof(Int32);
+                     }).BindList(ViewBag.OrganId).GetHtml()
+                </td>
+                <td style="padding-right: 4px">客户卡种</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.CardType,
+                     settings =>
+                     {
+                         settings.Name = "CardType";
+                         settings.Width = 180;
+                         settings.Properties.TextField = "Text";
+                         settings.Properties.ValueField = "Value";
+                         settings.Properties.ValueType = typeof(string);
+                     }).BindList(ViewBag.CardTypeList).GetHtml()
+                </td>
+                <td style="padding-right: 4px">起始日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.StartDate).GetHtml()
+                </td>
+                <td style="padding-right: 4px">截止日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.EndDate).GetHtml()
+                </td>
+                <td style="padding-right: 4px">
+                    @Html.HiddenFor(t => t.ProjectID)
+                    <input type="submit" class="btn btn-default" value="搜索" />
+                </td>
+            </tr>
+        </table>
+    }
+    <h3>项目消费列表</h3>
+    @Html.Partial("SalesList", Model.SalesList)
+    <h3>项目消耗列表</h3>
+    @Html.Partial("ServiceList", Model.ServiceList)
+
+</div>

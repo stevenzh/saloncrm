@@ -1,0 +1,56 @@
+﻿@using System.Web.UI.WebControls;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "ProjectStat",
+            Action = "PageList",
+            BranchID = ViewData["BranchID"],
+            BrandCode = ViewData["BrandCode"],
+            Category = ViewData["Category"],
+            ExtCategory = ViewData["ExtCategory"],
+            ProjectName = ViewData["ProjectName"],
+            ProjectCode = ViewData["ProjectCode"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            CardType = ViewData["CardType"]
+        };
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+
+        settings.Columns.Add("ProjectName", "项目名称");
+        settings.Columns.Add("Brand", "品牌");
+        settings.Columns.Add("Category", "项目类别");
+        settings.Columns.Add("PersonCount", "人头数");
+        settings.Columns.Add("Amount", "销售金额");
+        settings.Columns.Add("SaleTimes", "销售次数");
+        settings.Columns.Add("ServiceCount", "实操人头数");
+        
+        settings.Columns.Add("UsedAmount", "实操金额");
+        settings.Columns.Add("UsedCount", "实操次数");
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("详细", "Details", "ProjectStat", new
+                {
+                    ProjectID = DataBinder.Eval(c.DataItem, "ProjectId"),
+                    StartDate = ViewData["StartDate"],
+                    EndDate = ViewData["EndDate"],
+                    BranchID = ViewData["BranchID"]
+                }, new { target = "_self" }).ToHtmlString());
+
+            });
+        });
+
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    }).Bind(Model).GetHtml()

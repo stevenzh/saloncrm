@@ -1,0 +1,20 @@
+﻿@model SalonCRM.Models.RoleViewModel
+@{
+    ViewBag.Title = "项目导入结果";
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/Home/Index">首页</a> </li>
+        <li><a href="/Goods/Index">货品列表</a> </li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="alert-error">@Html.Raw(ViewBag.Message)</div>
+
+    <a class="btn btn-default" href="/Goods/Index">返回列表</a>
+</div>
+
+

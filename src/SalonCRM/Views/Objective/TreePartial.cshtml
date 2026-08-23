@@ -1,0 +1,118 @@
+﻿@model IEnumerable<SalonCRM.Models.ObjectiveViewModel>
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+
+    var treeList = Html.DevExpress().TreeList(
+            settings =>
+            {
+                settings.Name = "treeList";
+                settings.CallbackRouteValues = new { Controller = "Objective", Action = "TreePartial", BranchId = ViewData["BranchId"], DYear = ViewData["DYear"], DMonth = ViewData["DMonth"] };
+                settings.AutoGenerateColumns = false;
+                settings.KeyFieldName = "ID";
+                settings.ParentFieldName = "ParentID";
+                settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+                settings.Columns.Add(column =>
+                {
+                    column.Caption = "编码";
+                    column.FieldName = "OrganId";
+                    //column.ReadOnly = true;
+                    column.Visible = false;
+                    column.EditFormSettings.Visible = DefaultBoolean.False;
+                });
+                settings.Columns.Add(column => {
+                    column.Caption = "名称";
+                    column.FieldName = "OrganName";
+                    column.EditFormSettings.Visible = DefaultBoolean.False;
+                });
+                settings.Columns.Add("Year", "年份").ReadOnly = true;
+                settings.Columns.Add("Month", "月份").ReadOnly = true;
+                settings.Columns.Add(column =>
+                {
+                    column.Caption = "保底指标";
+                    column.FieldName = "Accounts";
+                    column.PropertiesEdit.DisplayFormatString = "{0:C}";
+                });
+                settings.Columns.Add(column =>
+                {
+                    column.Caption = "挑战目标";
+                    column.FieldName = "TopObjective";
+                    column.PropertiesEdit.DisplayFormatString = "{0:C}";
+                });
+                settings.Columns.Add(column =>
+                {
+                    column.Caption = "销售目标";
+                    column.FieldName = "SalesObjective";
+                    column.PropertiesEdit.DisplayFormatString = "{0:C}";
+                });
+                settings.Columns.Add(column =>
+                {
+                    column.Caption = "消耗目标";
+                    column.FieldName = "ServiceObjective";
+                    column.PropertiesEdit.DisplayFormatString = "{0:C}";
+                });
+                settings.Columns.Add("ObjectiveId").Visible = false;
+
+                settings.Summary.Add(DevExpress.Data.SummaryItemType.Count, "OrganName");
+                settings.Summary.Add(DevExpress.Data.SummaryItemType.Custom, "Accounts").DisplayFormat = "{0:C}";
+
+                // settings.Settings.ShowFooter = true;
+                settings.Settings.ShowGroupFooter = true;
+                settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+                settings.SettingsBehavior.AutoExpandAllNodes = true;
+                settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+                settings.SettingsEditing.Mode = TreeListEditMode.EditFormAndDisplayNode;
+
+                settings.CommandColumn.Visible = true;
+                settings.CommandColumn.EditButton.Visible = true;
+                settings.SettingsEditing.UpdateNodeRouteValues = new { Controller = "Objective", Action = "UpdateObjectivePartial", BranchId = ViewData["BranchId"], DYear = ViewData["DYear"], DMonth = ViewData["DMonth"] };
+
+
+                settings.CustomSummaryCalculate = (s, e) =>
+                {
+                    if (e.SummaryItem.FieldName != "Accounts")
+                        return;
+
+                    switch (e.SummaryProcess)
+                    {
+                        case DevExpress.Data.CustomSummaryProcess.Start:
+                            e.Value = (int)0;
+                            break;
+                        case DevExpress.Data.CustomSummaryProcess.Calculate:
+                            if (!e.Node.GetValue("Level").ToString().Equals("1")) // 不累加部门指标
+                            {
+                                e.Value = (int)e.Value + (e.Node["Accounts"] == null ? 0 : (int)e.Node["Accounts"]);
+                            }
+                            break;
+                        case DevExpress.Data.CustomSummaryProcess.Finalize:
+                            //if (!e.Node.ParentNode.GetValue("Accounts").Equals(e.Value))
+                            //    e.SummaryItem.DisplayFormat = "error {0:C}";
+                            break;
+                    }
+                };
+
+                //settings.HtmlDataCellPrepared = (s, e) =>
+                //{
+                //    if (e.Column.FieldName == "Budget")
+                //    {
+                //        int value = (int)e.CellValue;
+                //        e.Cell.BackColor = TreeListDemoHelper.GetBudgetColor(value);
+                //        if (value > 1000000)
+                //            e.Cell.Font.Bold = true;
+                //    }
+                //};
+                //settings.HtmlRowPrepared = (s, e) =>
+                //{
+                //    if (Object.Equals(e.GetValue("Location"), "Monterey"))
+                //        e.Row.BackColor = Color.FromArgb(211, 235, 183);
+                //};
+            });
+
+    if (ViewData["EditNodeError"] != null)
+    {
+        treeList.SetEditErrorText((string)ViewData["EditNodeError"]);
+    }
+}
+@treeList.Bind(Model).GetHtml()

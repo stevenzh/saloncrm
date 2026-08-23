@@ -1,0 +1,105 @@
+﻿@model SalonCRM.Models.MemberViewModel
+
+@{
+    ViewBag.Title = "客户基本信息";
+}
+@Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Chart },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Scheduler },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+@Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.PivotGrid },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.Chart },
+    new Script { ExtensionSuite = ExtensionSuite.Report },
+    new Script { ExtensionSuite = ExtensionSuite.Scheduler },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+<h2>@ViewBag.Title.</h2>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Birthday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Birthday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CardNo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CardNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Level)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Level)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.JoinDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JoinDate)
+        </dd>
+    </dl>
+</div>
+<h4>客户卡项明细</h4>
+@Html.Partial("~/Views/MemberAdmin/DetailProject.cshtml", Model.UsableProjects)
+<h4>沟通回访内容</h4>
+@Html.Partial("~/Views/MemberAdmin/DetailFeedback.cshtml", Model.Feedbacks)
+<h4>本次沟通记录</h4>
+@using (Html.BeginForm("Create", "Feedback", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.HiddenFor(m => m.Feedback.MemberId)
+    @Html.HiddenFor(m => m.Feedback.CallUserId)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Feedback.Purpose, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.Feedback.Purpose, (SelectList)ViewBag.FeedbackType, new { @class = "form-control" })
+        </div>
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Feedback.Centent, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(m => m.Feedback.Centent, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Feedback.NextDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Feedback.NextDate, new { @class = "form-control" })
+        </div>
+    </div>
+    <input type="submit" value="保存" />
+}
+<p>
+    @Html.ActionLink("返回客户列表", "CrisisIndex", "Feedback")
+</p>
+<script type="text/javascript">
+    $(function () {
+        $('#Feedback_NextDate').datepicker({
+            format: "yyyy-mm-dd",
+            language: "zh-CN"
+        });
+    });
+</script>

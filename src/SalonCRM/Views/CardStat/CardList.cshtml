@@ -1,0 +1,103 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvIncome";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "CardStat",
+            Action = "CardList",
+            BranchId = ViewData["BranchId"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            CardType = ViewData["CardType"]
+        };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "MemberCardId";
+
+        settings.Columns.Add("Member.Name", "客户");
+        settings.Columns.Add("Title", "标题");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Type";
+            column.Caption = "类型";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Text";
+                p.ValueField = "Value";
+                p.ValueType = typeof(string);
+                p.DataSource = ViewBag.CardTypeList;
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "TmplID";
+            column.Caption = "卡项模板";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Text";
+                p.ValueField = "Value";
+                p.ValueType = typeof(string);
+                p.DataSource = ViewBag.CardTmplList;
+            });
+        });
+
+        settings.Columns.Add("Amt", "储值余额");
+        settings.Columns.Add("BookTime", "购买次数");
+        settings.Columns.Add("UsedTime", "已用次数");
+        settings.Columns.Add("LastCount", "可用次数");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "有效日期";
+            column.FieldName = "ExpiryDate";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        });
+        settings.Columns.Add("Amount", "购卡金额");
+        settings.Columns.Add("ActualPrice", "购卡实付");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "欠款购买";
+            column.FieldName = "DebtFlag";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.Items.Add(new ListEditItem("无欠款", 0));
+            comboBoxProperties.Items.Add(new ListEditItem("欠款", 1));
+            comboBoxProperties.ValueType = typeof(Int32);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "欠款状态";
+            column.FieldName = "DebtStatus";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.Items.Add(new ListEditItem("无", 0));
+            comboBoxProperties.Items.Add(new ListEditItem("欠款", 1));
+            comboBoxProperties.Items.Add(new ListEditItem("已还清", 2));
+            comboBoxProperties.ValueType = typeof(Int32);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "状态";
+            column.FieldName = "Status";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.Items.Add(new ListEditItem("有效", 1));
+            comboBoxProperties.Items.Add(new ListEditItem("无效", 2));
+            comboBoxProperties.ValueType = typeof(Int32);
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsPager.PageSize = 20;
+
+
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "RecordID");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Amt").DisplayFormat = "c";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Amount").DisplayFormat = "c";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "ActualPrice").DisplayFormat = "c";
+        settings.Settings.ShowFooter = true;
+
+
+    }).Bind(Model).GetHtml()

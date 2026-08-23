@@ -1,0 +1,123 @@
+﻿@model SalonCRM.Models.BookModel
+
+@{
+    ViewBag.Title = "消耗详情";
+}
+@Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Chart },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Scheduler },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+@Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.PivotGrid },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.Chart },
+    new Script { ExtensionSuite = ExtensionSuite.Report },
+    new Script { ExtensionSuite = ExtensionSuite.Scheduler },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("Edit", "Book", FormMethod.Post, new { @id = "theForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.BookID)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.BookID, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.BookID, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Branch.Name, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Branch.Name, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.CreatedDate, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.CreatedDate, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.State, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.StateValue, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Amount, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Amount, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.SalesmanID, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.SalesmanID, (List<SelectListItem>)ViewBag.Salesman, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Remark, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(m => m.Remark, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @if (Model.State == "10" || Model.State == "20")
+                {
+                    <input type="button" id="btn_cancel" value="取消" class="btn btn-default" />
+                    <input type="submit" value="提交" class="btn btn-default" />
+                }
+            </div>
+        </div>
+    </div>
+}
+<h4>消耗项目明细</h4>
+@Html.Partial("ProjectList", Model.BookProjects)
+<p>
+    @Html.ActionLink("返回消耗列表", "Index", "Book")
+</p>
+<script type="text/javascript">
+    $(function () {
+        $("#btn_cancel").click(function () {
+            if (confirm("确认去掉消耗单？")) {
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    timeout: 10000,
+                    crossDomain: true,
+                    data: { "bookId": $("#BookID").val() },
+                    url: "/Book/AjaxCancel",
+                    success: function (result) {
+                        if (result.code == "0") {
+                            alert("消耗单取消成功！");
+                            window.location.href = '/Book/Index';
+                        } else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                    }
+                });
+            }
+        });
+    });
+</script>

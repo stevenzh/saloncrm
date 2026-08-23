@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 管理经营数据分析系统</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style type="text/css">
+        .container{padding-top:15px;}
+    </style>
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h2>MDSS</h2>
+            <p class="lead"> 我们深知影响美业发展困惑，并能为之全面提供本地化的、有针对性的整体解决方案服务。专业技术和丰富经验的研发团队，为美业的关键应用客户提供一流的服务....</p>
+            <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <h2>运营系统</h2>
+                <img alt="Responsive across devices" src="~/images/p3.jpg" class="img-responsive">
+                <p><a class="btn btn-primary" href="/Account/Login?path=SN1" role="button">登录 »</a></p>
+            </div>
+            <div class="col-lg-4">
+                <h2>经营系统</h2>
+                <img alt="Responsive across devices" src="~/images/p2.jpg" class="img-responsive">
+                <p><a class="btn btn-primary" href="/Account/Login?path=SN2" role="button">登录 »</a></p>
+            </div>
+            <div class="col-lg-4">
+                <h2>财务系统</h2>
+                <img alt="Responsive across devices" src="~/images/p1.jpg" class="img-responsive">
+                <p><a class="btn btn-primary" href="/Account/Login?path=SN3" role="button">登录 »</a></p>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <footer style="position:fixed; bottom:5px;width:100%;">
+        <div class="panel-footer" style=" text-align:center;">MDSS 版权所有  中文官网：www.mdss.hk</div>
+    </footer>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    <script>
+        $().ready(function () {
+
+
+        });
+    </script>
+</body>
+</html>

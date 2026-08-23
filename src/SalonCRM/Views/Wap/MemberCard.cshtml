@@ -1,0 +1,76 @@
+﻿@model SalonCRM.Models.MemberViewModel
+@{
+    Layout = "~/Views/Shared/_WapLayout.cshtml";
+    ViewBag.Title = "客户详细";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-body">
+                <div class="box-header with-border">
+                    <h3 class="box-title">客户卡集</h3>
+                </div>
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                                <tr>
+                                    <th>标题</th>
+                                    <th>卡类型</th>
+                                    <th>总金额</th>
+                                    <th>欠款</th>
+                                    <th>购买次数</th>
+                                    <th>剩余次数</th>
+                                    <th>使用期限</th>
+                                    <th>购买时间</th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model.Cards)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Title)
+                                    </td>
+                                    <td>
+                                        @(item.Type == "0" ? "储值卡" : "")
+                                        @(item.Type == "1" ? "疗程卡" : "")
+                                        @(item.Type == "2" ? "单次卡" : "")
+                                        @(item.Type == "3" ? "体验卡" : "")
+                                        @(item.Type == "4" ? "综合限时卡" : "")
+                                        @(item.Type == "5" ? "综合限次卡" : "")
+                                        @(item.Type == "6" ? "拓客增值卡" : "")
+                                        @(item.Type == "7" ? "拓客优惠卡" : "")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amt)
+                                    </td>
+                                    <td>
+                                        <span style="color:firebrick;">@(item.Amount - item.ActualPrice)</span>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BookTime)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LastCount)
+                                    </td>
+                                    <td>
+                                        @(item.ExpiryDate == null ? "" : item.ExpiryDate.Value.ToShortDateString())
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+    });
+</script>

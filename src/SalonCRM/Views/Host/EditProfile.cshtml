@@ -1,0 +1,52 @@
+﻿@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+
+    var grid = Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvProfile";
+        settings.KeyFieldName = "ProfileID";
+        settings.CallbackRouteValues = new { Controller = "Host", Action = "EditProfile", id = ViewData["HostID"], };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Host", Action = "AddNewProfile", HostID = ViewData["HostID"] };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Host", Action = "UpdateProfile", HostID = ViewData["HostID"] };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 70;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowNewButton = true;
+
+        //settings.Columns.Add("ProfileID", "ProfileID").EditFormSettings.Visible = DefaultBoolean.False;
+        //settings.Columns.Add("HostID", "商户ID").EditFormSettings.Visible = DefaultBoolean.False;
+        //settings.Columns.Add("PropertyText", "属性名称");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "PropertyText";
+            column.Caption = "属性";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Text";
+                p.ValueField = "Value";
+                p.DataSource = ViewBag.ProfilesDict;
+            });
+        });
+
+        settings.Columns.Add("PropertyValue", "属性值");
+
+        settings.CellEditorInitialize = (s, e) =>
+        {
+            ASPxEdit editor = (ASPxEdit)e.Editor;
+            editor.ValidationSettings.Display = Display.Dynamic;
+        };
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+
+@grid.Bind(Model).GetHtml()

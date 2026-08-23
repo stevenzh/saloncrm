@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"> 
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div data-role="page" id="help" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="menu_setting.html" data-rel="back" data-icon="back">返回首页</a>
+            <h3>当前登陆信息</h3>
+        </div>
+
+        <div data-role="content">
+            <ul id="ul_profile" data-role="listview" data-inset="true">
+            </ul>
+
+            <button id="btn_clear" data-role="button" data-inline="true">账号注销</button>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+            commonInit();
+
+            var dtt = getLocaleDate(new Date(userObject.time));
+            $("#ul_profile").append("<li> <h2> 商户： " + userObject.hostcode + " </h2> </li> ");
+            $("#ul_profile").append("<li> <h2> 门店： " + userObject.branchName + " </h2> </li> ");
+            //$("#ul_profile").append("<li> <h2> 用户ID： " + userObject.userid + " </h2> </li> ");
+            $("#ul_profile").append("<li> <h2> 用户名： " + userObject.username + " </h2> </li> ");
+            $("#ul_profile").append("<li> <h2> 终端ID： " + userObject.uuid + " </h2> </li> ");
+            $("#ul_profile").append("<li> <h2> 用户类型： " + userObject.type + " </h2> </li> ");
+            if (platform == "cordova") {
+                $("#ul_profile").append("<li> <h2> 终端说明： " + device.model + " </h2> </li> ");
+            }
+            $("#ul_profile").append("<li> <h2> 最后登陆时间： " + dtt + " </h2> </li> ");
+            //$("#ul_profile").listview("refresh");
+        }
+
+        $("#btn_clear").click(function () {
+            console.log("localStorage clear.");
+            window.localStorage.clear();
+
+            // 跳转到首页
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

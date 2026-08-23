@@ -1,0 +1,434 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>客户充值</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div data-role="page" id="rechargeamount" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>客户充值</h1>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmRechargeAmount">
+                <div data-role="fieldcontain">
+                    <label for="inputCard"><em>*</em>客户卡选择</label>
+                    <select id="inputCard" class="required">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputMoney"><em>*</em> 充值金额：</label>
+                    <input type="text" id="inputMoney" name="inputMoney">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputType"><em>*</em> 充值类型：</label>
+                    <select id="inputType" name="inputType">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                    </select>
+                </div>
+                <div data-role="collapsible" data-content-theme="false">
+                    <h4>增值设置</h4>
+                    <div data-role="fieldcontain">
+                        <label for="inputIncrease"> 增值金额（输入增加的部分）</label>
+                        <input type="text" id="inputIncrease" name="inputIncrease" value="0">
+                    </div>
+                </div>
+                <div data-role="fieldcontain" style="display:none;">
+                    <label for="inputPoints"> 会员获得积分：</label>
+                    <input type="text" id="inputPoints" name="inputPoints">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales"><em>*</em> 顾问：</label>
+                    <select name="inputSales" id="inputSales" data-native-menu="false">
+                        <option>请选择顾问</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="per_points1">
+                    <label for="points1">顾问分成:</label>
+                    <input type="range" name="points1" id="points1" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputBeauticianId"><em>*</em> 美容师：</label>
+                    <select name="inputBeauticianId" id="inputBeauticianId" data-native-menu="false">
+                        <option>请选择美容师</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="per_points2">
+                    <label for="points2">美容师分成:</label>
+                    <input type="range" name="points2" id="points2" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputBeauticians"> 助理美容师：</label>
+                    <select name="inputBeauticians" id="inputBeauticians" multiple="multiple" data-native-menu="false">
+                        <option>请选择助理美容师</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="per_points3">
+                    <label for="points3">助理分成:</label>
+                    <input type="range" name="points3" id="points3" value="0" min="0" step=".1" max="1">
+                </div>
+                <p>
+                    <button type="submit">下一步</button>
+                </p>
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="nextPage" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>客户输入密码</h3>
+        </div>
+        <div data-role="content">
+            <form id="frmPasswd">
+                <div data-role="fieldcontain">
+                    <label for="inputCustPwd"><em>*</em> 密码：</label>
+                    <input type="password" id="inputCustPwd" name="inputCustPwd">
+                </div>
+                <div class="btn-default btn btn-default btn-block">
+                    <button id="btnSave" type="submit">充值</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="page" id="successPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <h1>充值成功</h1>
+            <p></p>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <div data-role="page" id="failPage" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <h1>充值失败</h1>
+            <p></p>
+            <a href="recharge.html" class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left">重新充值</a>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/jquery.validate_zh.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+            commonInit();
+
+            var memberId = getUrlParameter("mid");
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: memberId },
+                url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                success: function (data) {
+                    $("#ul_member").empty();
+                    $("#ul_member").append("<li>姓名：" + data.Name + "</li><li>卡号：" + data.CardNo + "</li><li>手机：" + data.MobileNumber + "</li><li>余额：" + data.Amt + "</li>");
+                    $("#ul_member").listview('refresh');
+
+                    // 当前用户
+                    memberObject.MemberID = data.MemberID;
+                    memberObject.CardNo = data.CardNo;
+                    memberObject.Name = data.Name;
+                    memberObject.SalesmanId = data.SalesmanId;
+
+
+                    // 客户卡
+                    // 卡片类型 0:储值卡 1: 疗程卡 2: 单次卡 3: 体验卡 4: 综合限时卡 5: 综合限次卡 6: 拓客增值卡 7: 拓客优惠卡
+                    $(data.Cards).each(function (i, item) {
+                        if (item.Type == '0') {
+                            var option = "<option value=\"" + item.MemberCardId + "\">" + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":" + item.Amt + "元</option>";
+                            $("#inputCard").append(option);
+                        }
+                    });
+
+                    // 自动设置顾问
+                    if (memberObject.SalesmanId != "") {
+                        $("#inputSales").val(memberObject.SalesmanId);
+                        $("#inputSales").selectmenu("refresh");
+                    }
+                    //$.mobile.changePage("#rechargeamount");
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            $(document).on("pageinit", "#rechargeamount", function () {
+
+                // 业绩占比
+                if (userObject.percentageLock == "1") {
+                    // 锁定
+                    $("#per_points1").hide();
+                    $("#per_points2").hide();
+                    $("#per_points3").hide();
+                } else {
+                    // 放开
+                    if (userObject.majorPercentage != "") {   // 顾问占比
+                        $("#points1").val(new Number(userObject.majorPercentage));
+                        $("#points1").slider("refresh")
+                    }
+                    if (userObject.majorBeauticianPercentage != "") {   // 美容师占比
+                        $("#points2").val(new Number(userObject.majorBeauticianPercentage));
+                        $("#points2").slider("refresh")
+                    }
+                    if (userObject.beauticianPercentage != "") {      // 辅助美容师占比
+                        $("#points3").val(new Number(userObject.beauticianPercentage));
+                        $("#points3").slider("refresh")
+                    }
+                }
+
+                //$("#points1").on('slidestop', function (event, ui) {
+                //    var v1 = new Number($("#points1").val());
+                //    var v2 = new Number($("#points2").val());
+                //    var v3 = new Number($("#points3").val());
+                //    if (v1 + v2 + v3 > 1) {
+                //        $("#points3").val(0);
+                //        $("#points3").slider("refresh")
+                //    }
+                //    if (v1 + v2 > 1) {
+                //        $("#points2").val(1 - v1);
+                //        $("#points2").slider("refresh")
+                //    }
+                //});
+
+                // 分摊累加 等于 1 的判断
+                //$("#points2").on('slidestop', function (event, ui) {
+                //    var v1 = new Number($("#points1").val());
+                //    var v2 = new Number($("#points2").val());
+                //    var v3 = new Number($("#points3").val());
+
+                //    if (v1 + v2 + v3 > 1) {
+                //        $("#points3").val(0);
+                //        $("#points3").slider("refresh")
+                //    }
+
+                //    if (v1 + v2 > 1) {
+                //        $("#points2").val(1 - v1);
+                //        $("#points2").slider("refresh")
+                //    } else {
+                //        $("#points3").val((1 - v1 - v2).toFixed(1));
+                //    }
+                //});
+
+                //$("#points3").on('slidestop', function (event, ui) {
+                //    var v1 = new Number($("#points1").val());
+                //    var v2 = new Number($("#points2").val());
+                //    var v3 = new Number($("#points3").val());
+
+                //    if (v1 + v2 + v3 > 1) {
+                //        $("#points3").val(0);
+                //        $("#points3").slider("refresh")
+                //    }
+
+                //    if (v1 + v2 > 1) {
+                //        $("#points2").val(1 - v1);
+                //        $("#points2").slider("refresh")
+                //    } else {
+                //        $("#points3").val((1 - v1 - v2).toFixed(1));
+                //    }
+                //});
+            });
+
+            // 美容顾问
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "3" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputSales").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+            // 美容师
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "1" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputBeauticianId").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                        $("#inputBeauticians").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+
+                        $("#inputBeauticianId").selectmenu("refresh");
+                        $("#inputBeauticians").selectmenu("refresh");
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+        }
+
+
+        $().ready(function () {
+
+            $("#frmRechargeAmount").validate({
+                rules: {
+                    inputCard: "required",
+                    inputMoney: {
+                        required: true,
+                        digits: true,
+                        min: 1
+                    },
+                    inputIncrease: {
+                        number: true
+                    },
+                    inputType: "required",
+                    inputSales: "required"
+                },
+                messages: {
+                    inputCard: "请选择客户卡",
+                    inputMoney: {
+                        required: "请输入充值金额",
+                        digits: "请输入非零的整数",
+                        min: "请输入非零的整数"
+                    },
+                    inputIncrease: {
+                        number: "请输入数字"
+                    },
+                    inputType: "请选择充值类型",
+                    inputSales: "请输入美容顾问"
+                }
+            });
+
+            $("#frmPasswd").validate({
+                rules: {
+                    inputCustPwd: {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+                messages: {
+                    inputCustPwd: {
+                        required: "请输入密码",
+                        minlength: "请输入至少6位字符的密码"
+                    }
+                }
+            });
+
+            $("#frmRechargeAmount").submit(function () {
+                if ($("#frmRechargeAmount").validate().form()) {
+                    $.mobile.changePage("#nextPage");
+                }
+                return false;
+            });
+
+            $("#frmPasswd").submit(function () {
+                if ($("#frmPasswd").validate().form()) {
+                    var sales = "";
+                    $('#inputBeauticians :selected').each(function (i, selected) {
+                        sales += $(selected).val() + ",";
+                    });
+
+                    var p1 = userObject.majorPercentage;
+                    var p2 = userObject.majorBeauticianPercentage;
+                    var p3 = userObject.beauticianPercentage;
+
+                    if (userObject.percentageLock != "1") {
+                        p1 = $("#points1").val();
+                        p2 = $("#points2").val();
+                        p3 = $("#points3").val();
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            MemberId: memberObject.MemberID,
+                            Money: $("#inputMoney").val(),
+                            IncreasePrice: $("#inputIncrease").val(),   // 增值
+                            Points: $("#inputPoints").val(),
+                            CardId: $("#inputCard").val(),              // 储值卡ID
+                            Type: $("#inputType").val(),
+                            SalesId: $("#inputSales").val(),            // 顾问
+                            SalesPercentage: p1,
+                            BeauticianId: $("#inputBeauticianId").val(),// 美容师
+                            BeauticianPercentage: p2,
+                            Sales: sales,                               // 助理美容师
+                            AssistBeauticianPercentage: p3,
+                            Password: $("#inputCustPwd").val(),
+                            Remark: "",
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            UserId: userObject.userid,
+                        },
+                        url: serverUrl + "/MemberAdmin/AppRechargeAmount",
+                        success: function (result) {
+                            if (result.code != 1) {
+                                //会员卡无效、密码无效或其他错误
+                                console.log("RechargeAmount Fail");
+                                $("#failPage div.warning p:last").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else {
+                                //充值成功
+                                console.log("RechargeAmount Success");
+                                $.mobile.changePage("#successPage", 'pop');
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            showNetErrMsg();
+
+                            //充值失败
+                            //console.log("RechargeAmount Fail");
+                            //$("#failPage div.warning p:last").text(XMLHttpRequest.responseText);
+                            //$.mobile.changePage("#failPage", 'pop');
+                        }
+                    });
+                    return false;
+                }
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

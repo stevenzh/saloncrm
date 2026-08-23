@@ -1,0 +1,44 @@
+﻿@model SalonCRM.Models.MemberModel
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Member", Action = "MessageList", OpenID = ViewData["OpenID"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "MessageID";
+        settings.SettingsPager.PageSize = 10;
+
+        settings.Columns.Add("InOut", "来源");
+        settings.Columns.Add("Content", "内容");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "内容";
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                string type = Convert.ToString(DataBinder.Eval(c.DataItem, "MsgType"));
+                if (type == "Text")
+                {
+                    ViewContext.Writer.Write(DataBinder.Eval(c.DataItem, "Content"));
+                }
+                else if (type == "Image")
+                {
+                    ViewContext.Writer.Write("<a href='" + Convert.ToString(DataBinder.Eval(c.DataItem, "FileUrl")) + "'> 打开图片</a>");
+                }
+                else if (type == "Voice")
+                {
+                    ViewContext.Writer.Write("<a href='" + Convert.ToString(DataBinder.Eval(c.DataItem, "FileUrl")) + "'> 打开语音</a>");
+                }
+
+            });
+        });
+
+        settings.Columns.Add("CreatedBy", "客服");
+        // settings.Columns.Add("Binding", "绑定");
+        settings.Columns.Add("CreatedDate", "创建时间").SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    }).Bind(Model.Messages).GetHtml()

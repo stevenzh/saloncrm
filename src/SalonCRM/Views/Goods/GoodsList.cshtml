@@ -1,0 +1,75 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Goods", Action = "GoodsList", Category = ViewData["Category"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "GoodsID";
+
+        //settings.Columns.Add("GoodsCode", "编码");
+        settings.Columns.Add("Name", "名称");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Category";
+            column.Caption = "类型";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Contents";
+                p.ValueField = "KeyValue";
+                p.DataSource = ViewBag.CategoryList;
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Brand";
+            column.Caption = "品牌";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Contents";
+                p.ValueField = "KeyValue";
+                p.DataSource = ViewBag.BrandList;
+            });
+        });
+
+        settings.Columns.Add("Unit", "计量单位");
+        // settings.Columns.Add("IsVaild", "是否有效");
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "是否有效";
+            column.FieldName = "IsVaild";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.Items.Add(new ListEditItem("有效", 1));
+            comboBoxProperties.Items.Add(new ListEditItem("无效", 0));
+            comboBoxProperties.ValueType = typeof(Int32);
+        });
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = "是否有效";
+        //    //column.Width = 90;
+        //    column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+        //    {
+        //        string type = Convert.ToString(DataBinder.Eval(c.DataItem, "IsVaild"));
+        //        if (type == "1")
+        //            ViewContext.Writer.Write("有效");
+        //        else if (type == "0")
+        //            ViewContext.Writer.Write("无效");
+        //    });
+        //});
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 120;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Goods", Action = "AddNewGoodsPartial", Category = ViewData["Category"] };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Goods", Action = "UpdateGoodsPartial" };
+
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+
+    }).Bind(Model).GetHtml()

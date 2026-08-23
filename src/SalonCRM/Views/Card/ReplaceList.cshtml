@@ -1,0 +1,46 @@
+﻿@using System.Web.UI.WebControls;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Card", Action = "ReplaceList", Name = ViewData["Name"], BranchId = ViewData["BranchId"], CardNo = ViewData["CardNo"], Mobile = ViewData["Mobile"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+        
+        //settings.Columns.Add("MemberName", "姓名").SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        var clumn = settings.Columns.Add("MemberId", "姓名", MVCxGridViewColumnType.HyperLink);
+        var hyperLinkProperties = clumn.PropertiesEdit as HyperLinkProperties;
+        hyperLinkProperties.NavigateUrlFormatString = "~/MemberAdmin/Details/{0}";
+        hyperLinkProperties.TextFormatString = "{0}";
+        hyperLinkProperties.TextField = "MemberName";
+        clumn.CellStyle.HorizontalAlign = HorizontalAlign.Left;
+
+        //settings.Columns.Add("CardNo", "卡号");
+        settings.Columns.Add("BranchName", "门店");
+        settings.Columns.Add("UserName", "操作人");
+        settings.Columns.Add("OriginalCardNo", "原卡号");
+        settings.Columns.Add("NewCardNo", "新卡号");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CreatedDate";
+            column.Caption = "操作时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd HH:mm:ss";
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.HeaderFilterFillItems = (sender, e) =>
+        {
+            ASPxGridView grid = (ASPxGridView)sender;
+            if (e.Column.FieldName == "Amt")
+            {
+                e.Values.Clear();
+                if (e.Column.Settings.HeaderFilterMode == HeaderFilterMode.List)
+                    e.AddShowAll();
+                e.AddValue("欠款", string.Empty, "[Amt] < 0");
+            }
+        };
+    }).Bind(Model).GetHtml()

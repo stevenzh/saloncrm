@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户查询</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div data-role="page" id="mlist" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>客户查询</h3>
+        </div>
+
+        <div data-role="content">
+            <h4>客户查询</h4>
+            <ol id="ol_member" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="搜索姓名、卡号、手机号..."></ol>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+            commonInit();
+
+            // 客户过滤
+            $("#ol_member").on("listviewbeforefilter", function (e, data) {
+                var $ul = $(this),
+					$input = $(data.input),
+					value = $input.val(),
+					html = "";
+                $ul.html("");
+                if (value && value.length > 1) {
+                    //$ul.html("<li> <div class='ui-loader'> <span class='ui-icon ui-icon-loading'> </span> </div> </li> ");
+                    //$ul.listview("refresh");
+                    $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+                    page_action = getUrlParameter("pac");
+                    page_return = getUrlParameter("pat");  // 返回页面
+                    console.log("page_action:" + page_action);
+
+                    $.ajax({
+                        type: "POST",
+                        url: serverUrl + "/MemberAdmin/AppList",
+                        timeout: 10000,
+                        dataType: "json",
+                        async : false,
+                        data: {
+                            "hostId": userObject.host, "branchId": userObject.branch, userId: userObject.userid, pageNum: 10, q: $input.val()
+                        },
+                        success: function (result) {
+                            $("#ol_member").empty();
+                            $.each(result, function (i, item) {
+                                var url = "";
+                                console.log("2:page_action:" + page_action);
+                                if (page_action === 'appointment')
+                                    url = "appointment.html";
+                                if (page_action === 'buycard')
+                                    url = "buycard.html";
+                                else if (page_action == 'recharge')
+                                    url = "recharge.html";
+                                else if (page_action == 'buyproject')
+                                    url = "buyproject.html";
+                                else if (page_action == 'settlement')
+                                    url = "settlement.html";
+
+
+                                html += "<li><a href=\"" + url + "?mid=" + item.CardNo + "&pat=" + page_return + "\"><h3>姓名：" + item.Name + "</h3>";
+                                // html += "<p><b>地址：</b>" + item.Address + " </p>";
+                                html += "<p><b>手机</b>：" + item.MobileNumber + " <b>卡号</b>：" + item.CardNo + "</p>";
+                                html += "<p><b>状态</b>：" + item.StatusValue + "</p></a></li>";
+                            });
+                            $ul.html(html);
+                            $ul.listview('refresh');
+                            $ul.trigger("updatelayout");
+
+                            $.mobile.loading('hide');
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+            });
+
+
+        }
+
+
+        $().ready(function () {
+
+        });
+
+        //var page_action = "";
+        //var page_return = "";
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Worker", Action = "WorkerList", UserName = ViewData["UserName"], BranchId = ViewData["BranchId"], Status= ViewData["DStatus"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "Id";
+        settings.SettingsPager.PageSize = 20;
+
+        settings.Columns.Add("UserCnName", "姓名").SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        settings.Columns.Add("UserName", "用户名");
+        settings.Columns.Add("OrganName", "门店").GroupIndex = 0;
+        settings.Columns.Add("TypeValue", "类型").GroupIndex = 1;
+        settings.Columns.Add("StatusValue", "在离职状态");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "JoinDate";
+            column.Caption = "入职时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.Width = 80;
+            column.SetDataItemTemplateContent(delegate(GridViewDataItemTemplateContainer c)
+            {
+                //ViewContext.Writer.Write(Html.ActionLink("查看", "Details", new
+                //{
+                //    Id = DataBinder.Eval(c.DataItem, "Id")
+                //}, new { target = "_self" }).ToHtmlString());
+                //ViewContext.Writer.Write("&nbsp;");
+                ViewContext.Writer.Write(Html.ActionLink("编辑", "Edit", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "Id")
+                }, new { target = "_self" }).ToHtmlString());
+
+            });
+        });
+
+        //settings.Settings.ShowHeaderFilterButton = true;
+        //settings.Settings.ShowFilterRow = true;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "UserName");
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Count, "UserName");
+        settings.Settings.ShowFooter = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsBehavior.AutoExpandAllGroups = true;
+    }).Bind(Model).GetHtml()

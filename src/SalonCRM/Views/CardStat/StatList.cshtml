@@ -1,0 +1,49 @@
+﻿@using System.Web.UI.WebControls;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "StatList",
+            Action = "CardStat",
+            BranchID = ViewData["BranchID"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            CardType = ViewData["CardType"]
+        };
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+
+        settings.Columns.Add("TypeValue", "类型");
+        settings.Columns.Add("Quantity", "销售数量");
+        settings.Columns.Add("Person", "购卡人头数");
+
+        settings.Columns.Add("Amount", "购卡金额合计");
+        settings.Columns.Add("Amt", "储值卡<br/>余额合计");
+
+        settings.Columns.Add("BookTime", "项目购买<br/>次数合计");
+        settings.Columns.Add("LastCount", "项目剩余<br/>次数合计");
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("详细", "Details", "CardStat", new
+                {
+                    StartDate = ((DateTime)ViewData["StartDate"]).ToShortDateString(),
+                    EndDate = ((DateTime)ViewData["EndDate"]).ToShortDateString(),
+                    BranchID = ViewData["BranchID"],
+                    CardType = DataBinder.Eval(c.DataItem, "Type")
+                }, new { target = "_self" }).ToHtmlString());
+            });
+        });
+
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,131 @@
+﻿@model SalonCRM.Models.RoleViewModel
+@{
+    ViewBag.Title = "编辑角色";
+}
+<link href="~/Content/zTree/zTreeStyle.css" rel="stylesheet" />
+<script src="~/Scripts/zTree/jquery.ztree.core-3.5.min.js"></script>
+<script src="~/Scripts/zTree/jquery.ztree.excheck-3.5.min.js"></script>
+
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li><a href="/RolesAdmin/Index">角色列表</a></li>
+        <li class="active">编辑角色</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="col-sm-8">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.HostID)
+            @Html.HiddenFor(model => model.MenuItems)
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsMajor, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBoxFor(model => model.IsMajor, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IsMajor)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" onsubmit="getselect();" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-sm-3 col-sm-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-heading no-collapse">
+                功能选择
+            </div>
+            <ul id="treeDemo" class="ztree"></ul>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+		<!--
+		var setting = {
+			check: {
+				enable: true,
+                chkboxType : { "Y" : "s", "N" : "s" }
+			},
+	        data: {
+                key: {
+                    checked: "IsActive",
+                    name: "Name"
+                },
+		        simpleData: {
+			        enable: true,
+			        idKey: "MenuId",
+			        pIdKey: "ParentId",
+			        rootPId: 0
+		         }
+            },
+            callback: {
+		        onCheck: zTreeOnCheck
+	        }
+		};
+
+		var zNodes;
+		var code;
+
+		$(document).ready(function(){
+
+            $.ajax({
+                async : false,
+                cache:false,
+                type: 'POST',
+                dataType : "json",
+                url: "/RolesAdmin/GetMenuList?id=@Model.Id",
+                error: function () {//请求失败处理函数
+                    alert('请求失败');
+                },
+                success:function(data){ //请求成功后处理函数。
+                    zNodes = data;
+                }
+            });
+
+		    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		    var allnodeid = "";
+		    for (var i = 0, l = zNodes.length; i < l; i++) {
+		        if (zNodes[i].IsActive == true) {
+		            allnodeid += zNodes[i].MenuId + ",";
+		        }
+		    }
+		    $("#MenuItems").val(allnodeid);
+		});
+
+        function zTreeOnCheck(event, treeId, treeNode) {
+            //console.log("focus node:" + treeNode.tId + ", " + treeNode.name + "," + treeNode.checked);
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getCheckedNodes(true);
+            var allnodeid = "";
+    	    for (var i=0, l=nodes.length; i<l; i++) {
+                allnodeid += nodes[i].MenuId + ",";
+				//console.log(nodes[i].MenuId);
+			}
+            $("#MenuItems").val(allnodeid);
+        };
+		//-->
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

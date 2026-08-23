@@ -1,0 +1,109 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Client", Action = "PageList",  };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.Columns.Add("BranchName", "部门");
+        settings.Columns.Add("UserName", "登陆用户");
+        settings.Columns.Add("MobileGUID", "终端ID");
+        settings.Columns.Add("MobileModel", "终端说明");
+        settings.Columns.Add("IsVaildValue", "是否有效");
+        settings.Columns.Add("LastSignIn", "最后登陆时间");
+        
+        settings.Columns.Add(column =>
+        {
+            //column.Caption = "管理";
+            //column.Width = 90;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("编辑", "Edit", "Client", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "ClientID")
+                }, new { target = "_self" }).ToHtmlString());
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    }).Bind(Model).GetHtml()
+
+@*@model SalonCRM.Models.ClientQModel
+@{
+    Layout = null;
+}
+<div id="PageList">
+    <table class="table">
+        <tr>
+            <th>
+                门店ID
+            </th>
+            <th>
+                手机号
+            </th>
+            <th>
+                终端说明
+            </th>
+            <th>
+                是否有效
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.ClientPageList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrganID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileModel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsVaild)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ClientID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ClientID })
+                </td>
+            </tr>
+        }
+    </table>
+    <div id="Pagination" class="digg" />
+</div>
+<script type="text/javascript">
+    //分页控件 begin
+    $(function () {
+        $("#Pagination").pagination(
+                Number(@Model.ClientPageList.TotalCount), {
+                    callback: pageselectCallback1,
+                    prev_text: '前一页',
+                    next_text: '后一页',
+                    items_per_page: 10,
+                    num_display_entries: 5,
+                    num_edge_entries: 2,
+                    current_page: index
+                });
+        //debugger;
+    });
+    //回调方法
+    function pageselectCallback1(page_id, jq) {
+        jQuery.ajaxSetup({ cache: false });
+        index = page_id;
+        page_id = page_id + 1;
+        var param = {
+            'PagedIndex': page_id,
+            'PagedSize': 10
+        }
+        $.post('../Client/Index/', param, function (data) {
+            $('#PageList').html(data);
+        });
+    }
+    //分页控件 end
+</script>*@
+

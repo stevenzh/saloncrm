@@ -1,0 +1,36 @@
+﻿@model SalonCRM.Models.AccountRecord
+@{
+    Layout = "~/Views/Shared/_WapLayout.cshtml";
+    ViewBag.Title = "消耗详情";
+}
+
+<h2>@ViewBag.Title.</h2>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+           预约房间
+        </dt>
+        <dd>
+            @Model.InAmount.ToString()
+        </dd>
+        <dt>
+            预约美容师
+        </dt>
+        <dd>
+            @Model.PaymentType
+        </dd>
+        <dt>
+            操作时间
+        </dt>
+        <dd>
+            @Model.CreatedDate
+        </dd>
+    </dl>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+
+    });
+</script>

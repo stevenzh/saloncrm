@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+    <meta charset="utf-8">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div data-role="page" id="page2" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>客户消耗-选择项目</h3>
+        </div>
+        <div data-role="content">
+            <ul id="ul_member" data-role="listview"></ul>
+            <h3>消费信息</h3>
+            <ul id="ul_project" data-role="listview" data-inset="true"></ul>
+        </div>
+    </div>
+
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("doInit");
+            FastClick.attach(document.body);
+            commonInit();
+
+            // 取得订单信息
+            current_bid = getUrlParameter("id");
+            var memberId = getUrlParameter("mid");
+            console.log("bookid:" + current_bid + ", memberId:" + memberId);
+            var html = "";
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, BookId: current_bid },
+                url: serverUrl + "/Book/AppBookInfo",
+                success: function (data) {
+
+                    
+                    html += "<li data-role=\"list-divider\">下单时间：" + getDateTime(data.book.BookDate) + " <span class=\"ui-li-count\">";
+                    if (data.book.State =="20") {
+                        html += "付款时间" + getDateTime(data.book.BookDate);
+                    }
+                    html += "状态：" + data.book.StateValue + "</span></li>"
+                    $.each(data.projects, function (i, item) {
+                        var bbb = "";
+                        $.each(item.Beauties, function (j, bb) {
+                            bbb = bbb + bb;
+                        });
+
+                        html += "<li><h3>项目：" + item.ProjectName + "</h3>" +
+                                "<p>美容师：" + item.Workers + "</p>" +
+                                "<p>数量：" + item.Quantity + "  消费金额：" + item.Amount + "</p>" +
+                                "</li>";
+                    });
+
+                    $("#ul_project").html(html);
+                    $("#ul_project").listview("refresh");
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 取得顾客信息
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: memberId },
+                url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                success: function (data) {
+                    $("#ul_member").empty();
+                    memberObject.MemberID = data.MemberID;
+                    memberObject.Amt = data.Amt;
+                    memberObject.CardNo = data.CardNo;
+                    $("#ul_member").append("<li>姓名：" + data.Name + "</li><li>手机：" + data.MobileNumber + "</li><li>余额：" + data.Amt + "</li><li>等级：" + data.LevelValue + "</li><li>状态：" + data.StatusValue + "</li>");
+                    $("#ul_member").listview('refresh');
+
+                    //$("#ul_project").empty();
+                    //$.each(data.Projects, function (i, item) {
+                    //    var pjn = item.ProjectName;
+                    //    if (item.Type == "1") {
+                    //        pjn = item.ProjectName + "[赠]"
+                    //    } else if (item.Type == "1") {
+                    //        pjn = item.ProjectName + "[转]"
+                    //    }
+                    //    if (item.CardType == "1") {
+                    //        pjn = item.ProjectName + "[疗]"
+                    //    } else if (item.CardType == "3") {
+                    //        pjn = item.ProjectName + "[体]"
+                    //    } else if (item.CardType == "4" || item.CardType == "5") {
+                    //        pjn = item.ProjectName + "[综]"
+                    //    } else if (item.CardType == "7") {
+                    //        pjn = item.ProjectName + "[拓]"
+                    //    }
+
+                    //    // 和订单比较，对应项目标记消费次数
+                    //    var nohas = true;
+                    //    var llstr = "";
+                    //    for (var i = 0; i < book_list.length; i++) {
+                    //        //console.log("book_list[i][5]:" + book_list[i][5]);
+                    //        //console.log("item.MemberProjectId" + item.MemberProjectId);
+
+                    //        if (book_list[i][5] == item.MemberProjectId) {
+                    //            nohas = false;
+                    //            llstr = '<li id="pi' + item.MemberProjectId + '" pid="pi' + item.ProjectID + '" pcount="' + item.LastCount + '" pentity="' + book_list[i][8] + '"><a href="#page3?mpid=' + item.MemberProjectId + '&pid=' + item.ProjectID + '"><h2>' + pjn + '</h2><p>可用次数：' + item.LastCount + '</p><span class="ui-li-count">' + book_list[i][2] + '</span></a></li>'
+                    //        }
+                    //    }
+
+                    //    if (nohas == false) {
+                    //        $("#ul_project").append(llstr);
+                    //    } else {
+                    //        // 购买项目列表
+                    //        $("#ul_project").append('<li id="pi' + item.MemberProjectId + '" pid="pi' + item.ProjectID + '" pcount="' + item.LastCount + ' pentity="' + item.IsEntity + '"><a href="#page3?mpid=' + item.MemberProjectId + '&pid=' + item.ProjectID + '"><h2>' + pjn + '</h2><p>可用次数：' + item.LastCount + '</p><span class="ui-li-count">0</span></a></li>');
+                    //    }
+                    //});
+                    //$('#ul_project').listview('refresh');
+
+
+                    //// 客户卡
+                    //// 卡片类型 0:储值卡 1: 疗程卡 2: 单次卡 3: 体验卡 4: 综合限时卡 5: 综合限次卡 6: 拓客增值卡 7: 拓客优惠卡
+                    //$(data.Cards).each(function (i, item) {
+                    //    if (item.Type == '0' || item.Type == '2' || item.Type == '6') {
+                    //        var option = "<option value=\"" + item.MemberCardId + ":" + item.Type + "\">" + item.TypeValue + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":" + item.Amt + "元</option>";
+                    //        $("#inputCard").append(option);
+                    //    }
+                    //    if (item.Type == '4') {
+                    //        var option = "<option value=\"" + item.MemberCardId + ":" + item.Type + "\">" + item.TypeValue + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":时限" + getDate(item.ExpiryDate) + "</option>";
+                    //        $("#inputCard").append(option);
+                    //    }
+                    //    if (item.Type == '5') {
+                    //        var option = "<option value=\"" + item.MemberCardId + ":" + item.Type + "\">" + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":" + item.LastCount + "次</option>";
+                    //        $("#inputCard").append(option);
+                    //    }
+                    //});
+					                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+        };
+
+        //var current_bid = '';   // 当前订单号
+
+    </script>
+
+</body>
+</html>

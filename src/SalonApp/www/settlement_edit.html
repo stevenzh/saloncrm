@@ -1,0 +1,1140 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+    <meta charset="utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div data-role="page" id="page2" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>客户消耗-选择项目</h3>
+        </div>
+        <div data-role="content">
+            <ul id="ul_member" data-role="listview"></ul>
+            <h3>已购买项目</h3>
+            <ul id="ul_project" data-role="listview" data-inset="true"></ul>
+            <div data-role="fieldcontain">
+                <label for="inputSales"><em>*</em> 顾问：</label>
+                <select name="inputSales" id="inputSales" data-native-menu="false">
+                    <option>请选择顾问</option>
+                </select>
+            </div>
+            <p>
+                <button id="btn_newproject" class="btn btn-default">添加消耗项目</button>
+                <button id="btn_zonghe" class="btn btn-default">添加综合卡消耗</button>
+                <button id="btn_save" class="btn btn-default">提交订单</button>
+                <button id="btn_over" class="btn btn-default">去结算</button>
+            </p>
+        </div>
+    </div>
+
+    <div data-role="page" id="page3" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>客户消费-选择美容师</h1>
+        </div>
+        <div data-role="content">
+            <form id="frmProject">
+                <div data-role="fieldcontain" id="divAmt" style="display:none;">
+                    <label for="inputAmt">服务操作成本</label>
+                    <input type="text" id="inputAmt" value="0">
+                </div>
+                <fieldset id="fsNum" data-role="controlgroup" data-type="horizontal">
+                    <legend><em>*</em>选择份数：</legend>
+                    <input type="radio" name="radio-h-2" id="radio-choice-h-2a" value="0">
+                    <label for="radio-choice-h-2a">0</label>
+                    <input type="radio" name="radio-h-2" id="radio-choice-h-2b" value="1">
+                    <label for="radio-choice-h-2b">1</label>
+                    <input type="radio" name="radio-h-2" id="radio-choice-h-2c" value="2">
+                    <label for="radio-choice-h-2c">2</label>
+                    <input type="radio" name="radio-h-2" id="radio-choice-h-2d" value="3">
+                    <label for="radio-choice-h-2d">3</label>
+                    <input type="radio" name="radio-h-2" id="radio-choice-h-2e" value="4">
+                    <label for="radio-choice-h-2e">4</label>
+                </fieldset>
+                <fieldset id="inputWorkers" data-role="controlgroup" data-type="horizontal">
+                    <legend><em>*</em>请选择美容师：</legend>
+                </fieldset>
+                <p>
+                    <button id="btn_project_over" type="submit">确认</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="page" id="page4" data-position="fixed" data-theme="a">
+        <div data-role="header">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>添加现付消耗项目</h1>
+        </div>
+        <div data-role="content">
+            <form id="frmBuyProject">
+                <div data-role="fieldcontain">
+                    <label for="inputType"><em>*</em> 付款类型：</label>
+                    <select id="inputType" name="inputType" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                        <option value="4">储值卡</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divCard" style="display:none;">
+                    <label for="inputCard"><em>*</em>客户卡选择</label>
+                    <select id="inputCard" name="inputCard" data-native-menu="false">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divCategory">
+                    <label for="inputCategory"><em>*</em>项目类型</label>
+                    <select id="inputCategory" name="inputCategory" data-native-menu="false">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputProject"><em>*</em>项目列表</label>
+                    <select id="inputProject" name="inputProject" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain" id="divAmount">
+                    <label for="inputAmount">金额</label>
+                    <input type="text" id="inputAmount" placeholder="金额">
+                </div>
+                <fieldset id="fsNum1" data-role="controlgroup" data-type="horizontal">
+                    <legend><em>*</em>选择份数：</legend>
+                    <input type="radio" name="radio-h-3" id="radio-choice-h-3a" value="0">
+                    <label for="radio-choice-h-3a">0</label>
+                    <input type="radio" name="radio-h-3" id="radio-choice-h-3b" value="1">
+                    <label for="radio-choice-h-3b">1</label>
+                    <input type="radio" name="radio-h-3" id="radio-choice-h-3c" value="2">
+                    <label for="radio-choice-h-3c">2</label>
+                    <input type="radio" name="radio-h-3" id="radio-choice-h-3d" value="3">
+                    <label for="radio-choice-h-3d">3</label>
+                    <input type="radio" name="radio-h-3" id="radio-choice-h-3e" value="4">
+                    <label for="radio-choice-h-3e">4</label>
+                </fieldset>
+                <fieldset id="inputWorkers1" data-role="controlgroup" data-type="horizontal">
+                    <legend><em>*</em>请选择美容师：</legend>
+                </fieldset>
+                <div data-role="fieldcontain" style="display:none;">
+                    <label for="flipEntity1">现消现耗:</label>
+                    <select name="flipEntity1" id="flipEntity1" data-role="slider">
+                        <option value="0">操作服务</option>
+                        <option value="1">现消现耗</option>
+                    </select>
+                </div>
+                <p>
+                    <button id="btn_add_project" type="submit">确认</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="page" id="page7" data-position="fixed" data-theme="a">
+        <div data-role="header">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>添加综合卡项目</h1>
+        </div>
+        <div data-role="content">
+            <form id="frmBuyProject2">
+                <div data-role="fieldcontain" id="divCard2">
+                    <label for="inputCard2"><em>*</em>客户卡选择</label>
+                    <select id="inputCard2" name="inputCard2" data-native-menu="false">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputProject2"><em>*</em>项目列表</label>
+                    <select id="inputProject2" name="inputProject2" data-native-menu="false"></select>
+                </div>
+                <fieldset id="fsNum2" data-role="controlgroup" data-type="horizontal">
+                    <legend><em>*</em>选择份数：</legend>
+                    <input type="radio" name="radio-h-4" id="radio-choice-h-4a" value="0">
+                    <label for="radio-choice-h-4a">0</label>
+                    <input type="radio" name="radio-h-4" id="radio-choice-h-4b" value="1">
+                    <label for="radio-choice-h-4b">1</label>
+                    <input type="radio" name="radio-h-4" id="radio-choice-h-4c" value="2">
+                    <label for="radio-choice-h-4c">2</label>
+                    <input type="radio" name="radio-h-4" id="radio-choice-h-4d" value="3">
+                    <label for="radio-choice-h-4d">3</label>
+                    <input type="radio" name="radio-h-4" id="radio-choice-h-4e" value="4">
+                    <label for="radio-choice-h-4e">4</label>
+                </fieldset>
+                <div data-role="fieldcontain">
+                    <label for="inputAmount2">服务操作成本</label>
+                    <input type="text" id="inputAmount2" placeholder="金额">
+                </div>
+                <fieldset id="inputWorkers2" data-role="controlgroup" data-type="horizontal">
+                    <legend><em>*</em>请选择美容师：</legend>
+                </fieldset>
+                <p>
+                    <button id="btn_add_project2" type="submit">确认</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="page" id="page5" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-icon="back" data-rel="back">返回</a>
+            <h1>客户消费-结算</h1>
+        </div>
+        <div data-role="content">
+            <div data-role="fieldcontain">
+                <label for="card_no">密码：</label>
+                <input type="password" name="card_passsword" id="card_passsword">
+            </div>
+            <button id="btn_submit" data-inline="true">提交</button>
+        </div>
+    </div>
+
+    <div data-role="page" id="page6" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <h1>消费成功</h1>
+            <p></p>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <div data-role="page" id="failPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <h1>消费失败</h1>
+            <p id="returnMsg"></p>
+            <a href="member_select.html?pac=settlement&pat=menu_member" class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left">重新消费</a>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("doInit");
+            FastClick.attach(document.body);
+            commonInit();
+
+            // 美容顾问
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "3" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputSales").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+
+            // 美容师
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "0" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputWorkers").append('<label for="wo' + item.Text + '">' + item.Value + '</label><input type="checkbox" id="wo' + item.Text + '" name="worker" value="' + item.Text + '">');
+                        $("#inputWorkers1").append('<label for="wk' + item.Text + '">' + item.Value + '</label><input type="checkbox" id="wk' + item.Text + '" name="worker1" value="' + item.Text + '">');
+                        $("#inputWorkers2").append('<label for="wh' + item.Text + '">' + item.Value + '</label><input type="checkbox" id="wh' + item.Text + '" name="worker2" value="' + item.Text + '">');
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 项目分类
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch },
+                url: serverUrl + "/Project/AppCategory",
+                success: function (data) {
+                    $(data).each(function (i) {
+                        var option = "<option value=\"" + data[i].code + "\">" + data[i].name + "</option>";
+                        $("#inputCategory").append(option);
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 取得订单信息
+            current_bid = getUrlParameter("id");
+            var memberId = getUrlParameter("mid");
+            console.log("bookid:" + current_bid + ", memberId:" + memberId);
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, BookId: current_bid },
+                url: serverUrl + "/Book/AppBookInfo",
+                success: function (data) {
+                    $.each(data.projects, function (i, item) {
+                        var bbb = "";
+                        $.each(item.Beauties, function (j, bb) {
+                            bbb = bbb + bb + ",";
+                        });
+                        var kk = (item.Type == "0" ? "false" : "true");
+                        //[项目ID, [卡扣：false，现付：true]，数量，[美容师]，金额, MemberProjectId, MemberCardId, BookProjectId, IsEntity, ProjectCategory, PaymentType]
+                        var plt = [item.ProjectId, kk, item.Quantity, bbb, item.Amount, item.MemberProjectId, item.MemberCardId + ":" + item.MemberCardType, item.BookProjectId, item.IsEntity, item.Catetory, item.Type];
+                        book_list.push(plt);
+
+                        // 显示列表
+                        if (item.MemberProjectId == null) {
+                            if (item.MemberCardType == "4" || item.MemberCardType == "5" || item.MemberCardType == "8")
+                                $("#ul_project").append('<li id="dpi' + book_list.length + '" pid="pi' + item.ProjectId + '"><a href="#page7?&pid=' + item.ProjectId + '&dpid=' + book_list.length + '"><h2>' + item.ProjectName + '</h2><p></p><span class="ui-li-count">￥' + item.Amount + '</span></a></li>');
+                            else
+                                $("#ul_project").append('<li id="dpi' + book_list.length + '" pid="pi' + item.ProjectId + '"><a href="#page4?&pid=' + item.ProjectId + '&dpid=' + book_list.length + '"><h2>' + item.ProjectName + '</h2><p></p><span class="ui-li-count">￥' + item.Amount + '</span></a></li>');
+                        }
+                    });
+
+                    $('#ul_project').listview('refresh');
+
+                    // 自动设置顾问
+                    if (data.book.SalesmanID != "") {
+                        $("#inputSales").val(data.book.SalesmanID);
+                        $("#inputSales").selectmenu("refresh");
+                    }
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 取得顾客信息
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: memberId },
+                url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                success: function (data) {
+                    $("#ul_member").empty();
+                    memberObject.MemberID = data.MemberID;
+                    memberObject.Amt = data.Amt;
+                    memberObject.CardNo = data.CardNo;
+                    $("#ul_member").append("<li>姓名：" + data.Name + "</li><li>手机：" + data.MobileNumber + "</li><li>余额：" + data.Amt + "</li><li>等级：" + data.LevelValue + "</li><li>状态：" + data.StatusValue + "</li>");
+                    $("#ul_member").listview('refresh');
+                    //$("#ul_project").empty();
+                    $.each(data.Projects, function (i, item) {
+                        if (item.IsEntity == '0') {   // 不显示即销即耗
+                            var pjn = item.ProjectName;
+                            if (item.Type == "1") {
+                                pjn = item.ProjectName + "[赠]"
+                            } else if (item.Type == "1") {
+                                pjn = item.ProjectName + "[转]"
+                            }
+                            if (item.CardType == "1") {
+                                pjn = item.ProjectName + "[疗]"
+                            } else if (item.CardType == "3") {
+                                pjn = item.ProjectName + "[体]"
+                            } else if (item.CardType == "4" || item.CardType == "5") {
+                                pjn = item.ProjectName + "[综]"
+                            } else if (item.CardType == "7") {
+                                pjn = item.ProjectName + "[拓]"
+                            }
+
+                            // 和订单比较，对应项目标记消费次数
+                            var nohas = true;
+                            var llstr = "";
+                            for (var i = 0; i < book_list.length; i++) {
+                                //console.log("book_list[i][5]:" + book_list[i][5]);
+                                //console.log("item.MemberProjectId" + item.MemberProjectId);
+
+                                if (book_list[i][5] == item.MemberProjectId) {
+                                    nohas = false;
+                                    llstr = '<li id="pi' + item.MemberProjectId + '" pid="pi' + item.ProjectID + '" pcount="' + item.LastCount + '" pentity="' + book_list[i][8] + '"><a href="#page3?mpid=' + item.MemberProjectId + '&pid=' + item.ProjectID + '"><h2>' + pjn + '</h2><p>可用次数：' + item.LastCount + '</p><span class="ui-li-count">' + book_list[i][2] + '</span></a></li>'
+                                }
+                            }
+
+                            if (nohas == false) {
+                                console.log("book project, MemberProject:" + pjn);
+                                $("#ul_project").append(llstr);
+                            } else {
+                                // 购买项目列表
+                                $("#ul_project").append('<li id="pi' + item.MemberProjectId + '" pid="pi' + item.ProjectID + '" pcount="' + item.LastCount + ' pentity="' + item.IsEntity + '"><a href="#page3?mpid=' + item.MemberProjectId + '&pid=' + item.ProjectID + '"><h2>' + pjn + '</h2><p>可用次数：' + item.LastCount + '</p><span class="ui-li-count">0</span></a></li>');
+                            }
+
+                            project_list.push([item.MemberProjectId, item.CardType, item.MemberCardId, item.ProjectID, item.Type, item.LastCount, item.UnitPrice]);
+                        }
+                    });
+                    $('#ul_project').listview('refresh');
+
+                    // 客户卡
+                    // 卡片类型 0:储值卡 1: 疗程卡 2: 单次卡 3: 体验卡 4: 综合限时卡 5: 综合限次卡 6: 拓客增值卡 7: 拓客优惠卡 8: 综合限时限次卡
+                    $(data.Cards).each(function (i, item) {
+                        if (item.Type == '0' || item.Type == '6') {
+                            var option = "<option value='" + item.MemberCardId + ":" + item.Type + "' data-amt='" + item.Amt + "'>" + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":" + item.Amt + "元</option>";
+                            $("#inputCard").append(option);
+                        }
+                        if (item.Type == '4') {
+                            var option = "<option value=\"" + item.MemberCardId + ":" + item.Type + "\">" + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":时限" + getDate(item.ExpiryDate) + "</option>";
+                            $("#inputCard2").append(option);
+                        }
+                        if (item.Type == '5') {
+                            var option = "<option value=\"" + item.MemberCardId + ":" + item.Type + "\" data-num='" + item.LastCount + "'>" + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":" + item.LastCount + "次</option>";
+                            $("#inputCard2").append(option);
+                        }
+                        if (item.Type == '8') {
+                            var option = "<option value=\"" + item.MemberCardId + ":" + item.Type + "\" data-num='" + item.LastCount + "'>" + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":" + item.LastCount + "次,时限" + getDate(item.ExpiryDate) + "</option>";
+                            $("#inputCard2").append(option);
+                        }
+                    });
+
+                    //$.mobile.changePage("#page2");
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 跳转到设置份数服务页面
+            $.mobile.paramsHandler.addPage("page3", ["mpid", "pid"], [], function (args) {
+                current_pid = args.pid;
+                current_mpid = args.mpid;
+
+                // 取得项目数量，限制选择份数 未完成
+                var pcount = $("#pi" + current_mpid).attr("pcount");
+
+                // 复位操作
+                $('input[name="radio-h-2"]:checked').each(function () {
+                    $(this).prop("checked", false).checkboxradio("refresh");
+                });
+                $('input[name="worker"]:checked').each(function () {
+                    $(this).prop("checked", false).checkboxradio("refresh");
+                });
+
+                for (var i = 0; i < project_list.length; i++) {
+                    if (project_list[i][0] == current_mpid) {
+                        if (project_list[i][4] == "1") {   // 赠与项目
+                            $("#divAmt").show();
+                        } else {
+                            $("#divAmt").hide();
+                        }
+                    }
+                }
+
+                //数组回写到页面
+                for (var i = 0; i < book_list.length; i++) {
+                    if (book_list[i][5] == current_mpid) {
+
+                        // 设置份数
+                        if (book_list[i][2] != "") {
+                            if (page3Init == false) {
+                                $('input[name="radio-h-2"][value="' + book_list[i][2] + '"]').prop("checked", true);
+                            } else {
+                                $('input[name="radio-h-2"][value="' + book_list[i][2] + '"]').prop("checked", true).checkboxradio("refresh");
+                            }
+                        }
+                        // 设置美容师
+                        var wk = book_list[i][3].split(',');
+                        for (var j = 0; j < wk.length; j++) {
+                            if (wk[j] != "")
+                                if (page3Init == false) {
+                                    $("#wo" + wk[j]).prop("checked", true);
+                                } else {
+                                    $("#wo" + wk[j]).prop("checked", true).checkboxradio("refresh");
+                                }
+                        }
+                        // 金额
+                        $("#inputAmt").val(book_list[i][4]);
+                    }
+                }
+                page3Init = true;
+
+                $("#page3 div h1").text($("#pi" + args.pid + " a h2").text());
+            });
+
+            // 跳转到现金消费页面
+            $.mobile.paramsHandler.addPage("page4", ["pid", "dpid"], [], function (args) {
+                current_pid = args.pid;
+                current_dpid = args.dpid;
+
+                // 复位操作
+                $('input[name="radio-h-3"]:checked').each(function () {
+                    $(this).prop("checked", false).checkboxradio("refresh");
+                });
+                $('input[name="worker1"]:checked').each(function () {
+                    $(this).prop("checked", false).checkboxradio("refresh");
+                });
+
+                //数组回写到页面
+                for (var i = 0; i < book_list.length; i++) {
+                    if (book_list[i][0] == current_pid && book_list[i][1] == true) {
+
+                        // 回写金额
+                        $("#inputAmount").val(book_list[i][4]);
+                        // 设置份数
+                        if (book_list[i][2] != "") {
+                            if (page4Init == false) {
+                                $('input[name="radio-h-3"][value="' + book_list[i][2] + '"]').prop("checked", true);
+                            } else {
+                                $('input[name="radio-h-3"][value="' + book_list[i][2] + '"]').prop("checked", true).checkboxradio("refresh");
+                            }
+                        }
+                        // 设置美容师
+                        var wk = book_list[i][3].split(',');
+                        for (var j = 0; j < wk.length; j++) {
+                            if (wk[j] != "") {
+                                if (page4Init == false) {
+                                    $("#wk" + wk[j]).prop("checked", true);
+                                } else {
+                                    $("#wk" + wk[j]).prop("checked", true).checkboxradio("refresh");
+                                }
+                            }
+                        }
+                        // 设置卡
+                        $("#inputType").val(book_list[i][10]);
+                        $("#inputType").selectmenu("refresh");
+                        $("#inputCard").val(book_list[i][6]);
+                        $("#inputCategory").val(book_list[i][9]);
+                        $("#inputCategory").change();
+                        $("#inputProject").val(current_pid);
+                        $("#inputProject").selectmenu("refresh");
+
+                        // 设置现消现耗
+                        if (book_list[i][8] == "1") {
+                            if (page4Init == false) {
+                                $("#flipEntity1").val('1');
+                            } else {
+                                $("#flipEntity1").val('1').slider("refresh");
+                            }
+                        } else {
+                            if (page4Init == false) {
+                                $("#flipEntity1").val('0');
+                            } else {
+                                $("#flipEntity1").val('0').slider("refresh");
+                            }
+                        }
+                    }
+                }
+                page4Init = true;
+                // $("#page4 div h1").text($("#pi" + args.pid + " a h2").text());
+            });
+
+            // 跳转到综合卡消费页面
+            $.mobile.paramsHandler.addPage("page7", ["pid", "dpid"], [], function (args) {
+                current_pid = args.pid;
+                current_dpid = args.dpid;
+
+                // 复位操作
+                $('input[name="radio-h-4"]:checked').each(function () {
+                    $(this).prop("checked", false).checkboxradio("refresh");
+                });
+                $('input[name="worker2"]:checked').each(function () {
+                    $(this).prop("checked", false).checkboxradio("refresh");
+                });
+
+                //数组回写到页面
+                for (var i = 0; i < book_list.length; i++) {
+                    if (book_list[i][0] == current_pid && book_list[i][1] == 'true') {
+
+                        // 设置份数
+                        if (book_list[i][2] != "") {
+                            if (page5Init == false) {
+                                $('input[name="radio-h-4"][value="' + book_list[i][2] + '"]').prop("checked", true);
+                            } else {
+                                $('input[name="radio-h-4"][value="' + book_list[i][2] + '"]').prop("checked", true).checkboxradio("refresh");
+                            }
+                        }
+                        // 设置美容师
+                        var wk = book_list[i][3].split(',');
+                        for (var j = 0; j < wk.length; j++) {
+                            if (wk[j] != "") {
+                                if (page5Init == false) {
+                                    $("#wh" + wk[j]).prop("checked", true);
+                                } else {
+                                    $("#wh" + wk[j]).prop("checked", true).checkboxradio("refresh");
+                                }
+                            }
+                        }
+                        $("#inputAount2").val(book_list[i][4]);
+                        // 设置卡
+                        $("#inputCard2").val(book_list[i][6]);
+                        $("#inputCard2").change();
+                        $("#inputProject2").val(current_pid);
+                        $("#inputProject2").selectmenu("refresh");
+                    }
+                }
+                page5Init = true;
+                // $("#page4 div h1").text($("#pi" + args.pid + " a h2").text());
+            });
+
+            $.mobile.paramsHandler.init();
+        };
+
+        $().ready(function () {
+
+            // 保存份数金额服务人员到数组
+            $("#frmProject").submit(function () {
+                // 设置份数 服务人员 金额
+                // 判断是否为空
+                // 数组是否已含
+                var num = $('[name="radio-h-2"]:checked').val();
+                var works = "";
+                var amount = $("#inputAmt").val();
+                $("[name='worker']:checked").each(function () {
+                    works += $(this).val() + ",";
+                })
+
+                if (typeof (num) == "undefined") {
+                    alert("请选择消费项目次数.")
+                    return false;
+                } else {
+                    var pcount = $("#pi" + current_mpid).attr("pcount");
+                    if (Number(num) > Number(pcount)) {
+                        alert("消费次数超过可用的项目数.");
+                        return false;
+                    }
+                }
+
+                if (works == "") {
+                    alert("请选择服务的美容师.")
+                    return false;
+                }
+
+                var plt = [current_pid, 'false', num, works, amount, current_mpid, "", "", "0", "", "0"];
+                var nohas = true;
+                for (var i = 0; i < book_list.length; i++) {
+                    if (book_list[i][5] == current_mpid) {
+                        // book_list[i][1] = "false";             // 已付费项目
+                        book_list[i][2] = num;                    // 次数
+                        book_list[i][3] = works;                  // 美容师
+                        book_list[i][4] = amount;                 // 金额
+                        book_list[i][5] = current_mpid;           // 用户项目ID
+                        book_list[i][6] = "";                     // 客户卡ID
+                        // book_list[i][8] = $("#flipEntity").val(); // 是否现消现耗
+                        book_list[i][9] = "";                     // 项目类型
+                        nohas = false;
+                    }
+                }
+                if (nohas) book_list.push(plt);
+
+                // 标记数量
+                $("#pi" + current_mpid + " a span").text(num);
+                $.mobile.changePage("#page2", { transition: "slide" });
+
+                return false;
+            });
+
+            // 去结算
+            $("#btn_over").click(function () {
+                // 检查
+                var ss = $("#inputSales").val();
+                if (ss == "") {
+                    $.mobile.toast({ message: "请选择顾问!", position: "bottom" });
+                    return false;
+                }
+                if (book_list.length == 0) {
+                    $.mobile.toast({ message: "请选择消耗项目!", position: "bottom" });
+                    return false;
+                }
+
+                $.mobile.changePage("#page5", { transition: "slide" });
+            });
+
+            // 添加现金消费项目
+            $("#btn_newproject").click(function () {
+                $.mobile.changePage("#page4", { transition: "slide" });
+            });
+
+            $("#btn_zonghe").click(function () {
+                $.mobile.changePage("#page7", { transition: "slide" });
+            });
+
+            // 表单验证
+            $("#frmBuyProject").validate({
+                rules: {
+                    inputProject: {
+                        required: true
+                    },
+                    inputAmount: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    }
+                },
+                messages: {
+                    inputProject: {
+                        required: "请选择项目"
+                    },
+                    inputAmount: {
+                        required: "请输入购买金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    }
+                }
+            });
+
+            // 提交现金消费项目
+            $("#frmBuyProject").submit(function () {
+
+                try {
+
+                    if ($("#frmBuyProject").validate().form()) {
+
+                        var projectid = $("#inputProject").val();
+                        var projectname = $("#inputProject option:selected").text();
+                        var unit = $("#inputProject option:selected").attr("data-unit");
+                        var num = $('[name="radio-h-3"]:checked').val();
+                        var card = $('#inputCard').val();
+                        var payType = $("#inputType").val();
+                        var works = "";  // 美容师
+                        $("input[name='worker1']:checked").each(function () {
+                            works += $(this).val() + ",";
+                        })
+                        var amount = $("#inputAmount").val();
+
+                        // 选择储值卡支付
+                        if (payType == '4') {
+                            if (card == "") {
+                                alert("请选择储值卡.");
+                                return false;
+                            } else {
+                                var cardtype = card.split(":")[1];
+                                var card_amt = $("#inputCard option:selected").attr("data-amt");
+
+                                if (cardtype == '0' || cardtype == '6') {
+                                    if (Number(amount) > Number(card_amt)) {
+                                        alert("储值卡余额不足.");
+                                        return false;
+                                    }
+                                }
+                            }
+                        } else {
+
+                            // 数据审查
+                            if (amount == "") {
+                                alert("请选择消费金额.");
+                                return false;
+                            }
+                        }
+
+                        if (typeof (num) == "undefined") {
+                            alert("请选择消费项目次数.")
+                            return false;
+                        }
+                        if (works == "") {
+                            alert("请选择服务的美容师.")
+                            return false;
+                        }
+                        if (parseInt(unit) * parseInt(num) > parseInt(amount)) {
+                            alert("项目单价不能低于最低销售价.")
+                            return false;
+                        }
+
+                        // 合计现金消费金额 超过客户余额是提醒
+                        var nohas = true;
+                        for (var i = 0; i < book_list.length; i++) {
+
+                            // 已含 修改数据
+                            if (book_list[i][0] == projectid && book_list[i][1] == 'true') {
+                                //book_list[i][1] = "true";                  // 已付费项目
+                                book_list[i][2] = num;                       // 次数
+                                book_list[i][3] = works;                     // 美容师
+                                book_list[i][4] = amount;                    // 金额
+                                book_list[i][5] = "undefined";               // 用户项目ID
+                                book_list[i][6] = card;                      // 客户卡
+                                book_list[i][8] = $("#flipEntity1").val();   // 是否现消现耗
+                                book_list[i][9] = $("#inputCategory").val(); // 项目类型
+                                book_list[i][10] = payType;                  // 付款方式 现金  储值卡
+                                nohas = false;
+                            }
+
+                            // 重新标记金额
+                            if (typeof (current_dpid) != "undefined") {
+                                if ($("#dpi" + current_dpid).length > 0) {
+                                    $("#dpi" + current_dpid + " a span").text(amount);
+                                }
+                            }
+                        }
+
+                        // 添加到数组
+                        if (nohas) {
+                            var plt = [projectid, 'true', num, works, amount, "undefined", card, "", $("#flipEntity1").val(), $("#inputCategory").val(), payType];
+                            book_list.push(plt);
+
+                            //$("#ul_project").find("li:last").remove();
+                            $("#ul_project").append('<li id="dpi' + book_list.length + '" pid="pi' + projectid + '"><a href="#page4?&pid=' + projectid + '&dpid=' + book_list.length + '"><h2>' + projectname + '</h2><p></p><span class="ui-li-count">￥' + amount + '</span></a></li>');
+                            $('#ul_project').listview('refresh');
+                        }
+
+                        $.mobile.changePage("#page2", { transition: "slide" });
+                        //return false;
+                    }
+                } catch (e) {
+                    $.mobile.toast({
+                        message: "操作失败!",
+                        position: "top"
+                    });
+                }
+
+                return false;
+            });
+
+            // 提交综合卡项目
+            $("#frmBuyProject2").submit(function () {
+
+                try {
+                    if ($("#frmBuyProject2").validate().form()) {
+
+                        var projectid = $("#inputProject2").val();
+                        var projectname = $("#inputProject2 option:selected").text();
+                        //var unit = $("#inputProject2 option:selected").attr("data-unit");
+                        var num = $('[name="radio-h-4"]:checked').val();
+                        var card = $('#inputCard2').val();
+                        var works = "";  // 美容师
+                        $("input[name='worker2']:checked").each(function () {
+                            works += $(this).val() + ",";
+                        })
+
+                        // 选择储值卡支付
+                        if (card == "") {
+                            alert("请选择储值卡.");
+                            return false;
+                        } else {
+                            var cardtype = card.split(":")[1];
+                            var card_num = $("#inputCard2 option:selected").attr("data-num");
+                            if (cardtype == '5' || cardtype == '8') {
+                                if (Number(num) > Number(card_num)) {
+                                    alert("综合卡剩余次数不足.");
+                                    return false;
+                                }
+                            }
+                        }
+
+                        if (typeof (num) == "undefined") {
+                            alert("请选择消费项目次数.")
+                            return false;
+                        }
+                        if (works == "") {
+                            alert("请选择服务的美容师.")
+                            return false;
+                        }
+
+                        // 合计现金消费金额 超过客户余额是提醒
+                        var nohas = true;
+                        //var amount = Number(unit) * Number(num);
+                        var amount = 0;
+                        var v_amount = $("#inputAmount2").val();
+                        if (v_amount != "") {
+                            amount = new Number(v_amount);
+                        }
+
+                        for (var i = 0; i < book_list.length; i++) {
+
+                            // 已含 修改数据
+                            if (book_list[i][0] == projectid && book_list[i][1] == 'true') {
+                                //book_list[i][1] = "true";                   // 已付费项目
+                                book_list[i][2] = num;                        // 次数
+                                book_list[i][3] = works;                      // 美容师
+                                book_list[i][4] = amount;                     // 金额
+                                book_list[i][5] = "undefined";                // 用户项目ID
+                                book_list[i][6] = card;                       // 客户卡
+                                book_list[i][8] = "0";                        // 是否现消现耗
+                                book_list[i][9] = $("#inputCategory").val();  // 项目类型
+                                book_list[i][10] = "4";                       // 付款方式 现金  储值卡
+                                nohas = false;
+                            }
+
+                            // 重新标记金额
+                            if (typeof (current_dpid) != "undefined") {
+                                if ($("#dpi" + current_dpid).length > 0) {
+                                    $("#dpi" + current_dpid + " a span").text(amount);
+                                }
+                            }
+                        }
+
+                        // 添加到数组
+                        if (nohas) {
+                            var plt = [projectid, 'true', num, works, amount, "undefined", card, "", $("#flipEntity1").val(), $("#inputCategory").val(), "4"];
+                            book_list.push(plt);
+
+                            //$("#ul_project").find("li:last").remove();
+                            $("#ul_project").append('<li id="dpi' + book_list.length + '" pid="pi' + projectid + '"><a href="#page7?&pid=' + projectid + '&dpid=' + book_list.length + '"><h2>' + projectname + '</h2><p></p><span class="ui-li-count">￥' + amount + '</span></a></li>');
+                            $('#ul_project').listview('refresh');
+                        }
+
+                        $.mobile.changePage("#page2", { transition: "slide" });
+                        //return false;
+                    }
+                } catch (e) {
+                    $.mobile.toast({
+                        message: "操作失败!",
+                        position: "top"
+                    });
+                }
+
+                return false;
+            });
+
+            // 付款方式变更
+            $("#inputType").change(function () {
+                if ($(this).val() == '4') {
+                    $("#divCard").show();
+                } else {
+                    $("#divCard").hide();
+                }
+            });
+
+            // 结算
+            $("#btn_submit").click(function () {
+                // 验证密码
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { memberId: memberObject.MemberID, passwd: $("#card_passsword").val() },
+                    url: serverUrl + "/MemberAdmin/AppLogin",
+                    success: function (data) {
+                        console.log("member passwork:" + data);
+                        if (data == "false") {
+                            alert("密码错误");
+                        } else {
+                            payment();
+                        }
+                        $.mobile.loading('hide');
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                        $.mobile.loading('hide');
+                    }
+                });
+            });
+
+            // 保存订单
+            $("#btn_save").click(function () {
+                $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+                var vm = "";
+                var hasproject = false;
+
+                for (var i = 0; i < book_list.length; i++) {
+                    if (book_list[i][2] != "0") {
+                        vm += book_list[i][0] + "," + book_list[i][1] + "," + book_list[i][2] + "," + book_list[i][3].replace(/,/g, "|")
+                            + "," + book_list[i][4] + "," + book_list[i][5] + "," + book_list[i][6] + "," + book_list[i][7] + "," + book_list[i][8] + "," + book_list[i][10] + ";";
+                        hasproject = true;
+                    }
+                }
+                if (hasproject == false) {
+                    alert("没有选择项目");
+                    return false;
+                }
+
+                // 保存数据
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        hostId: userObject.host,
+                        branchId: userObject.branch,
+                        memberId: memberObject.MemberID,
+                        userId: userObject.userid,
+                        clientId: userObject.uuid,
+                        SalesId: $("#inputSales").val(),
+                        bookId: current_bid,
+                        books: vm
+                    },
+                    url: serverUrl + "/Book/AppCreate",
+                    success: function (data) {
+                        console.log("member passwork:" + data);
+                        if (data.code == 1) {
+                            // 消费成功
+                            $.mobile.changePage("#page6");
+                        } else {
+                            // 显示错误信息
+                            $("#returnMsg").html(data.message);
+                            $.mobile.changePage("#failPage");
+                        }
+                        $.mobile.loading('hide');
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                        $.mobile.loading('hide');
+                    }
+                });
+            });
+
+            // 客户选择卡
+            $("#inputCard").change(function () {
+                $("#divAmount").show();
+                $("#divCategory").show();
+
+                var cardid = $(this).val().split(":")[0];
+                var cardtype = $(this).val().split(":")[1];
+
+                if (cardtype == '4' || cardtype == '5' || cardtype == '8') {
+
+                }
+            });
+
+            // 客户选择卡
+            $("#inputCard2").change(function () {
+
+                var cardid = $(this).val().split(":")[0];
+                //var cardtype = $(this).val().split(":")[1];
+
+                // 综合卡 项目限定
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { hostId: userObject.host, cardId: cardid },
+                    async: false,
+                    url: serverUrl + "/MemberAdmin/AppMemberCardProject",
+                    success: function (data) {
+                        $("#inputProject2").empty();
+                        var option = "<option value=\"\">请选择...</option>";
+                        $("#inputProject2").append(option);
+
+                        $(data).each(function (i) {
+                            var option = "<option value='" + data[i].id + "' data-unit='" + data[i].unit + "'>" + data[i].name + "</option>";
+                            $("#inputProject2").append(option);
+                        });
+                        $("#inputProject2").selectmenu("refresh");
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+                // end ajax
+            });
+
+            // 项目类型改变
+            $("#inputCategory").change(function () {
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    async: false,
+                    data: { hostId: userObject.host, Category: $("#inputCategory").val() },
+                    url: serverUrl + "/Project/AppList",
+                    success: function (data) {
+                        $("#inputProject").empty();
+                        var option = "<option value=\"\">请选择...</option>";
+                        $("#inputProject").append(option);
+
+                        $(data).each(function (i) {
+                            var option = "<option value='" + data[i].id + "' data-unit='" + data[i].unit + "\" data-entity=\"" + data[i].entity+ "'>" + data[i].name + "</option>";
+                            $("#inputProject").append(option);
+                        });
+                        $("#inputProject").selectmenu("refresh");
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+            $('input[name="radio-h-4"]').click(function () {
+                var unit = $("#inputProject2 option:selected").attr("data-unit");
+                var num = $('[name="radio-h-4"]:checked').val();
+                if (unit != "" && num != "") {
+                    $("#inputAmount2").val(new Number(unit) * new Number(num));
+                }
+            });
+        });
+
+
+        // 结算
+        function payment() {
+            $.mobile.loading('show', { text: '加载中...', textVisible: true });
+            var vm = "";
+            var hasproject = false;
+
+            for (var i = 0; i < book_list.length; i++) {
+                if (book_list[i][2] != "0") {
+                    vm += book_list[i][0] + "," + book_list[i][1] + "," + book_list[i][2] + "," + book_list[i][3].replace(/,/g, "|")
+                        + "," + book_list[i][4] + "," + book_list[i][5] + "," + book_list[i][6] + "," + book_list[i][7] + "," + book_list[i][8] + "," + book_list[i][10] + ";";
+                    hasproject = true;
+                }
+            }
+            if (hasproject == false) {
+                alert("没有选择项目");
+                return false;
+            }
+
+            // 保存数据
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: {
+                    hostId: userObject.host,
+                    branchId: userObject.branch,
+                    memberId: memberObject.MemberID,
+                    userId: userObject.userid,
+                    clientId: userObject.uuid,
+                    SalesId: $("#inputSales").val(),
+                    bookId: current_bid,
+                    books: vm
+                },
+                url: serverUrl + "/Book/AppSettlement",
+                success: function (data) {
+                    console.log("member passwork:" + data);
+                    if (data.code == 1) {
+                        // 消费成功
+                        $.mobile.changePage("#page6");
+                    } else {
+                        // 显示错误信息
+                        $("#returnMsg").html(data.message);
+                        $.mobile.changePage("#failPage");
+                    }
+                    $.mobile.loading('hide');
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                    $.mobile.loading('hide');
+                }
+            });
+        }
+
+        //var current_pid = '';   // 当前项目ID
+        //var current_mpid = '';  // 当前会员项目ID
+        //var current_dpid = '';
+        var project_list = new Array();
+        var book_list = new Array();
+
+        var page3Init = false;
+        var page4Init = false;
+        var page5Init = false;
+    </script>
+
+</body>
+</html>

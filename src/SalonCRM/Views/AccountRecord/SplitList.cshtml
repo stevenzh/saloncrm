@@ -1,0 +1,52 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "AccountRecord", Action = "SplitList", RecordID = ViewData["RecordID"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "SplitID";
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "工种";
+            column.FieldName = "Position";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Text";
+                p.ValueField = "Value";
+                p.ValueType = typeof(string);
+                p.DataSource = ViewBag.Position;
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "UserID";
+            column.Caption = "员工";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "UserCnName";
+                p.ValueField = "Id";
+                p.ValueType = typeof(string);
+                p.DataSource = ViewBag.Salesman;
+            });
+        });
+        settings.Columns.Add("Percentage", "分配比");
+        settings.Columns.Add("Amount", "分配金额");
+
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.SettingsPager.PageSize = 20;
+
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "AccountRecord", Action = "AddNewSplitPartial", RecordID = ViewData["RecordID"] };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "AccountRecord", Action = "UpdateSplitPartial", RecordID = ViewData["RecordID"] };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "AccountRecord", Action = "DeleteSplitPartial", RecordID = ViewData["RecordID"] };
+
+    }).Bind(Model).GetHtml()

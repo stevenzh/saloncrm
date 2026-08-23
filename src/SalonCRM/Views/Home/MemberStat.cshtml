@@ -1,0 +1,266 @@
+﻿@using SalonCRM.Models
+@model SalonCRM.Models.MemberQModel
+@using SalonCRM.Identity
+@{
+    ViewBag.Title = "客户到店统计";
+    var sl = ViewBag.StatusList as List<KeyNameCountModel>;
+    var s2 = ViewBag.LevelList as List<KeyNameCountModel>;
+    // 门店用户登录
+    CustomPrincipal cu = (CustomPrincipal)User;
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+   )
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+   )
+    <style>
+        .label { font-size: 90%; }
+    </style>
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">客户统计</a> </li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+</div>
+
+<div class="main-content">
+
+    @using (Html.BeginForm("MemberStat", "Home", FormMethod.Post))
+    {
+        <table class="">
+            <tr style="height:45px;">
+                <td style="padding-right: 4px">门店</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "2")
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.BranchId,
+                          settings =>
+                          {
+                              settings.Width = 180;
+                              settings.Properties.TextField = "Text";
+                              settings.Properties.ValueField = "Value";
+                              settings.Properties.ValueType = typeof(Int32);
+                          }).BindList(ViewBag.OrganList).GetHtml();
+                    }
+                    else
+                    {
+                        @Html.DevExpress().TextBox(settings =>
+                          {
+                              settings.Name = "BranchName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserDepartment.Name;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.BranchId);
+                    }
+                </td>
+                <td style="padding-right: 4px">开始日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.StartDate).GetHtml()
+                </td>
+                <td style="padding-right: 4px">结束日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.EndDate).GetHtml()
+                </td>
+                <td style="padding-right: 4px">
+                    <input type="submit" class="btn btn-default" value="查询" />
+                </td>
+            </tr>
+        </table>
+    }
+    <br />
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">按照客户状态统计</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>类型</th>
+                                <th>人头数</th>
+                                <th>临店次数</th>
+                            </tr>
+                            @foreach (var item in sl)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.Count</td>
+                                    <td>@item.Count2</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td>体验客户</td>
+                                <td>@ViewBag.NoMember</td>
+                                <td>@ViewBag.NoMember1</td>
+                            </tr>
+                            @*<tr>
+                                    <td>所有客户</td>
+                                    <td>@ViewBag.AllMember</td>
+                                    <td>0</td>
+                                </tr>*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div id="chart" style="width:100%; height:250px;"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">按照客户等级统计</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>类型</th>
+                                <th>人头数</th>
+                                <th>临店次数</th>
+                            </tr>
+                            @foreach (var item in s2)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.Count</td>
+                                    <td>@item.Count2</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div id="chart2" style="width:100%; height:250px;"></div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <!-- ECharts单文件引入 -->
+    <script src="http://cdn.bootcss.com/echarts/3.4.0/echarts.min.js"></script>
+    <script type="text/javascript">
+
+        // 基于准备好的dom，初始化echarts图表
+        var myChart = echarts.init(document.getElementById('chart'));
+
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: [ @foreach (var item in sl) { @Html.Raw("\'" + item.Name+"\',") }, '体验用户']
+            },
+            series: [
+                {
+                    name: '临店次数',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '20',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: [
+                        @foreach (var item in sl) { @Html.Raw("{value:"+item.Count+",name:'" + item.Name+"'},") }
+                        { value: @ViewBag.NoMember, name: '体验用户' }
+                    ]
+                }
+            ]
+        };
+
+
+        // 为echarts对象加载数据
+        myChart.setOption(option);
+
+    </script>
+
+    <script type="text/javascript">
+
+        // 基于准备好的dom，初始化echarts图表
+        var myChart2 = echarts.init(document.getElementById('chart2'));
+
+        var option2 = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: [ @foreach (var item in s2) { @Html.Raw("\'" + item.Name+"\',") }]
+            },
+            series: [
+                {
+                    name: '临店次数',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '20',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: [
+                        @foreach (var item in s2) { @Html.Raw("{value:"+item.Count+",name:'" + item.Name+"'},") }
+                    ]
+                }
+            ]
+        };
+
+        // 为echarts对象加载数据
+        myChart2.setOption(option2);
+
+    </script>
+}

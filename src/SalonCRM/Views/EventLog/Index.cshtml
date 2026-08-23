@@ -1,0 +1,88 @@
+﻿@model SalonCRM.Models.EventLogQModel
+@{
+    ViewBag.Title = "操作日志";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+</div>
+
+<div class="main-content">
+    @using (Html.BeginForm("Index", "EventLog"))
+    {
+        <table class="">
+            <tr>
+                @if (User.IsInRole("超级管理员"))
+                {
+                    <td style="padding-right: 4px">商户</td>
+                    <td style="padding-right: 4px">
+                        @Html.DevExpress().ComboBoxFor(m => m.HostID,
+                          settings =>
+                          {
+                              settings.Name = "HostId";
+                              settings.Width = 180;
+                              settings.Properties.TextField = "Text";
+                              settings.Properties.ValueField = "Value";
+                              settings.Properties.ValueType = typeof(Int32);
+                          }).BindList(ViewBag.HostList).GetHtml()
+                    </td>
+                }
+                else
+                {
+                    @Html.HiddenFor(model => model.HostID)
+                }
+                <td style="padding-right: 4px">名称</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.TypeID,
+                          settings =>
+                          {
+                              settings.Name = "TypeID";
+                              settings.Width = 180;
+                              settings.Properties.TextField = "Text";
+                              settings.Properties.ValueField = "Value";
+                              settings.Properties.ValueType = typeof(Int32);
+                          }).BindList(ViewBag.EventTypeSelectList).GetHtml()
+                </td>
+                <td style="padding-right: 4px">开始日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.StartDate,
+                    settings =>
+                    {
+                        settings.Name = "StartDate";
+                        settings.Properties.EditFormatString = "yyyy-MM-dd";
+                    }).GetHtml()
+                </td>
+                <td style="padding-right: 4px">结束日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.EndDate,
+                    settings =>
+                    {
+                        settings.Name = "EndDate";
+                        settings.Properties.EditFormatString = "yyyy-MM-dd";
+                    }).GetHtml()
+                </td>
+                <td>
+                    <input type="submit" class="btn btn-default" value="搜索" />
+                </td>
+            </tr>
+        </table>
+        <br />
+        @Html.Partial("LogList", Model.LogList)
+    }
+
+</div>

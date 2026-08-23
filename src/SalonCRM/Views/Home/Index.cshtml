@@ -1,0 +1,429 @@
+﻿@using SalonCRM.Models;
+@using SalonCRM.Manager;
+@using SalonCRM.Web;
+@using SalonCRM.Identity
+@model SalonCRM.Models.HomeIndexModel
+@{
+    ViewBag.Title = "首页";
+    var daily = Model.DayStat;
+    var monthly = Model.MonthStat;
+    // 门店用户登录
+    CustomPrincipal cu = (CustomPrincipal)User;
+}
+@section AdditionalResources {}
+
+<div class="header">
+    <h1>门店统计总揽</h1>
+    <ul class="breadcrumb">
+        @if (cu.Type == "2")
+        {
+            <li class="active">当前门店:  @Html.DropDownListFor(m => m.BranchID, (List<SelectListItem>)ViewBag.OrganId, new { @id = "BranchID", @class = "form-control" }) </li>
+        }
+        else
+        {
+            <li class="active">当前门店:  @GlobalContext.Current.UserDepartment.Name </li>
+        }
+    </ul>
+</div>
+
+<div class="main-content">
+
+    @*<div class="panel panel-default">
+            <a href="#page-stats" class="panel-heading" data-toggle="collapse">门店统计</a>
+            <div id="page-stats" class="panel-collapse panel-body collapse in">
+                <div id="chart" style="width:100%; height:250px;"></div>
+            </div>
+        </div>*@
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading no-collapse">
+                    绩效管理数据
+                </div>
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <td colspan="2">今日销售业绩合计</td>
+                            <td>@(daily.N1 + daily.N2)</td>
+                        </tr>
+                        <tr>
+                            <td style="width:20px;"></td>
+                            <td>今日新客业绩</td>
+                            <td>@daily.N2</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>今日老客业绩</td>
+                            <td>@daily.N1</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">今日消耗业绩合计</td>
+                            <td>@((daily.A1 == null ? 0 : daily.A1.Value) + (daily.A2 == null ? 0 : daily.A2.Value))</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>今日即销即耗</td>
+                            <td>@daily.A2</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>今日实操消耗</td>
+                            <td>@daily.A1</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">当月销售业绩合计</td>
+                            <td>@((monthly.N1 == null ? 0 : monthly.N1.Value) + (monthly.N2 == null ? 0 : monthly.N2.Value) + (monthly.N3 == null ? 0 : monthly.N3.Value))</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>当月新客业绩</td>
+                            <td>@monthly.N2</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>当月老客业绩</td>
+                            <td>@monthly.N1</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>当月体验业绩</td>
+                            <td>@monthly.N3</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">当月消耗业绩合计</td>
+                            <td>@(monthly.A1 + monthly.A2)</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>当月即销即耗</td>
+                            <td>@monthly.A2</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>当月实操消耗</td>
+                            <td>@monthly.A1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading no-collapse">
+                    会员管理数据
+                </div>
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <td>总会员人数</td>
+                            <td>@Model.MemberCount</td>
+                        </tr>
+                        <tr>
+                            <td>今日临店数</td>
+                            <td>@daily.Flow</td>
+                        </tr>
+                        <tr>
+                            <td> 今日项目量</td>
+                            <td>@daily.ProjectNum</td>
+                        </tr>
+                        <tr>
+                            <td>当月临店数</td>
+                            <td>@monthly.Flow</td>
+                        </tr>
+                        <tr>
+                            <td>当月项目量</td>
+                            <td>@monthly.ProjectNum</td>
+                        </tr>
+                        <tr>
+                            <td>月业绩指标</td>
+                            <td>￥@Model.MonthObjective</td>
+                        </tr>
+                        <tr>
+                            <td>卡扣金额</td>
+                            <td>￥@daily.A3</td>
+                        </tr>
+                        <tr>
+                            <td>当日储值卡金额</td>
+                            <td>￥ @Model.DayCardAmount</td>
+                        </tr>
+                        <tr>
+                            <td>当日综合卡金额</td>
+                            <td>￥ @Model.DayZhCardAmount</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading no-collapse">
+                    本月业绩统计
+                </div>
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <td>本月面部</td>
+                            <td>￥@monthly.S1</td>
+                        </tr>
+                        <tr>
+                            <td>本月身体</td>
+                            <td>￥@monthly.S2</td>
+                        </tr>
+                        <tr>
+                            <td>本月仪器</td>
+                            <td>￥@monthly.S3</td>
+                        </tr>
+                        <tr>
+                            <td>本月家居产品</td>
+                            <td>￥@monthly.S4</td>
+                        </tr>
+                        <tr>
+                            <td>本月其他</td>
+                            <td>￥@monthly.S5</td>
+                        </tr>
+                        <tr>
+                            <td>当月卡项（储值卡、综合卡）</td>
+                            <td>￥@monthly.S6</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading no-collapse">
+                    客户统计
+                </div>
+                <table class="table list">
+                    <tbody>
+
+                        <tr>
+                            <td>当日预约</td>
+                            <td>@Model.Appointment.Count()（@Model.MonthWvie）</td>
+                        </tr>
+                        <tr>
+                            <td>明日预约</td>
+                            <td>@Model.NextDayAp</td>
+                        </tr>
+                        <tr>
+                            <td>新增客户</td>
+                            <td>@Model.NewMember </td>
+                        </tr>
+                        @foreach (CommonSample s in Model.MemberStatus)
+                        {
+                            <tr>
+                                <td>@s.Categoty</td>
+                                <td>@s.Num</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading no-collapse">
+                    <span class="label label-warning">@Model.BirtAlert.Count()</span>
+                    生日提醒
+                </div>
+                <table class="table list">
+                    <tbody>
+                        @foreach (Member mr in Model.BirtAlert)
+                        {
+                            <tr>
+                                <td>@mr.Name</td>
+                                <td>@mr.LastBirth.Value.ToShortDateString()</td>
+                                <td>@mr.MobileNumber</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading no-collapse">
+                    <span class="label label-warning">@Model.Appointment.Count()</span>
+                    预约提醒
+                </div>
+                <table class="table list">
+                    <tbody>
+                        @foreach (Appointment ap in Model.Appointment)
+                        {
+                            <tr>
+                                <td>@ap.Member.Name</td>
+                                <td>@ap.BookDate.ToShortDateString()</td>
+                                <td>@ap.Member.MobileNumber</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    <!-- ECharts单文件引入 -->
+    <script src="http://cdn.bootcss.com/echarts/3.4.0/echarts.min.js"></script>
+    <script type="text/javascript">
+        $("#BranchID").change(function () {
+            var branchID = $(this).val();
+            console.log("Branch:" + branchID);
+            window.location.href = '/Home/Index/' + branchID;
+        });
+    </script>
+
+    @*<script type="text/javascript">
+
+            // 基于准备好的dom，初始化echarts图表
+            var myChart = echarts.init(document.getElementById('chart'));
+
+            var option = {
+                //title: {
+                //    text: '',
+                //    subtext: '',
+                //    x: 'center'
+                //},
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} {b} :{d}%",
+                    textStyle: {
+                        fontWeight: 'bold',
+                        fontSize: 14
+                    }
+                },
+                //legend: {
+                //    orient: 'vertical',
+                //    left: 'left',
+                //    data: ['优秀', '通过', '建议修改']
+                //},
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    left: 'right',
+                    top: 'center',
+                    feature: {
+                        dataView: { readOnly: true },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                //grid: [
+                //    { x: '7.5%', y: '65%', width: '88%', height: '30%' },
+                //],
+                xAxis: [
+                    {
+                        gridIndex: 0,
+                        type: 'category',
+                        axisTick: {
+                            alignWithLabel: true
+                        },
+                        data: ['月度销售消耗比例', '月度业绩指标', '今日预约到店']
+                    },
+                ],
+                yAxis: [
+                    { gridIndex: 0, name: '学科', show: false },
+                ],
+                series: [
+                    {
+                        name: '月业绩指标',
+                        type: 'pie',
+                        radius: '33%',
+                        center: ['50%', '33%'],
+                        data: [
+                            { value: @Model.MonthsIncome, name: '已完成' },
+                            { value: @(Model.MonthObjective - Model.MonthsIncome), name: '未完成' }
+                        ],
+                        label: {
+                            normal: {
+                                position: 'outside',
+                                formatter: '{b}：{c}元',
+                                textStyle: {
+                                    color: '',
+                                    fontSize: 14
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    {
+                        name: '消耗比例',
+                        type: 'pie',
+                        radius: '33%',
+                        center: ['22%', '33%'],
+                        data: [
+                            { value: @Model.MonthsService, name: '消耗' },
+                            { value: @Model.MonthSales, name: '销售' }
+                        ],
+                        label: {
+                            normal: {
+                                position: 'outside',
+                                formatter: '{b}：{c}元',
+                                textStyle: {
+                                    color: '',
+                                    fontSize: 14
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    {
+                        name: '预约到店',
+                        type: 'pie',
+                        radius: '33%',
+                        center: ['80%', '33%'],
+                        data: [
+                            { value: @Model.MonthWvie, name: '已到店' },
+                            { value: @(Model.Appointment.Count() - Model.MonthWvie), name: '未到店' }
+                        ],
+                        label: {
+                            normal: {
+                                position: 'outside',
+                                formatter: '{b}：{c}人',
+                                textStyle: {
+                                    color: '',
+                                    fontSize: 14
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+
+                ]
+            };
+
+
+            // 为echarts对象加载数据
+            myChart.setOption(option);
+
+        </script>*@
+}

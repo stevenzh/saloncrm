@@ -1,0 +1,128 @@
+﻿@model SalonCRM.Models.MemberProjectViewModel
+@{
+    ViewBag.Title = "客户还款";
+}
+@using SalonCRM.Web.MVC;
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+</div>
+
+<div class="main-content">
+    @using (Html.BeginForm("Repayment", "Debt", FormMethod.Post, new { @id = "theForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.MemberProjectId)
+            @Html.HiddenFor(model => model.MemberCardId)
+            @Html.HiddenFor(model => model.MemberID)
+            @Html.HiddenFor(model => model.Payment)
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.ProjectName, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Model.ProjectName
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.CardTitle, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Model.CardTitle
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MemberName, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Model.MemberName
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Amount, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Model.Amount
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ActualPrice, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Model.ActualPrice
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Payment, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Model.Payment
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Repayment, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Repayment, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.SalesStr, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.SalesStr, (SelectList)ViewBag.Salesman, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Beautician, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.ListBoxFor(m => m.Beautician, (SelectList)ViewData["Workers"], new { @class = "form-control", @multiple = "multiple" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="提交" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript">
+    $(function () {
+
+        $('#Beautician').multiselect({ nonSelectedText: "请选择" });
+
+        $("#theForm").validate({
+            rules: {
+                Repayment: {
+                    required: true,
+                    number: true,
+                    min: 1,
+                }
+            },
+            messages: {
+                Repayment: {
+                    required: "请输入购买金额",
+                    number: "请输入数字",
+                    min: "请输入大于零的数字"
+                }
+            }
+        });
+
+        $("#theForm").submit(function () {
+
+            if ($("#theForm").validate().form()) {
+                var dd = $("#Payment").val();
+                var mm = $("#Repayment").val();
+                if (Number(dd) < Number(mm)) {
+                    alert("收款金额大于欠款。");
+                    return false;
+                }
+            }
+        });
+    });
+</script>

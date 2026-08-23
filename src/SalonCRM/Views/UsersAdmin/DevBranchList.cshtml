@@ -1,0 +1,12 @@
+﻿@model SalonCRM.Models.UserAdminViewModel
+@Html.DevExpress().ComboBox(
+    settings =>
+    {
+        settings.Name = "BranchId";
+        settings.CallbackRouteValues = new { Controller = "UsersAdmin", Action = "DevBranchList", HostId = ViewData["HostId"], BranchId = ViewData["BranchId"] };
+        settings.Width = 180;
+        settings.Properties.TextField = "Text";
+        settings.Properties.ValueField = "Value";
+        settings.Properties.ValueType = typeof(Int32);
+        settings.Properties.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['HostId'] = HostId.GetValue(); }";
+    }).BindList(ViewBag.OrganId).Bind(Model.BranchId).GetHtml()

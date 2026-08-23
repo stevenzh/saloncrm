@@ -1,0 +1,72 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "PointBook",
+            Action = "PointList",
+            BranchId = ViewData["BranchId"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            CardNo = ViewData["CardNo"]
+        };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "PointBookId";
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "MemberId";
+            column.Caption = "客户ID";
+            column.Visible = false;
+            column.GroupIndex = 0;
+        });
+        settings.Columns.Add("Member.Name", "客户名称");
+        //settings.Columns.Add("InOut", "类型");
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "类型";
+            column.Width = 90;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                string type = Convert.ToString(DataBinder.Eval(c.DataItem, "InOut"));
+                if (type == "1")
+                    ViewContext.Writer.Write("获得积分");
+                else if (type == "2")
+                    ViewContext.Writer.Write("消耗积分");
+            });
+        });
+
+
+        settings.Columns.Add("InPoints", "获得积分");
+        settings.Columns.Add("OutPoints", "消耗积分");
+
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.FieldName = "ExpiryDate";
+            column.Caption = "有效截至日期";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.FieldName = "CreatedDate";
+            column.Caption = "操作时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd HH:mm:ss";
+        });
+        settings.Columns.Add("Remark", "备注");
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "InPoints");
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "OutPoints");
+        settings.SettingsBehavior.AutoExpandAllGroups = true;
+
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "OutPoints");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "InPoints");
+        settings.Settings.ShowFooter = true;
+
+    }).Bind(Model).GetHtml()

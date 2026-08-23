@@ -1,0 +1,743 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户转卡</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+    <meta charset="utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div data-role="page" id="page0" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="menu_member.html" data-role="button">返回首页</a>
+            <h3>客户转卡</h3>
+        </div>
+        <div data-role="content">
+            <a href="#mlist?route=1" data-role="button">项目转换</a>
+            <a href="#mlist?route=2" data-role="button">换卡</a>
+        </div>
+    </div>
+
+    <!-- 分支 转换项目 -->
+    <div data-role="page" id="mlist" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>项目转换</h3>
+        </div>
+        <div data-role="content">
+            <p>选择客户</p>
+            <ol id="ol_member" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="搜索姓名、卡号、手机号..."></ol>
+        </div>
+    </div>
+
+    <div data-role="page" id="minfo" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>客户信息</h1>
+        </div>
+        <div data-role="content">
+            <ul id="u_member" data-role="listview"></ul>
+            <br />
+            <div data-role="fieldcontain">
+                <label for="card_no">密码：</label>
+                <input type="password" name="card_passsword" id="card_passsword">
+            </div>
+            <button id="btn_next1" class="btn btn-default">下一步</button>
+        </div>
+    </div>
+
+    <div data-role="page" id="route1-1" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>选择放弃项目</h3>
+        </div>
+        <div data-role="content">
+            <ul id="ul_member" data-role="listview" data-inset="true"></ul>
+            <label>请选择需要置换的项目：</label>
+            <ul id="ul_project" data-role="listview" data-inset="true"></ul>
+            <p>置换金额:<span id="span_amount">0</span></p>
+
+            <button id="btn_next2" class="btn btn-default">下一步</button>
+        </div>
+    </div>
+
+    <div data-role="page" id="route1-2" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>选择购买项目</h3>
+        </div>
+        <div data-role="content">
+            <form id="frmProject">
+                <div data-role="fieldcontain" id="divAmount">
+                    <label for="inputFrom">置换金额</label>
+                    <input type="text" id="inputFrom" name="inputFrom" placeholder="置换金额">
+                </div>
+
+                <div data-role="fieldcontain">
+                    <label for="inputCategory">项目类型</label>
+                    <select id="inputCategory" name="inputCategory">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputProject">项目列表</label>
+                    <select id="inputProject" name="inputProject"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputAmount">单价</label>
+                    <input type="text" id="inputAmount" name="inputAmount" placeholder="单价">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputNum">次数</label>
+                    <input type="text" id="inputNum" name="inputNum" value="1" placeholder="次数">
+                </div>
+                <p>
+                    现付或卡扣金额:<span id="remain_amt" style="color:#0f68bd"></span>
+                </p>
+                <div data-role="fieldcontain">
+                    <label for="inputType"><em>*</em> 付款类型：</label>
+                    <select id="inputType" name="inputType" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                        <option value="4">储值卡</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divCard" style="display:none;">
+                    <label for="inputCard"><em>*</em>客户卡选择</label>
+                    <select id="inputCard" name="inputCard" data-native-menu="false">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales"><em>*</em> 美容顾问：</label>
+                    <select name="inputSales" id="inputSales" data-native-menu="false">
+                        <option value="">请选择顾问</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSalesRadix">顾问分成:</label>
+                    <input type="range" name="inputSalesRadix" id="inputSalesRadix" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers"><em>*</em> 美容师</label>
+                    <select name="inputWorkers" id="inputWorkers" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain">
+                    <label for="inputWorkerRadix">美容师分成:</label>
+                    <input type="range" name="inputWorkerRadix" id="inputWorkerRadix" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <div data-role="fieldcontain">
+                    <select name="flipEntity" id="flipEntity" data-role="slider">
+                        <option value="0" selected="selected">操作服务</option>
+                        <option value="1">现消现耗</option>
+                    </select>
+                </div>
+                <input id="btnSave" type="submit" class="btn btn-default" value="提交" />
+            </form>
+        </div>
+    </div>
+
+    <!-- 分支 换卡号 -->
+    <div data-role="page" id="route2" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>客户换新卡号</h3>
+        </div>
+        <div data-role="content">
+            <ul id="ul_member1" data-role="listview" data-inset="true"></ul>
+            <div data-role="fieldcontain">
+                <label for="new_card">新卡号：</label>
+                <input type="text" name="new_card" id="new_card">
+                <!--<label for="mem_passwd">密码：</label>
+                <input type="password" name="mem_passwd" id="mem_passwd">-->
+            </div>
+            <input id="btn_over" type="button" data-inline="true" value="提交">
+        </div>
+    </div>
+
+    <!-- 公用 -->
+    <div data-role="page" id="successPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <div role="main" class="success">
+                <h1>转卡成功！</h1>
+                <p></p>
+                <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="page" id="failPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content" class="warning">
+            <h1>转卡失败</h1>
+            <p>转卡失败.</p>
+            <a href="exchange.html" class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left">重新转卡</a>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script src="scripts/jqm-spinbox.js"></script>
+    <script type="text/javascript">
+
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("doInit");
+            FastClick.attach(document.body);
+            commonInit();
+
+            // 客户过滤
+            $("#ol_member").on("listviewbeforefilter", function (e, data) {
+                var $ul = $(this),
+                    $input = $(data.input),
+                    value = $input.val(),
+                    html = "";
+                if (value && value.length > 1) {
+                    $ul.html("<li> <div class='ui-loader'> <span class='ui-icon ui-icon-loading'> </span> </div> </li> ");
+                    $ul.listview("refresh");
+                    $.ajax({
+                        type: "POST",
+                        url: serverUrl + "/MemberAdmin/AppList",
+                        dataType: "json",
+                        data: { "hostId": userObject.host, "branchId": userObject.branch, userId: userObject.userid, pageNum: 10, q: $input.val() },
+                        success: function (result) {
+                            $ul.empty();
+                            $.each(result, function (i, item) {
+                                html += "<li><a href=\"#minfo?mid=" + item.MemberID + "\"><h3>姓名：" + item.Name + "</h3>";
+                                // html += "<p><b>地址：</b>" + item.Address + " </p>";
+                                html += "<p><b>手机</b>：" + item.MobileNumber + " <b>卡号</b>：" + item.CardNo + "</p>";
+                                html += "<p><b>状态</b>：" + item.StatusValue + "</p></a></li>";
+                            });
+                            $ul.html(html);
+                            $ul.listview('refresh');
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+            });
+
+            // 项目类型
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch },
+                url: serverUrl + "/Project/AppCategory",
+                success: function (data) {
+                    $(data).each(function (i) {
+                        var option = "<option value=\"" + data[i].code + "\">" + data[i].name + "</option>";
+                        $("#inputCategory").append(option);
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 美容顾问
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "3" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputSales").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+
+            // 取得美容师
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "1" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputWorkers").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 选择客户
+            $.mobile.paramsHandler.addPage("mlist", ["route"], [], function (args) {
+                if (args.route == "1") {
+                    route = "1";
+                    $("#mlist h3").text("项目转换");
+                }
+                else {
+                    $("#mlist h3").text("客户换新卡号");
+                    route = "2";
+                }
+            });
+
+            // 客户信息
+            $.mobile.paramsHandler.addPage("minfo", ["mid"], [], function (args) {
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { "hostId": userObject.host, "branchId": userObject.branch, mid: args.mid },
+                    url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                    success: function (data) {
+                        $("#u_member").empty();
+                        $("#u_member").append("<li>姓名：" + data.Name + "</li><li>手机：" + data.MobileNumber + "</li><li>余额：" + data.Amt + "</li><li>等级：" + data.LevelValue + "</li><li>状态：" + data.StatusValue + "</li>");
+                        $("#u_member").listview('refresh');
+
+                        $("#ul_project").empty();
+                        // 客户现有的项目
+                        $.each(data.Projects, function (i, item) {
+                            if (item.IsEntity == "0") {
+                                //$('<label for="pt' + item.MemberProjectId + '">' + item.ProjectName + ' ∑:' + item.UnitPrice + "×" + item.LastCount + "=" + (item.UnitPrice * item.LastCount) + '</label><input type="checkbox" name="favcolor" id="pt' + item.MemberProjectId + '" value="' + item.MemberProjectId + '" data-val="' + (item.UnitPrice * item.LastCount) + '">').appendTo('#ul_project');
+
+                                var pjn = item.ProjectName;
+                                if (item.Type == "1") {
+                                    pjn = item.ProjectName + "[赠]"
+                                } else if (item.Type == "1") {
+                                    pjn = item.ProjectName + "[转]"
+                                }
+                                if (item.CardType == "1") {
+                                    pjn = item.ProjectName + "[疗]"
+                                } else if (item.CardType == "3") {
+                                    pjn = item.ProjectName + "[体]"
+                                } else if (item.CardType == "4" || item.CardType == "5") {
+                                    pjn = item.ProjectName + "[综]"
+                                } else if (item.CardType == "7") {
+                                    pjn = item.ProjectName + "[拓]"
+                                }
+                                // 购买项目列表
+
+                                var html = '<li id="pi' + item.MemberProjectId + '"><h2>' + pjn + '</h2><p>可用次数：' + item.LastCount + '</p>';
+                                html = html + '<span class="ui-li-count"><input id="spin_' + item.MemberProjectId + '" class="spin" type="text" data-role="spinbox" value="0" min="0" max="' + item.LastCount + '">';
+                                html = html + '</span></li>';
+
+                                $("#ul_project").append(html);
+                                project_list.push([item.MemberProjectId, item.CardType, item.MemberCardId, item.ProjectID, item.Type, item.LastCount, item.UnitPrice]);
+                            }
+                        });
+
+                        $("input.spin").change(function () {
+                            ReNum();
+                        });
+
+                        //$('#ul_project').trigger('create');
+
+                        // 客户卡
+                        // 卡片类型 0:储值卡 1: 疗程卡 2: 单次卡 3: 体验卡 4: 综合限时卡 5: 综合限次卡 6: 拓客增值卡 7: 拓客优惠卡 8: 综合限时限次卡
+                        $(data.Cards).each(function (i, item) {
+                            if (item.Type == '0' || item.Type == '6') {
+                                var option = "<option value='" + item.MemberCardId + "' data-amt='" + item.Amt + "'>" + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":" + item.Amt + "元</option>";
+                                $("#inputCard").append(option);
+                            }
+                        });
+
+                        // 当前用户
+                        memberObject.MemberID = data.MemberID;
+                        memberObject.CardNo = data.CardNo;
+                        memberObject.Birthday = data.BirthdayStr;
+                        memberObject.Amt = Number(data.Amt);
+                        memberObject.Address = data.Address;
+                        memberObject.JoinBranch = data.JoinBranch;
+                        memberObject.JoinDate = data.JoinDateStr;
+                        memberObject.Name = data.Name;
+                        memberObject.MobileNumber = data.MobileNumber;
+                        memberObject.Remark = data.Remark;
+                        memberObject.Vocation = data.Vocation;
+                        memberObject.Source = data.Source;
+                        memberObject.Sex = data.Sex;
+
+                        //$.mobile.changePage("#minfo");
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+            $.mobile.paramsHandler.init();
+        }
+
+        $().ready(function () {
+
+            // 付款方式变更
+            $("#inputType").change(function () {
+                if ($(this).val() == '4') {
+                    $("#divCard").show();
+                } else {
+                    $("#divCard").hide();
+                }
+            });
+
+            // 项目类型变更
+            $("#inputCategory").change(function () {
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { hostId: userObject.host, Category: $("#inputCategory").val() },
+                    url: serverUrl + "/Project/AppList",
+                    success: function (data) {
+                        $("#inputProject").empty();
+                        var option = "<option value=\"\">请选择...</option>";
+                        $("#inputProject").append(option);
+
+                        $(data).each(function (i) {
+                            var option = "<option value=\"" + data[i].id + "\">" + data[i].name + "</option>";
+                            $("#inputProject").append(option);
+                        });
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+            // TO 密码确认
+            $("#btn_next1").click(function () {
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { memberId: memberObject.MemberID, passwd: $("#card_passsword").val() },
+                    url: serverUrl + "/MemberAdmin/AppLogin",
+                    success: function (data) {
+                        console.log("member passwork:" + data);
+                        if (data == "false") {
+                            alert("密码错误");
+                        } else {
+                            if (route == "2")
+                                $.mobile.changePage("#route2");
+                            else
+                                $.mobile.changePage("#route1-1");
+                        }
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+            // TO 购买项目
+            $("#btn_next2").click(function () {
+                var isOk = false;
+                for (var i = 0; i < off_list.length; i++) {
+                    if (off_list[i][1] != "0") {
+                        isOk = true;
+                    }
+                }
+                if (isOk) {
+                    $.mobile.changePage("#route1-2");
+                } else {
+                    $.mobile.toast({
+                        message: "请选择放弃的项目!",
+                        position: "bottom"
+                    });
+                }
+            });
+
+            // 新购买项目 单价
+            $("#inputAmount").blur(function () {
+                $("#remain_amt").text(Number($("#inputAmount").val()) * Number($("#inputNum").val()) - Number($("#inputFrom").val()));
+            });
+            // 新购项目次数
+            $("#inputNum").blur(function () {
+                $("#remain_amt").text(Number($("#inputAmount").val()) * Number($("#inputNum").val()) - Number($("#inputFrom").val()));
+            });
+
+            // 表单验证
+            $("#frmProject").validate({
+                rules: {
+                    inputFrom: {
+                        required: true,
+                        number: true
+                    },
+                    inputCategory: {
+                        required: true
+                    },
+                    inputProject: {
+                        required: true
+                    },
+                    inputAmount: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    inputNum: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    inputSales: {
+                        required: true
+                    },
+                    inputWorkers: {
+                        required: true
+                    }
+                },
+                messages: {
+                    inputFrom: {
+                        required: "请输入置换金额",
+                        number: "请输入数字",
+                    },
+                    inputCategory: {
+                        required: "请选择项目类型"
+                    },
+                    inputProject: {
+                        required: "请选择项目"
+                    },
+                    inputAmount: {
+                        required: "请输入购买金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputNum: {
+                        required: "请输入购买次数",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputSales: {
+                        required: "请选择美容顾问"
+                    },
+                    inputWorkers: {
+                        required: "请选择美容师"
+                    }
+                }
+            });
+
+            // 转卡
+            $("#frmProject").submit(function () {
+
+                if ($("#frmProject").validate().form()) {
+
+                    $.mobile.loading('show', { text: '加载中...', textVisible: true });
+                    offProjects = "";
+                    var sales = "";
+                    for (var i = 0; i < off_list.length; i++) {
+                        if (off_list[i][1] != "0") {
+                            offProjects += off_list[i][0] + "," + off_list[i][1] + ";";
+                        }
+                    }
+                    $('#inputWorkers :selected').each(function (i, selected) {
+                        sales += $(selected).val() + ",";
+                    });
+
+                    // 检查储值卡余额
+                    var type = $("#inputType").val();
+                    if (type === "4") {
+                        var card = $("#inputCard").val();
+                        if (card === "") {
+                            $.mobile.loading('hide');
+                            return false;
+                        } else {
+                            var myVal = $("#inputCard").find("option:selected").attr("data-amt"); //余额
+                            var from = $("#inputFrom").val() // 置换金额
+                            var price = $("#inputAmount").val(); // 单价
+                            var num = $("#inputNum").val();  // 数量
+
+                            if (Number(price) * Number(num) - Number(from) > Number(myVal)) {
+                                console.log("储值卡余额不足");
+                                $.mobile.toast({ message: "储值卡余额不足!", position: "bottom" });
+                                $.mobile.loading('hide');
+                                return false;
+                            }
+                        }
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            MemberId: memberObject.MemberID,
+                            OffProjects: offProjects,
+                            OffAmount: $("#inputFrom").val(),
+                            PayType: type,
+                            MemberCardId: $("#inputCard").val(),
+                            Project: $("#inputProject").val().split(",")[0],
+                            Price: $("#inputAmount").val(),
+                            Count: $("#inputNum").val(),
+                            UserId: userObject.userid,
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Salesman: $("#inputSales").val(),
+                            Beautician: sales,
+                            SalesRadix: $("#inputSalesRadix").val(),
+                            WorkerRadix: $("#inputWorkerRadix").val(),
+                            IsEntity: $("#flipEntity").val()
+                        },
+                        url: serverUrl + "/MemberAdmin/AppExchangeProject",
+                        success: function (result) {
+                            if (result.code != 1) {
+                                //购买失败
+                                console.log("BuyProject Fail");
+                                $("#failPage div.warning p:last").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else {
+                                //购买成功
+                                console.log("BuyProject Success");
+                                $.mobile.changePage("#successPage", 'pop');
+                            }
+                            $.mobile.loading('hide');
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            showNetErrMsg();
+
+                            //购买失败
+                            //console.log("BuyProject Fail");
+                            //$("#failPage div.warning p:last").text(XMLHttpRequest.responseText);
+                            //$.mobile.changePage("#failPage", 'pop');
+                            $.mobile.loading('hide');
+                        }
+                    });
+                }
+
+                return false;
+            });
+
+            // 卡号重复检测
+            $("#new_card").change(function () {
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { hostId: userObject.host, CardNo: $(this).val() },
+                    url: serverUrl + "/MemberAdmin/AppRepeatCardNo",
+                    success: function (result) {
+                        if (result == "false") {
+                            alert("卡号已存在.");
+                            $(this).focus();
+                        }
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+            $("#btn_over").click(function () {
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { hostId: userObject.host, CardNo: $(this).val() },
+                    url: serverUrl + "/MemberAdmin/AppRepeatCardNo",
+                    success: function (result) {
+                        if (result == "false") {
+                            alert("卡号已存在.");
+                            $(this).focus();
+                        }
+                        else
+                            changeCard();
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+        });
+
+
+        function changeCard() {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: {
+                    MemberId: memberObject.MemberID,
+                    NewCardNo: $("#new_card").val(),
+                    Passwd: $("#mem_passwd").val(),
+                    UserId: userObject.userid,
+                    ClientId: userObject.uuid,
+                    BranchId: userObject.branch
+                },
+                url: serverUrl + "/MemberAdmin/AppExchangeCardNo",
+                success: function (result) {
+                    if (result.code != 1) {
+                        //购买失败
+                        $("#failPage div.warning p:last").text(result.message);
+                        $.mobile.changePage("#failPage", 'pop');
+                    } else {
+                        //购买成功
+                        $.mobile.changePage("#successPage", 'pop');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                    ////购买失败
+                    //$.mobile.changePage("#failPage", 'pop');
+                }
+            });
+        }
+
+        // 重新计算弃用项目金额
+        function ReNum() {
+            var amount = 0;
+            off_list = new Array();
+
+            $("#ul_project li").each(function () {
+                var itemid = $(this).attr('id').substring(2);
+                var spinNum = $("#spin_" + itemid).val();
+
+                if (spinNum != '0') {
+                    var unit = 0;
+                    for (var i = 0; i < project_list.length; i++) {
+                        if (project_list[i][0] == itemid) {
+                            unit = new Number(project_list[i][6]);
+                        }
+                    }
+                    amount += new Number(spinNum) * unit;
+                    off_list.push([itemid, spinNum]);
+                }
+            });
+
+            $("#span_amount").html(amount);
+        }
+
+
+        var page3Init = false;
+        var project_list = new Array();
+        // 弃用项目列表
+        var off_list = new Array();
+        //var route = "1";
+    </script>
+</body>
+</html>

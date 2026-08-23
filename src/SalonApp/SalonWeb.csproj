@@ -1,0 +1,539 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C2AE0F89-D8BD-4771-A4A9-A5109307B53F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SalonWeb</RootNamespace>
+    <AssemblyName>SalonWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="merges\android\scripts\android2.3-jscompat.js" />
+    <Content Include="merges\android\scripts\platformOverrides.js" />
+    <Content Include="merges\windows\scripts\platformOverrides.js" />
+    <Content Include="merges\windows\scripts\winstore-jscompat.js" />
+    <Content Include="res\icons\android\icon-36-ldpi.png" />
+    <Content Include="res\icons\android\icon-48-mdpi.png" />
+    <Content Include="res\icons\android\icon-72-hdpi.png" />
+    <Content Include="res\icons\android\icon-96-xhdpi.png" />
+    <Content Include="res\icons\ios\icon-40-2x.png" />
+    <Content Include="res\icons\ios\icon-40.png" />
+    <Content Include="res\icons\ios\icon-50-2x.png" />
+    <Content Include="res\icons\ios\icon-50.png" />
+    <Content Include="res\icons\ios\icon-57-2x.png" />
+    <Content Include="res\icons\ios\icon-57.png" />
+    <Content Include="res\icons\ios\icon-60-2x.png" />
+    <Content Include="res\icons\ios\icon-60-3x.png" />
+    <Content Include="res\icons\ios\icon-60.png" />
+    <Content Include="res\icons\ios\icon-72-2x.png" />
+    <Content Include="res\icons\ios\icon-72.png" />
+    <Content Include="res\icons\ios\icon-76-2x.png" />
+    <Content Include="res\icons\ios\icon-76.png" />
+    <Content Include="res\icons\ios\icon-small-2x.png" />
+    <Content Include="res\icons\ios\icon-small.png" />
+    <Content Include="res\icons\windows\Square150x150Logo.scale-100.png" />
+    <Content Include="res\icons\windows\Square150x150Logo.scale-240.png" />
+    <Content Include="res\icons\windows\Square30x30Logo.scale-100.png" />
+    <Content Include="res\icons\windows\Square310x310Logo.scale-100.png" />
+    <Content Include="res\icons\windows\Square44x44Logo.scale-100.png" />
+    <Content Include="res\icons\windows\Square44x44Logo.scale-240.png" />
+    <Content Include="res\icons\windows\Square70x70Logo.scale-100.png" />
+    <Content Include="res\icons\windows\Square71x71Logo.scale-100.png" />
+    <Content Include="res\icons\windows\Square71x71Logo.scale-240.png" />
+    <Content Include="res\icons\windows\StoreLogo.scale-100.png" />
+    <Content Include="res\icons\windows\StoreLogo.scale-240.png" />
+    <Content Include="res\icons\windows\Wide310x150Logo.scale-100.png" />
+    <Content Include="res\icons\windows\Wide310x150Logo.scale-240.png" />
+    <Content Include="res\screens\android\screen-hdpi-landscape.png" />
+    <Content Include="res\screens\android\screen-hdpi-portrait.png" />
+    <Content Include="res\screens\android\screen-ldpi-landscape.png" />
+    <Content Include="res\screens\android\screen-ldpi-portrait.png" />
+    <Content Include="res\screens\android\screen-mdpi-landscape.png" />
+    <Content Include="res\screens\android\screen-mdpi-portrait.png" />
+    <Content Include="res\screens\android\screen-xhdpi-landscape.png" />
+    <Content Include="res\screens\android\screen-xhdpi-portrait.png" />
+    <Content Include="res\screens\ios\screen-ipad-landscape-2x.png" />
+    <Content Include="res\screens\ios\screen-ipad-landscape.png" />
+    <Content Include="res\screens\ios\screen-ipad-portrait-2x.png" />
+    <Content Include="res\screens\ios\screen-ipad-portrait.png" />
+    <Content Include="res\screens\ios\screen-iphone-568h-2x.png" />
+    <Content Include="res\screens\ios\screen-iphone-landscape-736h.png" />
+    <Content Include="res\screens\ios\screen-iphone-portrait-2x.png" />
+    <Content Include="res\screens\ios\screen-iphone-portrait-667h.png" />
+    <Content Include="res\screens\ios\screen-iphone-portrait-736h.png" />
+    <Content Include="res\screens\ios\screen-iphone-portrait.png" />
+    <Content Include="res\screens\windows\SplashScreen.scale-100.png" />
+    <Content Include="res\screens\windows\SplashScreen.scale-240.png" />
+    <Content Include="res\screens\windows\SplashScreenPhone.scale-240.png" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="www\about.html" />
+    <Content Include="www\advice.html" />
+    <Content Include="www\appointment.html" />
+    <Content Include="www\appointmentlist.html" />
+    <Content Include="www\points.html" />
+    <Content Include="www\member_edit.html" />
+    <Content Include="www\member_info.html" />
+    <Content Include="www\scripts\fastclick.js" />
+    <Content Include="www\scripts\jqm-spinbox.js" />
+    <Content Include="www\scripts\jquery.validate_zh.js" />
+    <Content Include="www\settlement_show.html" />
+    <Content Include="www\settlement_edit.html" />
+    <Content Include="www\buycard.html" />
+    <Content Include="www\buyproject.html" />
+    <Content Include="www\css\images\ajax-loader.gif" />
+    <Content Include="www\css\images\icons-png\action-black.png" />
+    <Content Include="www\css\images\icons-png\action-white.png" />
+    <Content Include="www\css\images\icons-png\alert-black.png" />
+    <Content Include="www\css\images\icons-png\alert-white.png" />
+    <Content Include="www\css\images\icons-png\arrow-d-black.png" />
+    <Content Include="www\css\images\icons-png\arrow-d-l-black.png" />
+    <Content Include="www\css\images\icons-png\arrow-d-l-white.png" />
+    <Content Include="www\css\images\icons-png\arrow-d-r-black.png" />
+    <Content Include="www\css\images\icons-png\arrow-d-r-white.png" />
+    <Content Include="www\css\images\icons-png\arrow-d-white.png" />
+    <Content Include="www\css\images\icons-png\arrow-l-black.png" />
+    <Content Include="www\css\images\icons-png\arrow-l-white.png" />
+    <Content Include="www\css\images\icons-png\arrow-r-black.png" />
+    <Content Include="www\css\images\icons-png\arrow-r-white.png" />
+    <Content Include="www\css\images\icons-png\arrow-u-black.png" />
+    <Content Include="www\css\images\icons-png\arrow-u-l-black.png" />
+    <Content Include="www\css\images\icons-png\arrow-u-l-white.png" />
+    <Content Include="www\css\images\icons-png\arrow-u-r-black.png" />
+    <Content Include="www\css\images\icons-png\arrow-u-r-white.png" />
+    <Content Include="www\css\images\icons-png\arrow-u-white.png" />
+    <Content Include="www\css\images\icons-png\audio-black.png" />
+    <Content Include="www\css\images\icons-png\audio-white.png" />
+    <Content Include="www\css\images\icons-png\back-black.png" />
+    <Content Include="www\css\images\icons-png\back-white.png" />
+    <Content Include="www\css\images\icons-png\bars-black.png" />
+    <Content Include="www\css\images\icons-png\bars-white.png" />
+    <Content Include="www\css\images\icons-png\bullets-black.png" />
+    <Content Include="www\css\images\icons-png\bullets-white.png" />
+    <Content Include="www\css\images\icons-png\calendar-black.png" />
+    <Content Include="www\css\images\icons-png\calendar-white.png" />
+    <Content Include="www\css\images\icons-png\camera-black.png" />
+    <Content Include="www\css\images\icons-png\camera-white.png" />
+    <Content Include="www\css\images\icons-png\carat-d-black.png" />
+    <Content Include="www\css\images\icons-png\carat-d-white.png" />
+    <Content Include="www\css\images\icons-png\carat-l-black.png" />
+    <Content Include="www\css\images\icons-png\carat-l-white.png" />
+    <Content Include="www\css\images\icons-png\carat-r-black.png" />
+    <Content Include="www\css\images\icons-png\carat-r-white.png" />
+    <Content Include="www\css\images\icons-png\carat-u-black.png" />
+    <Content Include="www\css\images\icons-png\carat-u-white.png" />
+    <Content Include="www\css\images\icons-png\check-black.png" />
+    <Content Include="www\css\images\icons-png\check-white.png" />
+    <Content Include="www\css\images\icons-png\clock-black.png" />
+    <Content Include="www\css\images\icons-png\clock-white.png" />
+    <Content Include="www\css\images\icons-png\cloud-black.png" />
+    <Content Include="www\css\images\icons-png\cloud-white.png" />
+    <Content Include="www\css\images\icons-png\comment-black.png" />
+    <Content Include="www\css\images\icons-png\comment-white.png" />
+    <Content Include="www\css\images\icons-png\delete-black.png" />
+    <Content Include="www\css\images\icons-png\delete-white.png" />
+    <Content Include="www\css\images\icons-png\edit-black.png" />
+    <Content Include="www\css\images\icons-png\edit-white.png" />
+    <Content Include="www\css\images\icons-png\eye-black.png" />
+    <Content Include="www\css\images\icons-png\eye-white.png" />
+    <Content Include="www\css\images\icons-png\forbidden-black.png" />
+    <Content Include="www\css\images\icons-png\forbidden-white.png" />
+    <Content Include="www\css\images\icons-png\forward-black.png" />
+    <Content Include="www\css\images\icons-png\forward-white.png" />
+    <Content Include="www\css\images\icons-png\gear-black.png" />
+    <Content Include="www\css\images\icons-png\gear-white.png" />
+    <Content Include="www\css\images\icons-png\grid-black.png" />
+    <Content Include="www\css\images\icons-png\grid-white.png" />
+    <Content Include="www\css\images\icons-png\heart-black.png" />
+    <Content Include="www\css\images\icons-png\heart-white.png" />
+    <Content Include="www\css\images\icons-png\home-black.png" />
+    <Content Include="www\css\images\icons-png\home-white.png" />
+    <Content Include="www\css\images\icons-png\info-black.png" />
+    <Content Include="www\css\images\icons-png\info-white.png" />
+    <Content Include="www\css\images\icons-png\location-black.png" />
+    <Content Include="www\css\images\icons-png\location-white.png" />
+    <Content Include="www\css\images\icons-png\lock-black.png" />
+    <Content Include="www\css\images\icons-png\lock-white.png" />
+    <Content Include="www\css\images\icons-png\mail-black.png" />
+    <Content Include="www\css\images\icons-png\mail-white.png" />
+    <Content Include="www\css\images\icons-png\minus-black.png" />
+    <Content Include="www\css\images\icons-png\minus-white.png" />
+    <Content Include="www\css\images\icons-png\navigation-black.png" />
+    <Content Include="www\css\images\icons-png\navigation-white.png" />
+    <Content Include="www\css\images\icons-png\phone-black.png" />
+    <Content Include="www\css\images\icons-png\phone-white.png" />
+    <Content Include="www\css\images\icons-png\plus-black.png" />
+    <Content Include="www\css\images\icons-png\plus-white.png" />
+    <Content Include="www\css\images\icons-png\power-black.png" />
+    <Content Include="www\css\images\icons-png\power-white.png" />
+    <Content Include="www\css\images\icons-png\recycle-black.png" />
+    <Content Include="www\css\images\icons-png\recycle-white.png" />
+    <Content Include="www\css\images\icons-png\refresh-black.png" />
+    <Content Include="www\css\images\icons-png\refresh-white.png" />
+    <Content Include="www\css\images\icons-png\search-black.png" />
+    <Content Include="www\css\images\icons-png\search-white.png" />
+    <Content Include="www\css\images\icons-png\shop-black.png" />
+    <Content Include="www\css\images\icons-png\shop-white.png" />
+    <Content Include="www\css\images\icons-png\star-black.png" />
+    <Content Include="www\css\images\icons-png\star-white.png" />
+    <Content Include="www\css\images\icons-png\tag-black.png" />
+    <Content Include="www\css\images\icons-png\tag-white.png" />
+    <Content Include="www\css\images\icons-png\user-black.png" />
+    <Content Include="www\css\images\icons-png\user-white.png" />
+    <Content Include="www\css\images\icons-png\video-black.png" />
+    <Content Include="www\css\images\icons-png\video-white.png" />
+    <Content Include="www\css\images\icons-svg\action-black.svg" />
+    <Content Include="www\css\images\icons-svg\action-white.svg" />
+    <Content Include="www\css\images\icons-svg\alert-black.svg" />
+    <Content Include="www\css\images\icons-svg\alert-white.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-d-black.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-d-l-black.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-d-l-white.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-d-r-black.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-d-r-white.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-d-white.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-l-black.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-l-white.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-r-black.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-r-white.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-u-black.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-u-l-black.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-u-l-white.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-u-r-black.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-u-r-white.svg" />
+    <Content Include="www\css\images\icons-svg\arrow-u-white.svg" />
+    <Content Include="www\css\images\icons-svg\audio-black.svg" />
+    <Content Include="www\css\images\icons-svg\audio-white.svg" />
+    <Content Include="www\css\images\icons-svg\back-black.svg" />
+    <Content Include="www\css\images\icons-svg\back-white.svg" />
+    <Content Include="www\css\images\icons-svg\bars-black.svg" />
+    <Content Include="www\css\images\icons-svg\bars-white.svg" />
+    <Content Include="www\css\images\icons-svg\bullets-black.svg" />
+    <Content Include="www\css\images\icons-svg\bullets-white.svg" />
+    <Content Include="www\css\images\icons-svg\calendar-black.svg" />
+    <Content Include="www\css\images\icons-svg\calendar-white.svg" />
+    <Content Include="www\css\images\icons-svg\camera-black.svg" />
+    <Content Include="www\css\images\icons-svg\camera-white.svg" />
+    <Content Include="www\css\images\icons-svg\carat-d-black.svg" />
+    <Content Include="www\css\images\icons-svg\carat-d-white.svg" />
+    <Content Include="www\css\images\icons-svg\carat-l-black.svg" />
+    <Content Include="www\css\images\icons-svg\carat-l-white.svg" />
+    <Content Include="www\css\images\icons-svg\carat-r-black.svg" />
+    <Content Include="www\css\images\icons-svg\carat-r-white.svg" />
+    <Content Include="www\css\images\icons-svg\carat-u-black.svg" />
+    <Content Include="www\css\images\icons-svg\carat-u-white.svg" />
+    <Content Include="www\css\images\icons-svg\check-black.svg" />
+    <Content Include="www\css\images\icons-svg\check-white.svg" />
+    <Content Include="www\css\images\icons-svg\clock-black.svg" />
+    <Content Include="www\css\images\icons-svg\clock-white.svg" />
+    <Content Include="www\css\images\icons-svg\cloud-black.svg" />
+    <Content Include="www\css\images\icons-svg\cloud-white.svg" />
+    <Content Include="www\css\images\icons-svg\comment-black.svg" />
+    <Content Include="www\css\images\icons-svg\comment-white.svg" />
+    <Content Include="www\css\images\icons-svg\delete-black.svg" />
+    <Content Include="www\css\images\icons-svg\delete-white.svg" />
+    <Content Include="www\css\images\icons-svg\edit-black.svg" />
+    <Content Include="www\css\images\icons-svg\edit-white.svg" />
+    <Content Include="www\css\images\icons-svg\eye-black.svg" />
+    <Content Include="www\css\images\icons-svg\eye-white.svg" />
+    <Content Include="www\css\images\icons-svg\forbidden-black.svg" />
+    <Content Include="www\css\images\icons-svg\forbidden-white.svg" />
+    <Content Include="www\css\images\icons-svg\forward-black.svg" />
+    <Content Include="www\css\images\icons-svg\forward-white.svg" />
+    <Content Include="www\css\images\icons-svg\gear-black.svg" />
+    <Content Include="www\css\images\icons-svg\gear-white.svg" />
+    <Content Include="www\css\images\icons-svg\grid-black.svg" />
+    <Content Include="www\css\images\icons-svg\grid-white.svg" />
+    <Content Include="www\css\images\icons-svg\heart-black.svg" />
+    <Content Include="www\css\images\icons-svg\heart-white.svg" />
+    <Content Include="www\css\images\icons-svg\home-black.svg" />
+    <Content Include="www\css\images\icons-svg\home-white.svg" />
+    <Content Include="www\css\images\icons-svg\info-black.svg" />
+    <Content Include="www\css\images\icons-svg\info-white.svg" />
+    <Content Include="www\css\images\icons-svg\location-black.svg" />
+    <Content Include="www\css\images\icons-svg\location-white.svg" />
+    <Content Include="www\css\images\icons-svg\lock-black.svg" />
+    <Content Include="www\css\images\icons-svg\lock-white.svg" />
+    <Content Include="www\css\images\icons-svg\mail-black.svg" />
+    <Content Include="www\css\images\icons-svg\mail-white.svg" />
+    <Content Include="www\css\images\icons-svg\minus-black.svg" />
+    <Content Include="www\css\images\icons-svg\minus-white.svg" />
+    <Content Include="www\css\images\icons-svg\navigation-black.svg" />
+    <Content Include="www\css\images\icons-svg\navigation-white.svg" />
+    <Content Include="www\css\images\icons-svg\phone-black.svg" />
+    <Content Include="www\css\images\icons-svg\phone-white.svg" />
+    <Content Include="www\css\images\icons-svg\plus-black.svg" />
+    <Content Include="www\css\images\icons-svg\plus-white.svg" />
+    <Content Include="www\css\images\icons-svg\power-black.svg" />
+    <Content Include="www\css\images\icons-svg\power-white.svg" />
+    <Content Include="www\css\images\icons-svg\recycle-black.svg" />
+    <Content Include="www\css\images\icons-svg\recycle-white.svg" />
+    <Content Include="www\css\images\icons-svg\refresh-black.svg" />
+    <Content Include="www\css\images\icons-svg\refresh-white.svg" />
+    <Content Include="www\css\images\icons-svg\search-black.svg" />
+    <Content Include="www\css\images\icons-svg\search-white.svg" />
+    <Content Include="www\css\images\icons-svg\shop-black.svg" />
+    <Content Include="www\css\images\icons-svg\shop-white.svg" />
+    <Content Include="www\css\images\icons-svg\star-black.svg" />
+    <Content Include="www\css\images\icons-svg\star-white.svg" />
+    <Content Include="www\css\images\icons-svg\tag-black.svg" />
+    <Content Include="www\css\images\icons-svg\tag-white.svg" />
+    <Content Include="www\css\images\icons-svg\user-black.svg" />
+    <Content Include="www\css\images\icons-svg\user-white.svg" />
+    <Content Include="www\css\images\icons-svg\video-black.svg" />
+    <Content Include="www\css\images\icons-svg\video-white.svg" />
+    <Content Include="www\css\jqm-datebox-1.4.5.min.css" />
+    <Content Include="www\css\jquery.mobile-1.4.5.css" />
+    <Content Include="www\css\jquery.mobile-1.4.5.min.css" />
+    <Content Include="www\css\jquery.mobile-1.4.5.min.js" />
+    <Content Include="www\css\jquery.mobile.external-png-1.4.5.css" />
+    <Content Include="www\css\jquery.mobile.external-png-1.4.5.min.css" />
+    <Content Include="www\css\jquery.mobile.icons-1.4.5.css" />
+    <Content Include="www\css\jquery.mobile.icons-1.4.5.min.css" />
+    <Content Include="www\css\jquery.mobile.inline-png-1.4.5.css" />
+    <Content Include="www\css\jquery.mobile.inline-png-1.4.5.min.css" />
+    <Content Include="www\css\jquery.mobile.inline-svg-1.4.5.css" />
+    <Content Include="www\css\jquery.mobile.inline-svg-1.4.5.min.css" />
+    <Content Include="www\css\jquery.mobile.iscrollview-pull.css" />
+    <Content Include="www\css\jquery.mobile.iscrollview.css" />
+    <Content Include="www\css\jquery.mobile.structure-1.4.5.css" />
+    <Content Include="www\css\jquery.mobile.structure-1.4.5.min.css" />
+    <Content Include="www\css\jquery.mobile.theme-1.4.5.css" />
+    <Content Include="www\css\jquery.mobile.theme-1.4.5.min.css" />
+    <Content Include="www\css\main.css" />
+    <Content Include="www\css\page.pagination.css" />
+    <Content Include="www\exchange.html" />
+    <Content Include="www\gives.html" />
+    <Content Include="www\help.html" />
+    <Content Include="www\index.html" />
+    <Content Include="www\memberlist.html" />
+    <Content Include="www\member_select.html" />
+    <Content Include="www\menu_member.html" />
+    <Content Include="www\menu_setting.html" />
+    <Content Include="www\menu_stat.html" />
+    <Content Include="package.json" />
+    <Content Include="www\recharge.html" />
+    <Content Include="www\scripts\jquery-2.1.1.min.js" />
+    <Content Include="www\scripts\jquery.mobile.paramsHandler-1.4.3.js" />
+    <Content Include="www\scripts\jquery.mobile.toast.min.js" />
+    <Content Include="www\settlement.html" />
+    <Content Include="www\register.html" />
+    <Content Include="www\scripts\config.js" />
+    <Content Include="www\scripts\iscroll.js" />
+    <Content Include="www\scripts\jqm-datebox-1.4.5.js" />
+    <Content Include="www\scripts\jquery-1.11.1.min.js" />
+    <Content Include="www\scripts\jquery.mobile-1.4.5.min.js" />
+    <Content Include="www\scripts\jquery.mobile.iscrollview.js" />
+    <Content Include="www\scripts\jquery.pagination.js" />
+    <Content Include="www\scripts\jquery.validate.min.js" />
+    <Content Include="www\sign-in.html" />
+    <Content Include="www\themes\images\ajax-loader.gif" />
+    <Content Include="www\themes\images\icons-png\action-black.png" />
+    <Content Include="www\themes\images\icons-png\action-white.png" />
+    <Content Include="www\themes\images\icons-png\alert-black.png" />
+    <Content Include="www\themes\images\icons-png\alert-white.png" />
+    <Content Include="www\themes\images\icons-png\arrow-d-black.png" />
+    <Content Include="www\themes\images\icons-png\arrow-d-l-black.png" />
+    <Content Include="www\themes\images\icons-png\arrow-d-l-white.png" />
+    <Content Include="www\themes\images\icons-png\arrow-d-r-black.png" />
+    <Content Include="www\themes\images\icons-png\arrow-d-r-white.png" />
+    <Content Include="www\themes\images\icons-png\arrow-d-white.png" />
+    <Content Include="www\themes\images\icons-png\arrow-l-black.png" />
+    <Content Include="www\themes\images\icons-png\arrow-l-white.png" />
+    <Content Include="www\themes\images\icons-png\arrow-r-black.png" />
+    <Content Include="www\themes\images\icons-png\arrow-r-white.png" />
+    <Content Include="www\themes\images\icons-png\arrow-u-black.png" />
+    <Content Include="www\themes\images\icons-png\arrow-u-l-black.png" />
+    <Content Include="www\themes\images\icons-png\arrow-u-l-white.png" />
+    <Content Include="www\themes\images\icons-png\arrow-u-r-black.png" />
+    <Content Include="www\themes\images\icons-png\arrow-u-r-white.png" />
+    <Content Include="www\themes\images\icons-png\arrow-u-white.png" />
+    <Content Include="www\themes\images\icons-png\audio-black.png" />
+    <Content Include="www\themes\images\icons-png\audio-white.png" />
+    <Content Include="www\themes\images\icons-png\back-black.png" />
+    <Content Include="www\themes\images\icons-png\back-white.png" />
+    <Content Include="www\themes\images\icons-png\bars-black.png" />
+    <Content Include="www\themes\images\icons-png\bars-white.png" />
+    <Content Include="www\themes\images\icons-png\bullets-black.png" />
+    <Content Include="www\themes\images\icons-png\bullets-white.png" />
+    <Content Include="www\themes\images\icons-png\calendar-black.png" />
+    <Content Include="www\themes\images\icons-png\calendar-white.png" />
+    <Content Include="www\themes\images\icons-png\camera-black.png" />
+    <Content Include="www\themes\images\icons-png\camera-white.png" />
+    <Content Include="www\themes\images\icons-png\carat-d-black.png" />
+    <Content Include="www\themes\images\icons-png\carat-d-white.png" />
+    <Content Include="www\themes\images\icons-png\carat-l-black.png" />
+    <Content Include="www\themes\images\icons-png\carat-l-white.png" />
+    <Content Include="www\themes\images\icons-png\carat-r-black.png" />
+    <Content Include="www\themes\images\icons-png\carat-r-white.png" />
+    <Content Include="www\themes\images\icons-png\carat-u-black.png" />
+    <Content Include="www\themes\images\icons-png\carat-u-white.png" />
+    <Content Include="www\themes\images\icons-png\check-black.png" />
+    <Content Include="www\themes\images\icons-png\check-white.png" />
+    <Content Include="www\themes\images\icons-png\clock-black.png" />
+    <Content Include="www\themes\images\icons-png\clock-white.png" />
+    <Content Include="www\themes\images\icons-png\cloud-black.png" />
+    <Content Include="www\themes\images\icons-png\cloud-white.png" />
+    <Content Include="www\themes\images\icons-png\comment-black.png" />
+    <Content Include="www\themes\images\icons-png\comment-white.png" />
+    <Content Include="www\themes\images\icons-png\delete-black.png" />
+    <Content Include="www\themes\images\icons-png\delete-white.png" />
+    <Content Include="www\themes\images\icons-png\edit-black.png" />
+    <Content Include="www\themes\images\icons-png\edit-white.png" />
+    <Content Include="www\themes\images\icons-png\eye-black.png" />
+    <Content Include="www\themes\images\icons-png\eye-white.png" />
+    <Content Include="www\themes\images\icons-png\forbidden-black.png" />
+    <Content Include="www\themes\images\icons-png\forbidden-white.png" />
+    <Content Include="www\themes\images\icons-png\forward-black.png" />
+    <Content Include="www\themes\images\icons-png\forward-white.png" />
+    <Content Include="www\themes\images\icons-png\gear-black.png" />
+    <Content Include="www\themes\images\icons-png\gear-white.png" />
+    <Content Include="www\themes\images\icons-png\grid-black.png" />
+    <Content Include="www\themes\images\icons-png\grid-white.png" />
+    <Content Include="www\themes\images\icons-png\heart-black.png" />
+    <Content Include="www\themes\images\icons-png\heart-white.png" />
+    <Content Include="www\themes\images\icons-png\home-black.png" />
+    <Content Include="www\themes\images\icons-png\home-white.png" />
+    <Content Include="www\themes\images\icons-png\info-black.png" />
+    <Content Include="www\themes\images\icons-png\info-white.png" />
+    <Content Include="www\themes\images\icons-png\location-black.png" />
+    <Content Include="www\themes\images\icons-png\location-white.png" />
+    <Content Include="www\themes\images\icons-png\lock-black.png" />
+    <Content Include="www\themes\images\icons-png\lock-white.png" />
+    <Content Include="www\themes\images\icons-png\mail-black.png" />
+    <Content Include="www\themes\images\icons-png\mail-white.png" />
+    <Content Include="www\themes\images\icons-png\minus-black.png" />
+    <Content Include="www\themes\images\icons-png\minus-white.png" />
+    <Content Include="www\themes\images\icons-png\navigation-black.png" />
+    <Content Include="www\themes\images\icons-png\navigation-white.png" />
+    <Content Include="www\themes\images\icons-png\phone-black.png" />
+    <Content Include="www\themes\images\icons-png\phone-white.png" />
+    <Content Include="www\themes\images\icons-png\plus-black.png" />
+    <Content Include="www\themes\images\icons-png\plus-white.png" />
+    <Content Include="www\themes\images\icons-png\power-black.png" />
+    <Content Include="www\themes\images\icons-png\power-white.png" />
+    <Content Include="www\themes\images\icons-png\recycle-black.png" />
+    <Content Include="www\themes\images\icons-png\recycle-white.png" />
+    <Content Include="www\themes\images\icons-png\refresh-black.png" />
+    <Content Include="www\themes\images\icons-png\refresh-white.png" />
+    <Content Include="www\themes\images\icons-png\search-black.png" />
+    <Content Include="www\themes\images\icons-png\search-white.png" />
+    <Content Include="www\themes\images\icons-png\shop-black.png" />
+    <Content Include="www\themes\images\icons-png\shop-white.png" />
+    <Content Include="www\themes\images\icons-png\star-black.png" />
+    <Content Include="www\themes\images\icons-png\star-white.png" />
+    <Content Include="www\themes\images\icons-png\tag-black.png" />
+    <Content Include="www\themes\images\icons-png\tag-white.png" />
+    <Content Include="www\themes\images\icons-png\user-black.png" />
+    <Content Include="www\themes\images\icons-png\user-white.png" />
+    <Content Include="www\themes\images\icons-png\video-black.png" />
+    <Content Include="www\themes\images\icons-png\video-white.png" />
+    <Content Include="www\themes\jquery.mobile.icons.min.css" />
+    <Content Include="www\themes\salon.css" />
+    <Content Include="www\themes\salon.min.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\css\jquery.mobile-1.4.5.min.map" />
+    <Content Include="www\scripts\jquery.mobile-1.4.5.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="merges\ios\" />
+    <Folder Include="merges\wp8\" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="www\scripts\jquery-2.1.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="res\native\android\ant.properties" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:2373/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

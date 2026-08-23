@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户预约</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div data-role="page" id="appointment" data-theme="a">
+        <div data-role="header">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>预约-选择项目</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmAppointment">
+                <input type="hidden" id="inputAppointmentID" name="inputAppointmentID" />
+                <div data-role="fieldcontain">
+                    <label for="inputProject">产品</label>
+                    <select id="inputProject" name="inputProject"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputBookDate"><em>*</em> 预约日期</label>
+                    <input type="text" id="inputBookDate" name="inputBookDate" data-role="datebox" value="" data-options='{"mode": "flipbox"}' />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputBookTime"><em>*</em> 预约时间</label>
+                    <input type="text" id="inputBookTime" name="inputBookTime" data-role="datebox" value="" data-options='{"mode": "timeflipbox"}' />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales"><em>*</em> 美容顾问</label>
+                    <select id="inputSales" name="inputSales" data-native-menu="false">
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputWorkers"><em>*</em> 美容师：</label>
+                    <select name="inputWorkers" id="inputWorkers" multiple="multiple" data-native-menu="false">
+                        <option>请选择美容师</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputRoom">使用房间</label>
+                    <input type="text" id="inputRoom" name="inputRoom" />
+                </div>
+                <div class="btn-default btn btn-default btn-block">
+                    <input id="btnSave" type="submit" class="btn btn-default btn-block" value="保存">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="page" id="successPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <div role="main" class="success">
+                <h1>预约成功！</h1>
+                <p></p>
+                <a href="appointmentlist.html" class="ui-btn ui-shadow ui-corner-all ui-icon-bullets ui-btn-icon-left">返回列表</a>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="page" id="failPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <h1>预约失败</h1>
+            <!--<a href="javascript:$.mobile.changePage('#appointment', { transition: 'slide', reverse:true },false)" data-role="button" data-icon="back">返回</a>-->
+            <a href="appointment.html" class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left">重新预约</a>
+            <a href="appointmentlist.html" class="ui-btn ui-shadow ui-corner-all ui-icon-bullets ui-btn-icon-left">返回列表</a>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jqm-datebox-1.4.5.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+            commonInit();
+
+            var memberCardNo = getUrlParameter("mid");
+            var appointmentId = getUrlParameter("id");
+
+            // 销售顾问
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "3" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputSales").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                    $("#inputSales").selectmenu("refresh");
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+
+            // 美容师
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "1" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputWorkers").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                    $("#inputWorkers").selectmenu("refresh");
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 取得客户信息
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: memberCardNo },
+                url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                success: function (data) {
+                    // 当前用户
+                    memberObject.MemberID = data.MemberID;
+                    memberObject.CardNo = data.CardNo;
+                    memberObject.Name = data.Name;
+                    memberObject.MobileNumber = data.MobileNumber;
+                    memberObject.SalesmanId = data.SalesmanId;
+                    $("#ul_member").empty();
+                    $("#ul_member").append("<li>姓名：" + data.Name + "</li><li>卡号：" + data.CardNo + "</li><li>手机：" + data.MobileNumber + "</li><li>状态：" + data.StatusValue + "</li>");
+                    $("#ul_member").listview('refresh');
+                    //$("#inputProject").empty();
+                    $("#inputProject").append('<option value="">请选择</option>');
+                    $.each(data.Projects, function (i, item) {
+                        if (item.IsEntity == '0') {   // 不显示即销即耗
+                            var pjn = item.ProjectName;
+                            if (item.Type == "1") {
+                                pjn = item.ProjectName + "[赠]"
+                            } else if (item.Type == "1") {
+                                pjn = item.ProjectName + "[转]"
+                            }
+                            $("#inputProject").append('<option value=' + item.ProjectID + '>' + pjn + '</option>');
+                            console.log('member project loaded.');
+                        }
+                    });
+
+                    // 自动设置顾问
+                    if (memberObject.SalesmanId != "") {
+                        $("#inputSales").val(memberObject.SalesmanId);
+                        $("#inputSales").selectmenu("refresh");
+                    }
+                    //$.mobile.changePage("#appointment");
+                },
+                error: function (request, error) {
+                    showNetErrMsg();
+                }
+            });
+
+            // var id = window.localStorage.getItem("appointmentid");
+            if (appointmentId != undefined && appointmentId != "") {
+                //window.localStorage.removeItem("appointmentid");
+                var option = "<option value=\"1\">服务</option>" +
+                             "<option value=\"2\">取消</option>" +
+                             "<option value=\"3\">改约</option>";
+                $("#inputStatus").append(option);
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    timeout: 10000,
+                    data: { "id": appointmentId },
+                    url: serverUrl + "/Appointment/GetAppDetailById",
+                    success: function (data) {
+                        //console.log("GetAppDetailById Success");
+                        $("#inputAppointmentID").val(data.AppointmentID);
+                        $("#inputCardNo").val(data.CardNo);
+                        $("#inputName").val(data.Name);
+                        $("#inputPhone").val(data.Phone);
+                        $("#inputBookDate").val(getDate(data.BookDate));
+                        //console.log('data.Projects=' + data.Projects);
+                        $("#inputProject").val(data.Projects);
+                        $("#inputProject").selectmenu("refresh");
+                        $("#inputWorkers").val(data.Wokers);
+                        $("#inputRoom").val(data.BookRooms);
+                        $("#inputStatus").val(data.BookStatus);
+
+                        $("#inputStatus").selectmenu("refresh");
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            }
+        }
+
+        $().ready(function () {
+            // 表单验证
+            $("#frmAppointment1").validate({
+                rules: {
+                    inputProject: {
+                        required: true
+                    },
+                    inputBookDate: {
+                        required: true
+                    },
+                    inputBookTime: {
+                        required: true
+                    },
+                    inputStatus: {
+                        required: true
+                    }
+                },
+                messages: {
+                    inputBookDate: {
+                        required: "请输入预约日期",
+                        date: true
+                    },
+                    inputBookTime: {
+                        required: "请输入预约时间",
+                    },
+                    inputProject: {
+                        required: "请选择服务项目"
+                    },
+                    inputStatus: {
+                        required: "请选择状态"
+                    }
+                }
+            });
+            // 提交预约
+            $("#frmAppointment").submit(function () {
+                $('#btnSave').button('disable'); 
+                $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+                if ($("#frmAppointment").validate().form()) {
+                    var url = serverUrl + "/Appointment/AppCreate";
+                    var id = $("#inputAppointmentID").val();
+                    if (id != undefined && id != "") {
+                        url = serverUrl + "/Appointment/AppModify";
+                        $("#failPage div.warning h3").text("修改失败！");
+                        $("#successPage div.success h3").text("修改成功！");
+                    }
+                    var works = "";
+                    $("#inputWorkers option:selected").each(function () {
+                        works += $(this).text() + ',';
+                    });
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        timeout: 10000,
+                        data: {
+                            "AppointmentID": $("#inputAppointmentID").val(),
+                            "MemberID": memberObject.MemberID,
+                            "Name": memberObject.Name,
+                            "Phone": memberObject.MobileNumber,
+                            "BookDate": $("#inputBookDate").val() + " " + $("#inputBookTime").val(),
+                            "Projects": $("#inputProject").val(),
+                            "ProjectName": $("#inputProject").find("option:selected").text(),
+                            "Salesman": $("#inputSales").val(),
+                            "Wokers": works,
+                            "BookRooms": $("#inputRoom").val(),
+                            "HostID": userObject.host,
+                            "BranchId": userObject.branch,
+                            "CreatedBy": userObject.userid,
+                            "ClientId": userObject.uuid
+                        },
+                        url: url,
+                        success: function (result) {
+                            if (result.code != 1) {
+                                //预约失败
+                                console.log("Appointment Fail");
+                                $("#failPage div.warning p:last").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else {
+                                //预约成功
+                                console.log("Appointment Success");
+                                $.mobile.changePage("#successPage", 'pop');
+                            }
+                            $.mobile.loading('hide');
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            showNetErrMsg();
+                            $.mobile.loading('hide');
+                            //$("#failPage div.warning p:last").text(XMLHttpRequest.responseText);
+                            //$.mobile.changePage("#failPage", 'pop');
+                        }
+                    });
+                    $("#btnSave").button("enable");
+                    return false;
+                }
+
+                $("#btnSave").button("enable");
+                return false;
+            });
+        });
+
+    </script>
+</body>
+</html>

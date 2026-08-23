@@ -1,0 +1,32 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvProject";
+        settings.CallbackRouteValues = new { Controller = "GoodsStat", Action = "ProjectList", GoodsID=ViewData["GoodsID"], StartDate = ViewData["StartDate"], EndDate = ViewData["EndDate"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        //settings.KeyFieldName = "BookGoodsID";
+
+        settings.Columns.Add("CreatedDate", "消耗时间");
+        settings.Columns.Add("MemberName", "顾客姓名");
+        settings.Columns.Add("ProjectName", "项目名");
+        settings.Columns.Add("Num", "货品数量");
+        settings.Columns.Add("Quantity", "项目数量");
+        settings.Columns.Add("Unit", "单位");
+        //settings.Columns.Add("Goods.Name", "货品名称");
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = "美容师";
+        //    column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+        //    {
+        //        var bps = DataBinder.Eval(c.DataItem, "UserSplits") as ICollection<SalonCRM.Models.BookProjectSplit>;
+        //        var bpsn = string.Join(",", bps.Select(tt => tt.User.UserCnName).ToArray());
+        //        ViewContext.Writer.Write(bpsn);
+        //    });
+        //});
+
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.SettingsPager.PageSize = 20;
+
+    }).Bind(Model).GetHtml()

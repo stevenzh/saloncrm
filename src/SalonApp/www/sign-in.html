@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0" />
+    <meta charset="utf-8"> 
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <style>
+        #login-button { margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div data-role="page" id="login" data-theme="a">
+        <div data-role="header">
+            <h3>登陆</h3>
+        </div>
+
+        <div data-role="content">
+            <label for="hostcode">商户编码:</label>
+            <input type="text" value="" name="hostcode" id="hostcode" />
+            <!--<input type="hidden" name="hostcode" id="hostcode" value="MDSS" />-->
+            <label for="username">用户名:</label>
+            <input type="text" value="" name="username" id="username" />
+            <label for="password">密码:</label>
+            <input type="password" value="" name="password" id="password" />
+
+            <a data-role="button" id="login-button">登陆</a>
+        </div>
+
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+
+            // 设置默认商户
+            if (userObject.hostcode == '') {
+                $("#hostcode").val("MDSS");
+            } else {
+                $("#hostcode").val(userObject.hostcode);
+            }
+        }
+
+        $('#login-button').click(function () {
+            console.log("btn login.");
+            if ($('#username').val().length > 0 && $('#password').val().length > 0) {
+                userObject.username = $('#username').val(); 
+                userObject.password = $('#password').val();
+                userObject.hostcode = $('#hostcode').val();
+
+                if (platform == "cordova") {
+                    var param = {
+                        host: $('#hostcode').val(),
+                        username: $('#username').val(),
+                        password: $('#password').val(),
+                        uuid: device.uuid,
+                        model: device.model
+                    };
+                    console.log("login url:" + serverUrl + '/Account/AppLogin');
+                    $.ajax({
+                        url: serverUrl + '/Account/AppLogin',
+                        type: "POST",
+                        data: param,
+                        success: function (result) {
+                            console.log("ajax Login return code:" + result.code);
+                            if (result.code == 1) {
+                                userObject.time = new Date().getTime();
+                                userObject.host = result.HostId;
+                                userObject.hostcode = result.HostCode;
+                                userObject.branch = result.OrganId;
+                                userObject.branchName = result.BranchName;
+                                userObject.userid = result.Id;
+                                userObject.uuid = device.uuid;
+                                userObject.type = result.Type;
+
+                                window.localStorage.setItem(localAccount, JSON.stringify(userObject));
+                                //$.mobile.changePage("index.html", { transition: "slide" });
+                                window.location.href = 'index.html';
+                            } else {
+                                alert(result.message);
+                            }
+                            // This callback function will trigger on successful action
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                } else {
+                   var param = {
+                        host: $('#hostcode').val(),
+                        username: $('#username').val(),
+                        password: $('#password').val()
+                    };
+                    $.ajax({
+                        url: serverUrl + '/Account/AjaxLogin',
+                        type: "POST",
+                        data: param,
+                        success: function (result) {
+                            console.log("url return:" + result.code);
+                            if (result.code == 1) {
+                                userObject.time = new Date().getTime();
+                                userObject.host = result.HostId;
+                                userObject.hostcode = result.HostCode;
+                                userObject.branch = result.OrganId;
+                                userObject.branchName = result.BranchName;
+                                userObject.userid = result.Id;
+                                userObject.type = result.Type;
+
+                                // 占比
+                                userObject.majorPercentage = result.MajorPercentage;
+                                userObject.majorBeauticianPercentage = result.MajorBeauticianPercentage;
+                                userObject.beauticianPercentage = result.BeauticianPercentage;
+                                userObject.percentageLock = result.PercentageLock;
+
+                                window.localStorage.setItem(localAccount, JSON.stringify(userObject));
+                                window.location.href = 'index.html';
+                            } else {
+                                alert(result.message);
+                            }
+                            // This callback function will trigger on successful action
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+ 
+            } else {
+                alert('请输入用户名和密码.');
+            }
+        });
+
+    </script>
+
+</body>
+</html>

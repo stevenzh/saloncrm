@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>首页</title>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0" />
+    <meta charset="utf-8">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div data-role="page" id="index" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h3>我的门店</h3>
+        </div>
+
+        <div data-role="content">
+            <div data-role="tabs" id="tabs">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#one" class="ui-btn-active ui-state-persist" data-ajax="false">预约未到</a></li>
+                        <li><a href="#two" data-ajax="false">预约已到</a></li>
+                        <li><a href="#three" data-ajax="false">今日订单</a></li>
+                    </ul>
+                </div>
+                <div id="one" class="ui-body-d ui-content">
+                    <ol id="noshows" data-role="listview" data-inset="true"></ol>
+                </div>
+                <div id="two">
+                    <ol id="hasto" data-role="listview" data-inset="true"></ol>
+                </div>
+                <div id="three">
+                    <ol id="books" data-role="listview" data-inset="true"></ol>
+                </div>
+            </div>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="index.html" class="ui-btn-active ui-state-persist" data-icon="home">我的门店</a></li>
+                    <li><a href="menu_member.html" data-icon="grid">客户管理</a></li>
+                    <!--<li><a href="menu_stat.html" data-icon="search">统计查询</a></li>-->
+                    <li><a href="menu_setting.html" data-icon="gear">用户设置</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="page" id="minfo" data-theme="a">
+        <div data-theme="a" data-role="header">
+            <a href="#index" data-role="button" data-icon="back">返回</a>
+            <h3>客户预约信息</h3>
+        </div>
+        <div data-role="content">
+            <div class="ui-body ui-body-a ui-corner-all">
+            </div>
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a id="m_recharge" href="#" data-icon="plus">客户充值</a></li>
+                    <!--<li><a id="m_project" href="#" data-icon="star">购买疗程</a></li>-->
+                    <li><a id="m_settlement" href="#" data-icon="recycle">客户消费</a></li>
+                    <li><a id="m_card" href="#" data-icon="recycle">用户设置</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+            commonInit();
+
+            refreshPage();
+            setInterval(function () { refreshPage(); }, 20000)
+
+            // 店名
+            $("#index").find('[data-role="header"] h3').text(userObject.branchName);
+        }
+
+        function refreshPage() {
+            $.mobile.loading('show', { text: '加载中...', textVisible: true });
+            GetAjaxDayList(0, "0", "#noshows");
+            GetAjaxDayList(0, "1", "#hasto");
+            GetBookDayList(0, "#books");
+        }
+
+        $.mobile.paramsHandler.addPage("minfo", ["id"], [], function (args) {
+            //var item = AppointmentArray[args.id];
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "id": args.id },
+                url: serverUrl + "/Appointment/GetAppDetailById",
+                success: function (item) {
+                    console.log("GetAppDetailById Success");
+                    var html = "<p>卡号：" + item.CardNo + "</p>" +
+                             "<p>姓名：" + item.Name + "</p>" +
+                             "<p>电话：" + item.Phone + "</p>" +
+                             "<p>预约时间：" + getDateTime(item.BookDate) + "</p>" +
+                             "<p>服务项目：" + item.ProjectNames + "</p>" +
+                             "<p>服务人：" + item.Wokers + "</p>" +
+                             "<p>使用房间：" + item.BookRooms + "</p>" +
+                             "<p>状态：" + item.BookStatus + "</p>";
+
+                    var $body = $("#minfo").find("div.ui-body");
+                    $body.empty();
+                    $body.append(html);
+
+
+                    // 连接修正
+                    $("#m_recharge").attr("href", "recharge.html?mid=" + item.CardNo);
+                    // $("#m_project").attr("href", "buyproject.html?mid=" + item.CardNo);
+                    $("#m_settlement").attr("href", "settlement.html?mid=" + item.CardNo);
+                    $("#m_card").attr("href", "buycard.html?mid=" + item.CardNo);
+                    $("#m_edit").attr("href", "member_edit.html?mid=" + item.CardNo);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+        });
+
+        $.mobile.paramsHandler.init();
+
+        //$(document).on('pagebeforeshow', function () {
+        //    console.log("run pagebeforeshow");
+        //});
+
+        function GetAjaxDayList(pageindex, status, ui) {
+            var $ul = $(ui), html = "";
+            $ul.html("");
+
+            // 取得数据
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                data: {
+                    "hostId": userObject.host,
+                    "branchId": userObject.branch,
+                    "cardNo": $("input[data-type=search]").val(),
+                    "status": status,
+                    "dayindex": 0,
+                    "userId": userObject.userid,
+                },
+                url: serverUrl + "/Appointment/AppDayList",
+                success: function (result) {
+                    //AppointmentArray = result.list;
+                    $.each(result.list, function (i, item) {
+                        html += "<li><a href=\"#minfo?id=" + item.Id + "\">" +
+                                "<h3>" + item.Name + "</h3>" +
+                                "<p>卡号：" + item.CardNo +
+                                " 电话：" + item.Phone + "</p>" +
+                                "<p>预约时间：" + getDateTime(item.BookDate) +
+                                " 预约项目：" + (item.ProjectName == null ? "空" : item.ProjectName) + "</p>" +
+                                "<p>服务人：" + item.Wokers + " 状态：" + item.BookStatus + "</p>" +
+                                "</a></li>";
+                    });
+                    $ul.html(html);
+                    $ul.listview("refresh");
+                    $ul.trigger("updatelayout");
+
+                    // 加载完成
+                    $.mobile.loading('hide');
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                    $.mobile.loading('hide');
+                }
+            });
+        }
+
+        function GetBookDayList(pageindex, ui) {
+            var $ul = $(ui), html = "";
+            $ul.html("");
+
+            // 取得数据
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                data: {
+                    "hostId": userObject.host,
+                    "branchId": userObject.branch,
+                    "cardNo": $("input[data-type=search]").val(),
+                    "status": "",
+                    "userId": userObject.userid,
+                },
+                url: serverUrl + "/Book/AppDayList",
+                success: function (result) {
+
+                    $.each(result.list, function (i, item) {
+                        var book_url = "settlement_edit.html";
+                        if (item.State == '20'|| item.State=='30') book_url = "settlement_show.html";
+                        html += "<li><a href=\"" + book_url + "?id=" + item.Id + "&mid=" + item.CardNo + "\">" +
+                                "<h3>" + item.MemberName + "</h3>" +
+                                "<p>卡号：" + item.CardNo +
+                                " 时间：" + getDateTime(item.BookDate) + "</p>" +
+                                "<p>服务项目：" + (item.ProjectName == null ? "空" : item.ProjectName) + "</p>" +
+                                "<p>服务人：" + item.Workers + " 状态：" + item.StateValue + "</p>" +
+                                "</a></li>";
+                    });
+
+                    $ul.html(html);
+                    $ul.listview("refresh");
+                    $ul.trigger("updatelayout");
+
+                    // 加载完成
+                    $.mobile.loading('hide');
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                    $.mobile.loading('hide');
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

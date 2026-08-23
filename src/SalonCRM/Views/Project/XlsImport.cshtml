@@ -1,0 +1,34 @@
+﻿@model SalonCRM.Models.RoleViewModel
+@{
+    ViewBag.Title = "项目导入结果";
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/Home/Index">首页</a> </li>
+        <li><a href="/Project/Index">项目列表</a> </li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="alert-error">@Html.Raw(ViewBag.Message)</div>
+
+    @*<table class="table">
+
+        @foreach (var item in ViewBag.Users)
+        {
+            <tr>
+                <td>
+                    @item.UserCnName
+                </td>
+                <td>
+                    @item.UserName
+                </td>
+            </tr>
+        }
+    </table>*@
+    <a class="btn btn-default" href="/Project/Index">返回列表</a>
+</div>
+
+

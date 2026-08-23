@@ -1,0 +1,48 @@
+﻿@model SalonCRM.Models.WxMemberQModel
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Member", Action = "PageList", Name = ViewData["Name"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "MemberID";
+        settings.SettingsPager.PageSize = 20;
+
+        settings.Columns.Add("NickName", "微信昵称");
+        //settings.Columns.Add("Province", "省份");
+        settings.Columns.Add("SubscribeValue", "微信关注");
+        settings.Columns.Add("BindingValue", "绑定状态");
+        settings.Columns.Add("PhoneNumber", "手机");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "关注时间";
+            column.FieldName = "SubscribeTime";
+            column.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+            column.SortIndex = 1;
+            column.Visible = false;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "最后消息时间";
+            column.FieldName = "LastMessageTime";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.Width = 80;
+            column.SetDataItemTemplateContent(delegate(GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("详细", "Details", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "MemberID")
+                }, new { target = "_self" }).ToHtmlString());
+
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    }).Bind(Model.MemberList).GetHtml()

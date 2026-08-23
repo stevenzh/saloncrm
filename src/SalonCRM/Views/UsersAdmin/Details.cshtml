@@ -1,0 +1,52 @@
+﻿@model SalonCRM.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "用户详细";
+}
+
+<h2>@ViewBag.Title..</h2>
+
+<div>
+    <h4>用户详细信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserCnName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserCnName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+    </dl>
+</div>
+<h4>列出用户应用的角色</h4>
+@if (ViewBag.RoleNames.Length == 0)
+{
+    <hr />
+    <p>该用户没有应用的角色.</p>
+}
+<table class="table">
+    @foreach (var item in ViewBag.RoleNames)
+    {
+        <tr>
+            <td>
+                @item
+            </td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("返回用户列表", "Index")
+</p>

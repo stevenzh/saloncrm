@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+    <meta charset="utf-8"> 
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div data-role="page" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>统计报表</h1>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <a href="#">
+                        <h2>客户开卡统计</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>客户充值统计</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>消费结账统计</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>客户挂失统计</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>客户换卡统计</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>客户余额查询</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>客户积分查询</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>客户对账清单</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>项目销量排行</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>员工业绩统计</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>预约消费统计</h2>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <h2>客户忠诚度统计</h2>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div data-id="PersistentFooter" data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="index.html" data-icon="home">首页</a></li>
+                    <li><a href="menu_member.html" data-icon="grid">客户管理</a></li>
+                    <li><a href="#" data-icon="search" class="ui-btn-active ui-state-persist">客户查询</a></li>
+                    <li><a href="menu_setting.html" data-icon="gear">用户设置</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+        }
+    </script>
+</body>
+</html>

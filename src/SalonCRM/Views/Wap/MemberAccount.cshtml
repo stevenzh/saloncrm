@@ -1,0 +1,59 @@
+﻿@model SalonCRM.Models.MemberViewModel
+@{
+    Layout = "~/Views/Shared/_WapLayout.cshtml";
+    ViewBag.Title = "客户详细";
+}
+@using SalonCRM.Web.MVC;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">客户账户变更记录</h3>
+            </div>
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table no-margin">
+                        <thead>
+                            <tr>
+                                <th>门店</th>
+                                <th>充值金额</th>
+                                <th>付款方式</th>
+                                <th>充值时间</th>
+                                <th>美容顾问</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model.RechargeBooks)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Branch.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InAmount)
+                                </td>
+                                <td>
+                                    @(item.PaymentType == "1" ? "现金" : "")
+                                    @(item.PaymentType == "2" ? "刷卡" : "")
+                                    @(item.PaymentType == "3" ? "转账" : "")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                                </td>
+                                <td>
+                                    @item.SaleID
+                                    @*@String.Join(",", item.Salesmans.Select(t => t.UserCnName).ToArray())*@
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+    });
+</script>

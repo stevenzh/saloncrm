@@ -1,0 +1,111 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvRecord";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "BranchStat",
+            Action = "OutcomeList",
+            BranchId = ViewData["BranchId"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            Type = "3"
+        };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.Columns.Add("Member.CardNo", "客户卡号");
+        //settings.Columns.Add("MemberCard.Type", "卡类型");
+        settings.Columns.Add("Member.Name", "客户姓名");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "卡类型";
+            column.Width = 90;
+            column.FieldName = "MemberCard.TypeValue";
+        });
+        settings.Columns.Add("MemberCard.Title", "卡标题");
+        settings.Columns.Add("TypeValue", "交易类型");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "付款方式";
+            column.Width = 90;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                string type = Convert.ToString(DataBinder.Eval(c.DataItem, "SalesType"));
+                if (type == "1")
+                    ViewContext.Writer.Write("卡扣金额");
+                else if (type == "2")
+                    ViewContext.Writer.Write("现金支付");
+            });
+        });
+        settings.Columns.Add("OutAmount", "支出金额");
+        settings.Columns.Add("InAmount", "收入金额");
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "卡内余额";
+            column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                decimal balance = Convert.ToDecimal(DataBinder.Eval(c.DataItem, "Balance"));
+                if (balance >= 0)
+                    ViewContext.Writer.Write(String.Format("{0:g}", balance));
+                else
+                    ViewContext.Writer.Write("");
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "欠款";
+            column.Width = 60;
+            column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                decimal balance = Convert.ToDecimal(DataBinder.Eval(c.DataItem, "Balance"));
+                if (balance < 0)
+                    ViewContext.Writer.Write(String.Format("{0:g}", balance));
+                else
+                    ViewContext.Writer.Write("");
+            });
+        });
+
+        settings.Columns.Add("Salesman.UserCnName", "美容顾问");
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CreatedDate";
+            column.Width = 150;
+            column.Caption = "操作时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd HH:mm:ss";
+            column.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+            column.SortIndex = 1;
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.Width = 80;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("查看", "Details", "AccountRecord", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "RecordID")
+                }, new { target = "_self" }).ToHtmlString());
+
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsPager.PageSize = 20;
+
+
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "RecordID");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "OutAmount").DisplayFormat = "c";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "InAmount").DisplayFormat = "c";
+        settings.Settings.ShowFooter = true;
+
+
+    }).Bind(Model).GetHtml()

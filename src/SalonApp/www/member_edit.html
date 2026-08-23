@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <div data-role="page" id="medit" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>编辑客户资料</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <form id="frmMember">
+                <input type="hidden" id="inputMemberID">
+                <label for="inputName">姓名</label>
+                <input type="text" id="inputName" name="inputName" placeholder="姓名">
+                <label for="inputMobile">手机</label>
+                <input type="number" id="inputMobile" name="inputMobile" placeholder="手机">
+                <label for="inputPassword">密码</label>
+                <input type="password" id="inputPassword" name="inputPassword" placeholder="密码">
+                <label for="inputCardNo">卡号</label>
+                <input type="number" id="inputCardNo" name="inputCardNo" placeholder="卡号">
+                <label for="inputType">客户类型</label>
+                <select id="inputType"></select>
+                <label for="inputSex">性别</label>
+                <select id="inputSex" name="inputSex"></select>
+                <label for="inputVocation">职业</label>
+                <select id="inputVocation" name="inputVocation"></select>
+                <label for="inputSource">来源</label>
+                <select id="inputSource" name="inputSource"></select>
+                <label for="inputBirthday">生日</label>
+                <input type="text" class="date-input" data-role="datebox" value="" data-options='{"mode": "flipbox"}' id="inputBirthday" name="inputBirthday" placeholder="生日">
+                <label for="inputJoinDate">入会时间</label>
+                <input type="text" class="date-input" data-role="datebox" value="" data-options='{"mode": "flipbox"}' id="inputJoinDate" name="inputJoinDate" placeholder="入会时间">
+                <label for="inputAdress">地址</label>
+                <textarea id="inputAdress" rows="3" name="inputAdress" placeholder="地址"></textarea>
+                <p>
+                    <button id="btn_update" type="submit" class="btn btn-default">保存</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jqm-datebox-1.4.5.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("doInit");
+            FastClick.attach(document.body);
+            commonInit();
+
+            // 初始化列表
+            commonList("#inputSex", "MemberGender");
+            commonList("#inputVocation", "MemberVocation");
+            commonList("#inputSource", "MemberSource");
+            commonList("#inputType", "MemberType");
+
+            var memberId = getUrlParameter("mid");
+            $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: memberId },
+                url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                success: function (data) {
+
+                    $("#inputMemberID").val(data.MemberID);
+                    $("#inputName").val(data.Name);
+                    $("#inputMobile").val(data.MobileNumber);
+                    $("#inputCardNo").val(data.CardNo);
+                    if (data.Sex != "")
+                        $("#inputSex").val(data.Sex);
+                    if (data.Vocation != "")
+                        $("#inputVocation").val(data.Vocation);
+                    if (data.Source != "")
+                        $("#inputSource").val(data.Source);
+                    $("#inputBirthday").val(data.BirthdayStr);
+                    $("#inputJoinDate").val(getDate(data.JoinDate));
+                    $("#inputAdress").val(data.Address);
+
+                    // 加载完成
+                    $.mobile.loading('hide');
+                },
+                error: function () {
+                    showNetErrMsg();
+                }
+            });
+        }
+
+        //$(document).on('pagebeforeshow', '#medit', function () {
+        //    console.log("run pagebeforeshow");
+        //});
+
+        $().ready(function () {
+
+            $("#frmMember").validate({
+                rules: {
+                    inputName: {
+                        required: true
+                    },
+                    inputMobile: {
+                        required: true,
+                        digits: true,
+                        rangelength: [11, 11],
+                        //remote: {
+                        //    type: "post",
+                        //    url: serverUrl + "/MemberAdmin/AppEditRepeatMobile",
+                        //    data: {
+                        //        hostId: userObject.host,
+                        //        memberId: function () { return $("#inputMemberID").val(); },
+                        //        Mobile: function () { return $("#inputMobile").val(); }
+                        //    }
+                        //}
+                    },
+                    inputBirthday: {
+                        dateISO: true
+                    },
+                    inputJoinDate: {
+                        dateISO: true
+                    }
+                },
+                messages: {
+                    inputName: {
+                        required: "请输入姓名"
+                    },
+                    inputMobile: {
+                        required: "请输入手机号码",
+                        digits: "手机号码请输入数字",
+                        rangelength: "手机号位数不正确",
+                        //remote: "新输入的手机号重复"
+                    },
+                    inputBirthday: {
+                        dateISO: "生日格式不正确"
+                    },
+                    inputJoinDate: {
+                        dateISO: "入会日期格式不正确"
+                    }
+                }
+            });
+
+            $("#frmMember").submit(function () {
+                console.log($("#inputVocation").val());
+                if (checkMobile() == false) {
+                    return false;
+                }
+                if ($("#frmMember").validate().form()) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            MemberID: $("#inputMemberID").val(),
+                            Name: $("#inputName").val(),
+                            MobileNumber: $("#inputMobile").val(),
+                            CardNo: $("#inputCardNo").val(),
+                            Passwd: $("#inputPassword").val(),
+                            JoinDate: $("#inputJoinDate").val(),
+                            Address: $("#inputAdress").val(),
+                            Birthday: $("#inputBirthday").val(),
+                            Sex: $("#inputSex").val(),
+                            Vocation: $("#inputVocation").val(),
+                            Source: $("#inputSource").val(),
+                            Type: $("#inputType").val(),
+                        },
+                        url: serverUrl + "/MemberAdmin/AppUpdate",
+                        success: function (result) {
+                            console.log("member update " + result);
+                            window.location.href ="member_info.html?mid=" + $("#inputCardNo").val();
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            showNetErrMsg();
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+
+        $("#inputMobile").change(function () {
+            checkMobile();
+        });
+
+        function checkMobile() {
+            var repeat = true;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                async: false,
+                data: {
+                    hostId: userObject.host,
+                    memberId: $("#inputMemberID").val(),
+                    Mobile: $("#inputMobile").val()
+                },
+                url: serverUrl + "/MemberAdmin/AppEditRepeatMobile",
+                success: function (result) {
+                    repeat = result;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            if (repeat == false) {
+                if ($("#inputMobile-error").length == 0) {
+                    $("#inputMobile").after("<label id='inputMobile-error' class='error' for='inputMobile'>手机号重复</label>");
+                } else {
+                    $("#inputMobile-error").text("手机号重复");
+                }
+                $("#inputMobile-error").show();
+                $("#inputMobile").focus();
+            } else {
+                $("#inputMobile").next("label").remove();
+            }
+
+            return repeat;
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+﻿@model SalonCRM.Models.LoginViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 管理经营数据分析系统</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style type="text/css">
+        .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+            color: #fff;
+        }
+
+        body {
+            background-image: url("/Content/login/bg.png");
+        }
+    </style>
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body class=" theme-blue">
+    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @id = "loginform" }))
+    {
+        <table style="margin-top:200px;height:259px;width:100%;">
+            <tr>
+                <td>&nbsp;</td>
+                <td style="width:804px;background:url('/Content/login/login-bg.png') no-repeat;">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.HostCode)
+                    <div style=" margin:0px 0 0 420px;">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                    <table style="height:160px; margin:0px 0 0 420px;">
+                        @*<tr>
+                            <td>商户编号：</td>
+                            <td>
+                                @Html.TextBoxFor(m => m.HostCode, new { @class = "" })
+                                @Html.ValidationMessageFor(m => m.HostCode, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>*@
+                        <tr>
+                            <td>用&nbsp;户&nbsp;名：</td>
+                            <td>
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "" })
+                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+                            <td>
+                                @Html.PasswordFor(m => m.Password, new { @class = "" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                @Html.CheckBoxFor(m => m.RememberMe)
+                                @Html.LabelFor(m => m.RememberMe)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <img src="~/Content/login/btn_login.png" id="btn_image" style="float:left;cursor:pointer;"/>
+                                <img src="~/Content/login/btn_pwd.png" id="btn_pwd" style="float:left;cursor:pointer;" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width:15%; background:url('/Content/login/ext-bg.png')">
+                    &nbsp;
+                </td>
+            </tr>
+        </table>
+    }
+    <footer style="position:fixed; bottom:5px;width:100%;">
+         <div class="panel-footer" style=" text-align:center;">香港星亮集团 版权所有  中文官网：www.mdss.hk</div>
+    </footer>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    <script>
+        $().ready(function () {
+            $("#btn_image").click(function () {
+                $("#loginform").submit();
+            });
+            $("#btn_pwd").click(function () {
+                document.location.href = "/Account/ForgotPassword";
+            });
+
+            // 回车提交
+            $(document).keyup(function (evnet) {
+                if (evnet.keyCode == '13') {
+                    $("#loginform").submit();
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

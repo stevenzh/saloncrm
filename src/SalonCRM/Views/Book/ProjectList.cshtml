@@ -1,0 +1,82 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Book", Action = "ProjectList", BookID = ViewData["BookID"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "BookProjectID";
+
+        settings.Columns.Add("MemberCardId", "卡ID").EditFormSettings.Visible = DefaultBoolean.False;
+        settings.Columns.Add("Project.Name", "项目名").EditFormSettings.Visible = DefaultBoolean.False;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "消费方式";
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                string type = Convert.ToString(DataBinder.Eval(c.DataItem, "Type"));
+                if (type == "1")
+                {
+                    ViewContext.Writer.Write("现金");
+                }
+                else if (type == "2")
+                {
+                    ViewContext.Writer.Write("刷卡");
+                }
+                else if (type == "3")
+                {
+                    ViewContext.Writer.Write("转账");
+                }
+                else if (type == "4")
+                {
+                    ViewContext.Writer.Write("储值卡");
+                }
+            });
+        });
+        settings.Columns.Add("Quantity", "数量");
+        settings.Columns.Add("Amount", "消耗金额");
+        settings.Columns.Add("HandicraftFee", "手工费");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "美容师";
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                var bps = DataBinder.Eval(c.DataItem, "UserSplits") as ICollection<SalonCRM.Models.BookProjectSplit>;
+                var bpsn = string.Join(",", bps.Select(tt => tt.User.UserCnName).ToArray());
+                ViewContext.Writer.Write(bpsn);
+            });
+        });
+
+
+        settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+        settings.SettingsDetail.ShowDetailRow = true;
+        settings.SetDetailRowTemplateContent(c =>
+        {
+            //ViewContext.Writer.Write(
+            //    "Contact Phone: <b>" +
+            //        DataBinder.Eval(c.DataItem, "Phone") + "</b>, Fax: <b>" +
+            //            DataBinder.Eval(c.DataItem, "Fax") + "</b>" +
+            //    "<br />" +
+            //    "<br />"
+            //);
+            Html.RenderAction("SplitList", new { BookProjectID = DataBinder.Eval(c.DataItem, "BookProjectID") });
+        });
+        settings.PreRender = (sender, e) =>
+        {
+            ((MVCxGridView)sender).DetailRows.ExpandRow(0);
+        };
+
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.SettingsPager.PageSize = 20;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 120;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Book", Action = "UpdateProjectPartial", BookID = ViewData["BookID"] };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Book", Action = "DeleteProjectPartial", BookID = ViewData["BookID"] };
+
+    }).Bind(Model).GetHtml()

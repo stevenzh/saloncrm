@@ -1,0 +1,72 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "CardTmpl", Action = "TmplList" };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "TmplID";
+
+        //settings.Columns.Add("CardType", "类型");
+        settings.Columns.Add("Title", "标题");
+        settings.Columns.Add("Amount", "价格");
+        //settings.Columns.Add("IsVaild", "是否有效");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "是否有效";
+            column.FieldName = "IsVaild";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.Items.Add(new ListEditItem("有效", 1));
+            comboBoxProperties.Items.Add(new ListEditItem("无效", 0));
+            comboBoxProperties.ValueType = typeof(Int32);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CardType";
+            column.Caption = "类型";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Text";
+                p.ValueField = "Value";
+                p.ValueType = typeof(string);
+                p.DataSource = ViewBag.CardTypeList;
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Remark";
+            column.Caption = "备注";
+            column.EditorProperties().Memo(p =>
+            {
+                p.Rows = 3;
+            });
+        });
+
+        settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+        settings.SettingsDetail.ShowDetailRow = true;
+        settings.SetDetailRowTemplateContent(c =>
+        {
+            //ViewContext.Writer.Write(
+            //    "Contact Phone: <b>" +
+            //        DataBinder.Eval(c.DataItem, "Phone") + "</b>, Fax: <b>" +
+            //            DataBinder.Eval(c.DataItem, "Fax") + "</b>" +
+            //    "<br />" +
+            //    "<br />"
+            //);
+            Html.RenderAction("ProjectList", new { TmplID = DataBinder.Eval(c.DataItem, "TmplID") });
+        });
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 120;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "CardTmpl", Action = "AddNewTmplPartial" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "CardTmpl", Action = "UpdateTmplPartial" };
+
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+
+    }).Bind(Model).GetHtml()

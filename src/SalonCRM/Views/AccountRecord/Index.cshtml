@@ -1,0 +1,217 @@
+﻿@model SalonCRM.Models.AccountRecordQModel
+@using SalonCRM.Identity
+@{
+    ViewBag.Title = "交易记录";
+    // 门店用户登录
+    CustomPrincipal cu = (CustomPrincipal)User;
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+
+    <script type="text/javascript">
+        function SelectionChanged(s, e) {
+            s.GetSelectedFieldValues("RecordID", GetSelectedFieldValuesCallback);
+        }
+        function GetSelectedFieldValuesCallback(values) {
+            $("#count").val(values);
+        }
+
+        function BookPay(bookids) {
+
+            if (confirm("确认删除") == true) {
+                $.ajax({
+                    url: '/AccountRecord/BatchDelete',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { records: bookids },
+                    success: function (data) {
+                        if (data.code == "1") {
+                            alert("删除成功");
+
+                            gvSorting.Refresh();
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+</div>
+<div class="main-content">
+    @using (Html.BeginForm("Index", "AccountRecord", FormMethod.Post))
+    {
+        <table class="">
+            <tr style="height:40px;">
+                <td style="padding-right: 4px">门店</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "2")
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.BranchId,
+                             settings =>
+                             {
+                                 settings.Name = "BranchId";
+                                 settings.Width = 150;
+                                 settings.Properties.TextField = "Text";
+                                 settings.Properties.ValueField = "Value";
+                                 settings.Properties.ValueType = typeof(Int32);
+                             }).BindList(ViewBag.OrganId).GetHtml();
+                    }
+                    else
+                    {
+                        @Html.DevExpress().TextBox(settings =>
+                          {
+                              settings.Name = "BranchName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserDepartment.Name;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.BranchId);
+                    }
+                </td>
+                <td style="padding-right: 4px">美容师</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "1")
+                    {
+                        @Html.DevExpress().TextBox(
+                         settings =>
+                          {
+                              settings.Name = "BeauticianName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserInfo.UserCnName;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.BeauticianId);
+                    }
+                    else
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.BeauticianId,
+                       settings =>
+                       {
+                           settings.Name = "BeauticianId";
+                           settings.Width = 150;
+                           settings.Properties.TextField = "Text";
+                           settings.Properties.ValueField = "Value";
+                           settings.Properties.ValueType = typeof(string);
+                       }).BindList(ViewBag.Beautician).GetHtml()
+                    }
+                </td>
+                <td style="padding-right: 4px">美容顾问</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "3")
+                    {
+                        @Html.DevExpress().TextBox(
+                         settings =>
+                          {
+                              settings.Name = "SalesmanName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserInfo.UserCnName;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.SalesmanId);
+                    }
+                    else
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.SalesmanId,
+                       settings =>
+                       {
+                           settings.Name = "SalesmanId";
+                           settings.Width = 150;
+                           settings.Properties.TextField = "Text";
+                           settings.Properties.ValueField = "Value";
+                           settings.Properties.ValueType = typeof(string);
+                       }).BindList(ViewBag.Salesman).GetHtml()
+                    }
+                </td>
+                <td style="padding-right: 4px">交易类型</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.Type,
+                       settings =>
+                       {
+                           settings.Name = "Type";
+                           settings.Width = 150;
+                           settings.Properties.TextField = "Text";
+                           settings.Properties.ValueField = "Value";
+                           settings.Properties.ValueType = typeof(string);
+                       }).BindList(ViewBag.TypeList).GetHtml()
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-right: 4px">顾客卡号</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.CardNo,
+                    settings =>
+                    {
+                        settings.Name = "CardNo";
+                        settings.Width = 150;
+                    }).GetHtml()
+                </td>
+                <td style="padding-right: 4px">会员卡类型</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.CardType,
+                    settings =>
+                    {
+                        settings.Name = "CardType";
+                        settings.Width = 150;
+                        settings.Properties.TextField = "Text";
+                        settings.Properties.ValueField = "Value";
+                        settings.Properties.ValueType = typeof(string);
+                    }).BindList(ViewBag.CardTypeList).GetHtml()
+                </td>
+                <td style="padding-right: 4px">开始日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.StartDate,
+                    settings =>
+                    {
+                        settings.Name = "StartDate";
+                        settings.Properties.EditFormatString = "yyyy-MM-dd";
+                    }).GetHtml()
+                </td>
+                <td style="padding-right: 4px">结束日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.EndDate,
+                    settings =>
+                    {
+                        settings.Name = "EndDate";
+                        settings.Properties.EditFormatString = "yyyy-MM-dd";
+                    }).GetHtml()
+                </td>
+                <td></td>
+                <td style="padding-right: 4px">
+                    <input type="submit" class="btn btn-default" value="查询" />
+                </td>
+            </tr>
+        </table>
+    }
+    <br />
+    @Html.Partial("RecordList", Model.RecordList)
+
+    @if (User.IsInRole("管理员"))
+    {
+        <div class="box-footer">
+            <form action="#">
+                <div class="input-group">
+                    <input id="count" name="message" placeholder="选择交易记录" readonly="readonly" class="form-control" type="text">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-warning btn-flat" onclick="BookPay($('#count').val());">批量删除</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    }
+</div>

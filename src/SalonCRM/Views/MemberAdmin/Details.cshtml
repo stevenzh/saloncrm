@@ -1,0 +1,570 @@
+﻿@model SalonCRM.Models.MemberViewModel
+@using SalonCRM.Identity
+@using SalonCRM.Web.MVC;
+@{
+    ViewBag.Title = "客户详细";
+    CustomPrincipal cu = (CustomPrincipal)User;
+}
+@section AdditionalResources {
+    <style>
+        .table { margin-bottom: 5px; }
+    </style>
+}
+<h1 class="text-center">@Model.Name 会员档案</h1>
+<div class="">
+    <hr />
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <td rowspan="4" style="width:50px">基本信息</td>
+                <td>会员姓名：@Html.DisplayFor(model => model.Name)</td>
+                <td>出生年月：@Html.DisplayFor(model => model.Birthday)</td>
+                <td>联系电话：@Html.DisplayFor(model => model.MobileNumber)</td>
+            </tr>
+            <tr>
+                <td>性别：@Html.DisplayFor(model => model.Sex)</td>
+                <td>职业：@Html.DisplayFor(model => model.Vocation)</td>
+                <td>来源：@Html.DisplayFor(model => model.Source)</td>
+            </tr>
+            <tr>
+                <td>状态：@Html.DisplayFor(model => model.StatusValue)</td>
+                <td>门店：@Html.DisplayFor(model => model.JoinBranchStr)</td>
+                <td>入会时间：@Html.DisplayFor(model => model.JoinDateStr)</td>
+            </tr>
+            <tr>
+                <td colspan="3">婚姻情况：@Html.CheckboxList("MaritalStatus", (List<SelectListItem>)ViewBag.MaritalStatus, Model.MaritalStatus)</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    客户类别：@Html.CheckboxList("MemberType", (List<SelectListItem>)ViewBag.MemberType, Model.Type)<br />
+                    客户级别：@Html.CheckboxList("MemberLevel", (List<SelectListItem>)ViewBag.MemberLevel, Model.Level)
+                </td>
+            </tr>
+            <tr>
+                <td>联系方式</td>
+                <td colspan="3">
+                    手机：@Html.DisplayFor(model => model.MobileNumber)
+                    电子信箱：@Html.DisplayFor(model => model.Email)
+                    地址：@Html.DisplayFor(model => model.Address)
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="4">核心内容</td>
+                <td colspan="3">
+                    <table>
+                        <tr>
+                            <td style="width:90px; vertical-align:top;font-weight:bold;">皮肤类型：</td>
+                            <td>@Html.CheckboxList("SkinType", (List<SelectListItem>)ViewBag.SkinTypes, Model.SkinType)</td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;font-weight:bold;">肌肤症状：</td>
+                            <td>@Html.CheckboxList("SkinConditions", (List<SelectListItem>)ViewBag.SkinConditions, Model.SkinConditions)</td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:top;font-weight:bold;">肌肤症状：</td>
+                            <td>@Html.CheckboxList("FacialDemand", (List<SelectListItem>)ViewBag.FacialDemands, Model.FacialDemand)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table>
+                        <tr>
+                            <td style="width:90px; vertical-align:top;font-weight:bold;">身体需求：</td>
+                            <td>@Html.CheckboxList("BodyDemand", (List<SelectListItem>)ViewBag.BodyDemands, Model.BodyDemand)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table>
+                        <tr>
+                            <td style="width:90px; vertical-align:top;font-weight:bold;">消费习惯：</td>
+                            <td>@Html.CheckboxList("ConsumptionHabit", (List<SelectListItem>)ViewBag.ConsumptionHabits, Model.ConsumptionHabit)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table>
+                        <tr>
+                            <td style="width:90px; vertical-align:top;font-weight:bold;">客户性格：</td>
+                            <td>@Html.CheckboxList("Personality", (List<SelectListItem>)ViewBag.Personalitys, Model.Personality)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="3">卡项数据</td>
+                <td>
+                    会员卡内余额：@Html.DisplayFor(model => model.Amt)
+                </td>
+                <td colspan="2">
+                    项目余次：@Model.RemainedProject
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">现有卡项明细：</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>卡类型</th>
+                                <th>标题</th>
+                                <th>总金额</th>
+                                <th>欠款</th>
+                                <th>购买次数</th>
+                                <th>已用次数</th>
+                                <th>剩余次数</th>
+                                <th>使用期限</th>
+                                <th>购买时间</th>
+                                <th>单价</th>
+                                <th>顾问\美容师</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model.Cards)
+                        {
+                            <tr>
+                                <td>
+                                    @(item.Type == "0" ? "储值卡" : "")
+                                    @(item.Type == "1" ? "疗程卡" : "")
+                                    @(item.Type == "2" ? "单次卡" : "")
+                                    @(item.Type == "3" ? "留客卡" : "")
+                                    @(item.Type == "4" ? "综合限时卡" : "")
+                                    @(item.Type == "5" ? "综合限次卡" : "")
+                                    @(item.Type == "6" ? "拓客增值卡" : "")
+                                    @(item.Type == "7" ? "拓客优惠卡" : "")
+                                    @(item.Type == "8" ? "综合限时限次卡" : "")
+                                    @(item.Type == "9" ? "现金通道" : "")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Title)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Amt)
+                                </td>
+                                <td>
+                                    <span style="color:firebrick;">@(item.Amount - item.ActualPrice)</span>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BookTime)
+                                </td>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LastCount)
+                                </td>
+                                <td>
+                                    @(item.ExpiryDate == null ? "" : item.ExpiryDate.Value.ToShortDateString())
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    @if (item.Record != null)
+                                    {
+                                        @Html.Raw(string.Join(",", item.Record.Splits.Select(t => t.User.UserCnName).ToArray()))
+                                    }
+                                </td>
+                            </tr>
+
+                            if (Model.UsableProjects.Where(t => t.MemberCardId == item.MemberCardId).Count() > 0)
+                            {
+                                foreach (var it in Model.UsableProjects.Where(t => t.MemberCardId == item.MemberCardId))
+                                {
+                                    if (it.IsEntity == 0)
+                                    {
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                @(it.CardType == "0" ? "储值卡：" : "")
+                                                @(it.CardType == "1" ? "疗程卡：" : "")
+                                                @(it.CardType == "2" ? "单次卡：" : "")
+                                                @(it.CardType == "3" ? "体验卡：" : "")
+                                                @(it.CardType == "4" ? "综合限时卡：" : "")
+                                                @(it.CardType == "5" ? "综合限次卡：" : "")
+                                                @(it.CardType == "6" ? "拓客增值卡：" : "")
+                                                @(it.CardType == "7" ? "拓客优惠卡：" : "")
+                                                @(it.CardType == "8" ? "综合限时限次卡：" : "")
+                                                @( it.ProjectName + (it.Type == "1" ? "[赠]" : "") + (it.Type == "2" ? "[转]" : ""))
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => it.Amount)
+                                            </td>
+                                            <td>
+                                                <span style="color:firebrick;">@(it.Amount - it.ActualPrice)</span>
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => it.BookTime)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => it.UsedTime)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => it.LastCount)
+                                            </td>
+                                            <td></td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => it.CreatedDate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => it.UnitPrice)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => it.SalesStr)
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        }
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="4">卡扣</td>
+                <td>
+                    今年卡扣额：@Model.ConsumptionThisYear
+                </td>
+                <td colspan="2">
+                    今年卡扣频次：@Model.ConsumptionHzThisYear
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">卡扣记录：</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>门店</th>
+                                <th>消费金额</th>
+                                <th>充值时间</th>
+                                <th>顾问\美容师</th>
+                                <th>项目名称</th>
+                                <th>单价</th>
+                                <th>次数</th>
+                                <th>合计</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model.ExpenseRecords)
+                        {
+                            if (item.SalesType == 1)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Branch.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OutAmount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                                    </td>
+                                    <td>
+                                        @String.Join(",", item.Splits.Select(t => t.User.UserCnName).ToArray())
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+                                foreach (var mp in item.MemberProjects)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>@mp.Project.Name</td>
+                                        <td>@mp.UnitPrice</td>
+                                        <td>@mp.BookTime</td>
+                                        <td>@mp.Amount</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    往年卡扣金额：@Model.ConsumptionLastYear
+                </td>
+                <td colspan="2">
+                    往年卡扣频次：@Model.ConsumptionHzLastYear
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="2">现金购买</td>
+                <td>现金购买记录：</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>门店</th>
+                                <th>消费金额</th>
+                                <th>充值时间</th>
+                                <th>顾问\美容师</th>
+                                <th>项目名称</th>
+                                <th>单价</th>
+                                <th>次数</th>
+                                <th>合计</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model.ExpenseRecords)
+                        {
+                            if (item.SalesType == 2)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Branch.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OutAmount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                                    </td>
+                                    <td>
+                                        @String.Join(",", item.Splits.Select(t => t.User.UserCnName).ToArray())
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+                                foreach (var mp in item.MemberProjects)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>@mp.Project.Name</td>
+                                        <td>@mp.UnitPrice</td>
+                                        <td>@mp.BookTime</td>
+                                        <td>@mp.Amount</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="2">历史充值数据</td>
+                <td colspan="3">充值记录：</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>门店</th>
+                                <th>充值金额</th>
+                                <th>付款方式</th>
+                                <th>充值时间</th>
+                                <th>顾问\美容师</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model.RechargeRecords)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Branch.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InAmount)
+                                </td>
+                                <td>
+                                    @(item.PaymentType == "1" ? "现金" : "")
+                                    @(item.PaymentType == "2" ? "刷卡" : "")
+                                    @(item.PaymentType == "3" ? "转账" : "")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                                </td>
+                                <td>
+                                    @String.Join(",", item.Splits.Select(t => t.User.UserCnName).ToArray())
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="3">历史消费数据</td>
+                <td>
+                    临店次数：@Model.BookTime
+                </td>
+                <td colspan="2">
+                    最后消费时间：@(Model.LastServiceDate == default(DateTime) ? "" : Model.LastServiceDate.Value.ToLongDateString() )
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">消费记录：</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>门店</th>
+                                <th>会员卡</th>
+                                <th>消费项目</th>
+                                <th>消费金额</th>
+                                <th>消费时间</th>
+                                <th>美容师</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model.ExpenseProjects)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BranchName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MemberCardTitle)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Project.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                                </td>
+                                <td>
+                                    @String.Join(",", item.Splits.Select(t => t.User.UserCnName).ToArray())
+                                </td>
+                            </tr>
+                        }
+                        @foreach (var item in Model.UsableProjects.Where(t => t.IsEntity == 1))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BranchName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CardTitle)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProjectName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SalesStr)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+            @*<tr>
+                    <td>沟通记录</td>
+                    <td colspan="3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>类型</th>
+                                    <th>内容</th>
+                                    <th>回访人</th>
+                                    <th>回访时间</th>
+                                    <th>下次时间</th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model.Feedbacks)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Purpose)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Centent)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CallUserName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NextDate)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                </tr>*@
+        </tbody>
+    </table>
+
+</div>
+@*<h4>本次沟通记录</h4>
+    @using (Html.BeginForm("Create", "Feedback", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.HiddenFor(m => m.Feedback.MemberId)
+        @Html.HiddenFor(m => m.Feedback.CallUserId)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Feedback.Purpose, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.Feedback.Purpose, (SelectList)ViewBag.FeedbackType, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Feedback.Centent, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(m => m.Feedback.Centent, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Feedback.NextDate, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Feedback.NextDate, new { @id = "NextDate", @class = "form-control" })
+            </div>
+        </div>
+        <input type="submit" class="btn btn-default" value="保存" />
+    }*@
+@*<h4>卡项信息</h4>
+    @Html.Partial("DetailProject", Model.UsableProjects)
+    <h4>消费记录</h4>
+    @Html.Partial("DetailBook", Model.ExpenseBooks)
+    <h4>充值记录</h4>
+    @Html.Partial("DetailRechargeBook", Model.RechargeBooks)
+    <h4>沟通回访内容</h4>
+    @Html.Partial("DetailFeedback", Model.Feedbacks)*@
+<p>
+    @if (cu.Type == "2")
+    {
+        Html.ActionLink("编辑", "Edit", new { id = Model.MemberID });
+        Html.ViewContext.Writer.Write(" |");
+    }
+    @Html.ActionLink("返回客户列表", "Index", "MemberAdmin")
+</p>
+<script type="text/javascript">
+    $(function () {
+        $('#NextDate').datepicker({
+            format: "yyyy-mm-dd",
+            language: "zh-CN"
+        });
+    });
+</script>

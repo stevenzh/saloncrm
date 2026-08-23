@@ -1,0 +1,132 @@
+﻿@model SalonCRM.Models.DictionaryViewModel
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1>编辑 @ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li>@Html.ActionLink("返回列表", "Index", new { Category = (String)ViewBag.Category })</li>
+        <li class="active">编辑 @ViewBag.Title</li>
+    </ul>
+</div>
+<div class="main-content">
+    @using (Html.BeginForm("Edit", "Dictionary", new { Category = Model.Identifier }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>@ViewBag.Title 详细.</h4>
+            <hr />
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.TypeId)
+            @Html.HiddenFor(model => model.Category)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Identifier, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Identifier, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.KeyValue, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.KeyValue, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.KeyValue)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Contents, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Contents, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(m => m.Remark, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.SortOrder, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.SortOrder, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsVaild, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DevExpress().RadioButtonListFor(m => m.IsVaild, settings =>
+                       {
+                           settings.Name = "IsVaild";
+                           settings.Width = 180;
+                           settings.Properties.Items.Add("有效", 1);
+                           settings.Properties.Items.Add("无效", 0);
+                           settings.Properties.RepeatDirection = System.Web.UI.WebControls.RepeatDirection.Horizontal;
+                           settings.Properties.ValueType = typeof(Int32);
+                       }).GetHtml()
+                    @Html.ValidationMessageFor(model => model.IsVaild)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsDefault, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.CheckBoxFor(m => m.IsDefault, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IsDefault)
+                </div>
+            </div>
+            @if (Model.Identifier == "MemberLevel")
+            {
+                <div class="form-group">
+                    <label class="control-label col-md-2">年消费区间</label>
+                    <div class="col-md-10">
+                        <div class="form-inline">
+                            @Html.TextBoxFor(m => m.MinAmount, new { @class = "form-control" })
+                            -
+                            @Html.TextBoxFor(m => m.MaxAmount, new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                </div>
+            }
+            @if (Model.Identifier == "MemberStatus")
+            {
+                <div class="form-group">
+                    <label class="control-label col-md-2">月份区间</label>
+                    <div class="col-md-10">
+                        <div class="form-inline">
+                            @Html.TextBoxFor(m => m.FMonth, new { @class = "form-control" })
+                            -
+                            @Html.TextBoxFor(m => m.SMonth, new { @class = "form-control" })
+
+                            @Html.DropDownListFor(m => m.MonthSet, (SelectList)ViewBag.CategorySet, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="保存" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

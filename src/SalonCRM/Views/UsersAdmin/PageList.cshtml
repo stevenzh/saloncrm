@@ -1,0 +1,38 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "UsersAdmin", Action = "PageList", HostId = ViewData["HostId"], UserName = ViewData["UserName"], BranchId = ViewData["BranchId"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "Id";
+        settings.SettingsPager.PageSize = 20;
+
+        settings.Columns.Add("UserCnName", "姓名").SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        settings.Columns.Add("UserName", "用户名");
+        settings.Columns.Add("OrganName", "门店");
+        settings.Columns.Add("Email", "电子信箱");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.Width = 80;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("查看", "Details", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "Id")
+                }, new { target = "_self" }).ToHtmlString());
+                ViewContext.Writer.Write("&nbsp;");
+                ViewContext.Writer.Write(Html.ActionLink("编辑", "Edit", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "Id")
+                }, new { target = "_self" }).ToHtmlString());
+
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    }).Bind(Model).GetHtml()

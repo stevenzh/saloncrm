@@ -1,0 +1,155 @@
+﻿@model SalonCRM.Models.EditUserViewModel
+
+@{
+    ViewBag.Title = "编辑账户";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li><a href="/usersadmin/index">账户列表</a> </li>
+        <li class="active">新建账户</li>
+    </ul>
+</div>
+<div class="main-content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.HostId)
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(model => model.UserName, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.UserName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.UserCnName, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.UserCnName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UserCnName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Password, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+            </div>
+            @if (User.IsInRole("超级管理员"))
+            {
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        选择类型
+                    </label>
+                    <div class="col-md-10">
+                        @Html.DevExpress().ComboBoxFor(m => m.IsAdminUser,
+                          settings =>
+                          {
+                              settings.Name = "IsAdminUser";
+                              settings.Width = 180;
+                              settings.Properties.TextField = "Text";
+                              settings.Properties.ValueField = "Value";
+                              settings.Properties.ValueType = typeof(String);
+                          }).BindList(ViewBag.UserAdmin).GetHtml()
+                        @Html.ValidationMessageFor(model => model.Status)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        选择商户
+                    </label>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.HostName, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.IsAdminUser)
+            }
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.OrganId, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.OrganId, (SelectList)ViewBag.OrganId, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.OrganId)
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="Roles">角色</label>
+                <span class=" col-md-10">
+                    @foreach (var item in Model.RolesList)
+                {
+                        <input type="checkbox" name="selectedRoles" value="@item.Value" checked="@item.Selected" class="checkbox-inline" />
+                        @Html.Label(item.Value, new { @class = "control-label" })
+                    }
+                </span>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="保存" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript">
+    $().ready(function () {
+
+        $("#HostId").change(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { hostId: $(this).val() },
+                url: "/Branch/AppList",
+                success: function (data) {
+                    $("#OrganId").empty();
+                    //var option = "<option value=\"\">请选择...</option>";
+                    //$("#OrganId").append(option);
+
+                    $(data).each(function (i) {
+                        var option = "<option value=\"" + data[i].Value + "\">" + data[i].Text + "</option>";
+                        $("#OrganId").append(option);
+                    });
+                }
+            });
+        });
+    });
+</script>

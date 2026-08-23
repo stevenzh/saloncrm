@@ -1,0 +1,67 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Host", Action = "HostList" };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.Columns.Add("HostID", "商户ID");
+        settings.Columns.Add("Name", "商户名称");
+        settings.Columns.Add("HostCode", "商户编码");
+        settings.Columns.Add("Province", "省份");
+        settings.Columns.Add("City", "城市");
+        //settings.Columns.Add("Manager", "负责人");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "StartDate";
+            column.Caption = "开通日期";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "EndDate";
+            column.Caption = "终止日期";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd";
+        });
+        settings.Columns.Add("ClientNum", "终端数量");
+        settings.Columns.Add("BranchNum", "门店数量");
+        //settings.Columns.Add("IsVaild", "是否有效");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "是否有效";
+            //column.Width = 90;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                string type = Convert.ToString(DataBinder.Eval(c.DataItem, "IsVaild"));
+                if (type == "1")
+                    ViewContext.Writer.Write("有效");
+                else if (type == "0")
+                    ViewContext.Writer.Write("无效");
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            //column.Caption = "管理";
+            column.Width = 90;
+            column.SetDataItemTemplateContent(delegate(GridViewDataItemTemplateContainer c)
+            {
+                //ViewContext.Writer.Write(Html.ActionLink("详细", "EditProfile", "Host", new
+                //{
+                //    Id = DataBinder.Eval(c.DataItem, "HostID")
+                //}, new { target = "_self" }).ToHtmlString());
+                //ViewContext.Writer.Write("&nbsp;");
+                ViewContext.Writer.Write(Html.ActionLink("编辑", "Edit", "Host", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "HostID")
+                }, new { target = "_self" }).ToHtmlString());
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        //settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+
+    }).Bind(Model).GetHtml()

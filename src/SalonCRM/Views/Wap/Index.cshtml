@@ -1,0 +1,80 @@
+﻿@model SalonCRM.Models.MemberViewModel
+@{
+    Layout = "~/Views/Shared/_WapLayout.cshtml";
+    ViewBag.Title = "客户详细";
+}
+@using SalonCRM.Web.MVC;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">@Model.Name 会员档案</h3>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <td>会员姓名：@Html.DisplayFor(model => model.Name)</td>
+                            <td>出生年月：@Html.DisplayFor(model => model.Birthday)</td>
+                            <td>联系电话：@Html.DisplayFor(model => model.MobileNumber)</td>
+                        </tr>
+                        <tr>
+                            <td>性别：@Html.DisplayFor(model => model.Sex)</td>
+                            <td>职业：@Html.DisplayFor(model => model.Vocation)</td>
+                            <td>来源：@Html.DisplayFor(model => model.Source)</td>
+                        </tr>
+                        <tr>
+                            <td>状态：@Html.DisplayFor(model => model.StatusValue)</td>
+                            <td>门店：@Html.DisplayFor(model => model.JoinBranchStr)</td>
+                            <td></td>
+                        </tr>
+                        @*<tr>
+                                <td colspan="3">
+                                    客户类别：@Html.CheckboxList("MemberType", (List<SelectListItem>)ViewBag.MemberType, Model.Type)<br />
+                                    客户级别：@Html.CheckboxList("MemberLevel", (List<SelectListItem>)ViewBag.MemberLevel, Model.Level)
+                                </td>
+                            </tr>*@
+                        <tr>
+                            <td>联系方式</td>
+                            <td colspan="2">
+                                手机：@Html.DisplayFor(model => model.MobileNumber)
+                                电子信箱：@Html.DisplayFor(model => model.Email)
+                                地址：@Html.DisplayFor(model => model.Address)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="box">
+            @*<div class="box-header">
+                    <h3 class="box-title">Application Buttons</h3>
+                </div>*@
+            <div class="box-body">
+                @*<p>Add the classes <code>.btn.btn-app</code> to an <code>&lt;a&gt;</code> tag to achieve the following:</p>*@
+                <a class="btn btn-app" href="/Wap/MemberCard">
+                    <i class="fa fa-edit"></i> 客户卡集
+                </a>
+                <a class="btn btn-app" href="/Wap/MemberAccount">
+                    <i class="fa fa-cny"></i> 账户记录
+                </a>
+                <a class="btn btn-app" href="/Wap/MemberBook">
+                    <i class="fa fa-repeat"></i> 消费记录
+                </a>
+                <a class="btn btn-app" href="/Wap/MemberProject">
+                    <i class="fa fa-pause"></i> 客户项目
+                </a>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+
+    });
+</script>

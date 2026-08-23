@@ -1,0 +1,74 @@
+﻿@model IEnumerable<SalonCRM.Models.MenuViewModel>
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+
+    var treeList = Html.DevExpress().TreeList(
+            settings =>
+            {
+                settings.Name = "treeList";
+                settings.CallbackRouteValues = new { Controller = "Menu", Action = "TreePartial" };
+                settings.AutoGenerateColumns = false;
+                settings.SettingsEditing.Mode = TreeListEditMode.EditFormAndDisplayNode;
+                settings.KeyFieldName = "MenuId";
+                settings.ParentFieldName = "ParentId";
+                settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+                settings.Columns.Add("Name", "名称");
+                settings.Columns.Add("Description", "说明");
+                settings.Columns.Add("MenuPath", "链接");
+                settings.Columns.Add("Level","级别");
+                settings.Columns.Add("SortOrder", "权重");
+                settings.Columns.Add("Icon", "图标");
+                settings.Columns.Add("IsActive", "激活", MVCxTreeListColumnType.CheckBox);
+
+                settings.Columns.Add(column =>
+                {
+                    column.Caption = "系统分类";
+                    column.FieldName = "SiteNav";
+                    // column.Width = 80;
+                    column.ColumnType = MVCxTreeListColumnType.ComboBox;
+                    var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+                    comboBoxProperties.DataSource = ViewBag.NavList as List<SelectListItem>;
+                    comboBoxProperties.TextField = "Text";
+                    comboBoxProperties.ValueField = "Value";
+                    comboBoxProperties.ValueType = typeof(string);
+                });
+
+                settings.Columns.Add(column =>
+                {
+                    column.Caption = "二级分类";
+                    column.FieldName = "SiteNavNext";
+                    // column.Width = 80;
+                    column.ColumnType = MVCxTreeListColumnType.ComboBox;
+                    var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+                    comboBoxProperties.DataSource = ViewBag.NavNextList as List<SelectListItem>;
+                    comboBoxProperties.TextField = "Text";
+                    comboBoxProperties.ValueField = "Value";
+                    comboBoxProperties.ValueType = typeof(string);
+                });
+
+                settings.CommandColumn.Visible = true;
+                settings.CommandColumn.ShowNewButtonInHeader = true;
+                settings.CommandColumn.NewButton.Visible = true;
+                settings.CommandColumn.DeleteButton.Visible = true;
+                settings.CommandColumn.EditButton.Visible = true;
+
+                settings.SettingsEditing.AddNewNodeRouteValues = new { Controller = "Menu", Action = "AddNewMenuPartial" };
+                settings.SettingsEditing.UpdateNodeRouteValues = new { Controller = "Menu", Action = "UpdateMenuPartial" };
+                settings.SettingsEditing.DeleteNodeRouteValues = new { Controller = "Menu", Action = "DeleteMenuPartial" };
+                settings.SettingsEditing.ConfirmDelete = true;
+
+                settings.Settings.ShowFooter = false;
+                settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+                settings.SettingsBehavior.AutoExpandAllNodes = true;
+                settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+            });
+
+    if (ViewData["EditNodeError"] != null)
+    {
+        treeList.SetEditErrorText((string)ViewData["EditNodeError"]);
+    }
+}
+@treeList.Bind(Model).GetHtml()

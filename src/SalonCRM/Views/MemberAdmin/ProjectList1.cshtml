@@ -1,0 +1,65 @@
+﻿@using SalonCRM.Identity;
+@{
+    CustomPrincipal cUser = User as CustomPrincipal;
+}
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvProjectList1";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "MemberAdmin",
+            Action = "ProjectList1",
+            MemberID = ViewData["MemberID"],
+            MemberCardId = ViewData["MemberCardId"]
+        };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "MemberCardProjectId";
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ProjectID";
+            column.Caption = "项目名称";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Text";
+                p.ValueField = "Value";
+                p.ValueType = typeof(int);
+                p.DataSource = ViewBag.ProjectDataList;
+            });
+        });
+
+        settings.Columns.Add("UnitPrice", "单价");
+
+        if (cUser.IsAdminUser > 0)
+        {
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.Width = 120;
+            settings.CommandColumn.ShowNewButtonInHeader = true;
+            settings.CommandColumn.ShowNewButton = true;
+            settings.CommandColumn.ShowEditButton = true;
+            settings.CommandColumn.ShowDeleteButton = true;
+            settings.SettingsBehavior.ConfirmDelete = true;
+
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "MemberAdmin", Action = "AddNewProject1Partial", MemberCardId = ViewData["MemberCardId"] };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "MemberAdmin", Action = "UpdateProject1Partial", MemberCardId = ViewData["MemberCardId"] };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "MemberAdmin", Action = "DeleteProject1Partial", MemberCardId = ViewData["MemberCardId"] };
+        }
+
+        if (ViewData["EditError"] != null)
+        {
+            settings.SetFooterRowTemplateContent(c =>
+            {
+                Html.ViewContext.Writer.Write(ViewData["EditError"]);
+            });
+        }
+        settings.BeforeGetCallbackResult = (s, e) =>
+        {
+            if (ViewData["EditError"] != null)
+            {
+                MVCxGridView gridView = (MVCxGridView)s;
+                gridView.Settings.ShowFooter = true;
+            }
+        };
+
+    }).Bind(Model).GetHtml();

@@ -1,0 +1,47 @@
+﻿@model SalonCRM.Models.DictionaryQModel
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li class="active">@ViewBag.Title 列表</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="btn-toolbar list-toolbar">
+        @Html.ActionLink("添加" + (String)ViewBag.Title, "Create", new { Category = ViewData["Category"] }, new { @class = "btn  btn-primary" })
+    </div>
+
+    @using (Html.BeginForm("Index", "Dictionary"))
+    {
+        if (ViewData["Category"] == null)
+        {
+            <div style="padding-bottom: 10px;">
+                <label for="selectAllMode">选择类型:&nbsp;</label>
+                @Html.DropDownListFor(m => m.Category, (SelectList)ViewBag.CategoryType)
+                <input type="submit" value="搜索" />
+            </div>
+        }
+
+        @Html.Partial("PageList", Model.DictionayList)
+    }
+    <script>
+        var index = 0;
+    </script>
+</div>

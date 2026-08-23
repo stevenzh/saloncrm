@@ -1,0 +1,778 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户购买家居产品</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div data-role="page" id="buyproject" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-icon="back" data-rel="back">返回</a>
+            <h3>选择项目</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ul_member1" class="ul_member" data-role="listview"></ul>
+            <br />
+            <!--<label for="inputCategory">项目类型</label>
+            <select id="inputCategory">
+                <option value="">请选择...</option>
+            </select>-->
+            <ol id="ol_project" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="搜索项目名称、编号..."></ol>
+        </div>
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="pagethree" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>项目购买详情</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ul_member2" class="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmBuyProject">
+                <input type="hidden" id="inputProject" />
+
+
+                <div data-role="fieldcontain">
+                    <label for="inputType"><em>*</em> 付款类型：</label>
+                    <select id="inputType" name="inputType" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                        <option value="4">储值卡</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divCard" style="display:none;">
+                    <label for="inputCard"><em>*</em> 储值卡选择</label>
+                    <select id="inputCard" name="inputCard" data-native-menu="false">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayment"><em>*</em> 购买金额 </label>
+                    <input type="text" id="inputPayment" name="inputPayment">
+                </div>
+                <div id="divPay" data-role="collapsible" data-content-theme="false" style="display:none;">
+                    <h4>欠款方式购买</h4>
+                    <div data-role="fieldcontain">
+                        <label for="inputBook"> 实收金额（剩余金额作为欠款）</label>
+                        <input type="text" id="inputBook" name="inputBook" value="">
+                    </div>
+                </div>
+
+                <div data-role="fieldcontain">
+                    <label for="listProject2">其他付款方式</label>
+                    <ul id="listProject2" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newpayment" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left">添加其他付款</a>
+                </div>
+
+                <div data-role="fieldcontain">
+                    <label for="inputAllPayment"><em>*</em> 合计购买金额 </label>
+                    <input type="text" id="inputAllPayment" name="inputAllPayment">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputCount"><em>*</em> 购买数量</label>
+                    <input type="text" id="inputCount" name="inputCount">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales"><em>*</em> 美容顾问：</label>
+                    <select name="inputSales" id="inputSales" data-native-menu="false">
+                        <option>请选择顾问</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="per_points1">
+                    <label for="inputSalesRadix">顾问分成:</label>
+                    <input type="range" name="inputSalesRadix" id="inputSalesRadix" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers"><em>*</em> 美容师</label>
+                    <select name="inputWorkers" id="inputWorkers" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain" id="per_points2">
+                    <label for="inputWorkerRadix">美容师分成:</label>
+                    <input type="range" name="inputWorkerRadix" id="inputWorkerRadix" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <div data-role="fieldcontain" style="display:none;">
+                    <select name="flipEntity" id="flipEntity" data-role="slider">
+                        <option value="0">操作服务</option>
+                        <option value="1">现消现耗</option>
+                    </select>
+                </div>
+                <p>
+                    <button type="submit">下一步</button>
+                </p>
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div id="paymentDialog" data-role="page" data-dialog="true">
+        <div data-role="header">
+            <a id="dialogBack1" href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>添加其他付款方式</h1>
+        </div>
+        <div data-role="content">
+            <form id="frmBuyProduct">
+                <div data-role="fieldcontain">
+                    <label for="inputType1"><em>*</em> 付款类型：</label>
+                    <select id="inputType1" name="inputType1" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                        <option value="4">储值卡</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divCard1" style="display:none;">
+                    <label for="inputCard1"><em>*</em> 储值卡选择</label>
+                    <select id="inputCard1" name="inputCard" data-native-menu="false">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayment1"><em>*</em> 付款金额 </label>
+                    <input type="text" id="inputPayment1" name="inputPayment1">
+                </div>
+                <p>
+                    <button id="btn_add_payment" type="submit">保存</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="page" data-dialog="true" id="popupDialog" data-theme="a">
+        <div data-role="header">
+            <h1>余额不足</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <p class="ui-title">账户余额不足</p>
+            <!--<p>储值卡可以欠款方式支付，是否继续购买?</p>-->
+            <a href="#pagethree" data-role="button" data-inline="true">取消</a>
+            <!--<a href="#nextPage" id="btn_dialog_continue" data-inline="true" data-role="button">继续</a>-->
+        </div>
+    </div>
+
+    <div data-role="page" id="nextPage" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>客户输入密码</h3>
+        </div>
+        <div data-role="content">
+            <form id="frmPasswd">
+                <div data-role="fieldcontain">
+                    <label for="inputCustPwd"><em>*</em> 密码：</label>
+                    <input type="password" id="inputCustPwd" name="inputCustPwd">
+                </div>
+                <div class="btn-default btn btn-default btn-block">
+                    <input id="btnSave" type="submit" value="购买疗程" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="page" id="successPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <h1>购买成功</h1>
+            <p>项目购买成功.</p>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <div data-role="page" id="failPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content" class="warning">
+            <h1>购买失败</h1>
+            <p>购买失败:</p>
+            <a href="buyproject.html" class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left">重新购买</a>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+            commonInit();
+
+            var memberCardNo = getUrlParameter("mid");
+
+            // 取得客户信息
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: memberCardNo },
+                url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                success: function (data) {
+                    // 当前用户
+                    memberObject.MemberID = data.MemberID;
+                    memberObject.CardNo = data.CardNo;
+                    memberObject.Name = data.Name;
+                    memberObject.MobileNumber = data.MobileNumber;
+                    memberObject.Amt = data.Amt;
+                    memberObject.Points = data.Points;
+                    memberObject.SalesmanId = data.SalesmanId;
+                    $(".ul_member").empty();
+                    $(".ul_member").append("<li>姓名：" + data.Name + "</li><li>卡号：" + data.CardNo + "</li><li>手机：" + data.MobileNumber + "</li><li>余额：" + data.Amt + "</li><li>积分：" + data.Points + "</li>");
+                    $("#ul_member1").listview('refresh');
+
+                    // 客户卡
+                    // 卡片类型 0:储值卡 1: 疗程卡 2: 单次卡 3: 体验卡 4: 综合限时卡 5: 综合限次卡 6: 拓客增值卡 7: 拓客优惠卡
+                    $(data.Cards).each(function (i, item) {
+                        if (item.Type == '0' || item.Type == '6') {
+                            var option = "<option value=\"" + item.MemberCardId + ":" + item.Type + ":" + item.Amt + "\">" + item.TypeValue + ":" + item.Title + ":" + item.Amt + "</option>";
+                            $("#inputCard").append(option);
+                            $("#inputCard1").append(option);
+                        }
+                    });
+                    //$("#inputCard").selectmenu("refresh");
+                },
+                error: function () {
+                    showNetErrMsg();
+                }
+            });
+
+            //// 初始项目类型
+            //$.ajax({
+            //    type: "POST",
+            //    dataType: "json",
+            //    data: { "hostId": userObject.host, "branchId": userObject.branch },
+            //    url: serverUrl + "/Project/AppCategory",
+            //    success: function (data) {
+            //        $(data).each(function (i) {
+            //            var option = "<option value=\"" + data[i].code + "\">" + data[i].name + "</option>";
+            //            $("#inputCategory").append(option);
+            //        });
+            //    },
+            //    error: function (request, error) {
+            //        // This callback function will trigger on unsuccessful action
+            //        showNetErrMsg();
+            //    }
+            //});
+
+            // 取得项目列表
+            //$("#inputCategory").change(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { hostId: userObject.host, Category: 'C04' },
+                url: serverUrl + "/Project/AppList",
+                success: function (data) {
+                    $("#ol_project").empty();
+                    $(data).each(function (i, item) {
+                        $("#ol_project").append('<li><a href="#pagethree?pid=' + item.id + '&pname=' + item.name + '&punit=' + item.unit + '">' + item.code + ':' + item.name + '</a></li>');
+                    });
+                    $("#ol_project").listview("refresh");
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+            //});
+
+            // 美容顾问
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "3" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputSales").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+
+            // 取得美容师
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "1" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputWorkers").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 项目过滤
+            $("#ol_project").on("listviewbeforefilter", function (e, data) {
+                var $ul = $(this),
+                    $input = $(data.input),
+                    value = $input.val(),
+                    html = "";
+                if (value && value.length > 1) {
+                    $ul.html("<li> <div class='ui-loader'> <span class='ui-icon ui-icon-loading'> </span> </div> </li> ");
+                    $ul.listview("refresh");
+                    $.ajax({
+                        type: "POST",
+                        data: { hostId: userObject.host, Category: 'C04', q: $input.val() },
+                        url: serverUrl + "/Project/AppList",
+                        dataType: "json",
+                        success: function (result) {
+                            $ul.empty();
+                            $(result).each(function (i, item) {
+                                $ul.append('<li><a href="#pagethree?pid=' + item.id + '&pname=' + item.name + '&punit=' + item.unit + '">' + item.name + '</a></li>');
+                            });
+                            $ul.listview("refresh");
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+            });
+        }
+
+        $(document).on("pageinit", "#pagethree", function (event) {
+            // 自动设置顾问
+            if (memberObject.SalesmanId != "") {
+                $("#inputSales").val(memberObject.SalesmanId);
+                $("#inputSales").selectmenu("refresh");
+            }
+
+            // 业绩占比
+            if (userObject.percentageLock == "1") {
+                // 锁定
+                $("#per_points1").hide();
+                $("#per_points2").hide();
+            } else {
+                // 放开
+                if (userObject.majorPercentage != "") {   // 顾问占比
+                    $("#inputSalesRadix").val(new Number(userObject.majorPercentage));
+                    $("#inputSalesRadix").slider("refresh")
+                }
+                if (userObject.majorBeauticianPercentage != "") {   // 美容师占比
+                    $("#inputWorkerRadix").val(new Number(userObject.majorBeauticianPercentage));
+                    $("#inputWorkerRadix").slider("refresh")
+                }
+            }
+        });
+
+        $().ready(function () {
+
+            // 添加疗程卡项目
+            $("#btn_newpayment").click(function () {
+                $.mobile.changePage("#paymentDialog", { transition: "slide" });
+            });
+
+            // 付款方式变更 疗程卡
+            $("#inputType").change(function () {
+                if ($(this).val() == '4') {
+                    $("#divCard").show();
+                } else {
+                    $("#divCard").hide();
+                }
+            });
+            $("#inputType1").change(function () {
+                if ($(this).val() == '4') {
+                    $("#divCard1").show();
+                } else {
+                    $("#divCard1").hide();
+                }
+            });
+
+            //  会员卡变更
+            //$("#inputCard").change(function () {
+            //    var incard = $(this).val();
+            //    if (incard != '') {
+            //        var cardarray = incard.split(':');
+            //        if (cardarray[1] != "0") {   // 储值卡
+            //            $("#divPay").hide();
+            //        } else {
+            //            $("#divPay").show();
+            //        }
+            //    }
+            //});
+
+            // 自定义验证
+            $.validator.addMethod("ltbalance", function (value, element, param) {
+                var paramVal = $(param).val(); // 余额
+                if (parseInt(value) > parseFloat(paramVal)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }, "余额不足");
+            $.validator.addMethod("ltcash", function (value, element, param) {
+                var paramVal = $(param).val(); // 余额
+                if (parseInt(value) > parseFloat(paramVal)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }, "定金不能超过现金余额");
+            $.validator.addMethod("ltdeposit", function (value, element, param) {
+                var paramVal = $(param).val(); // 余额
+                if (parseInt(value) > parseInt(paramVal)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }, "定金不能超过应付余额");
+            $.validator.addMethod("ltcost", function (value, element, param) {
+                var countVal = $("#inputCount").val();
+                var payment = $("#inputAllPayment").val();
+                if (countVal == "") return true;
+                var params = $("#inputProject").val().split(',');
+                if (parseInt(params[1]) * parseInt(countVal) > parseInt(payment)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }, "单价不得低于成本");
+
+
+            // 表单验证
+            $("#frmBuyProject").validate({
+                rules: {
+                    inputProject: {
+                        required: true
+                    },
+                    inputPayment: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                        ltcost: ""
+                    },
+                    inputBook: {
+                        number: true,
+                        min: 0,
+                        ltcash: '#inputCash',
+                        ltdeposit: '#inputPayment',
+                    },
+                    inputCount: {
+                        required: true,
+                        digits: true,
+                        min: 1,
+                        ltcost: ""
+                    },
+                    inputWorkers: {
+                        required: true,
+                    }
+                },
+                messages: {
+                    inputProject: {
+                        required: "请选择项目"
+                    },
+                    inputPayment: {
+                        required: "请输入购买金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputBook: {
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputCount: {
+                        required: "请输入购买次数",
+                        digits: "请输入非零的整数",
+                        min: "请输入非零的整数"
+                    },
+                    inputWorkers: {
+                        required: "请选择美容顾问"
+                    },
+                }
+            });
+
+            // 表单提交
+            $("#frmBuyProject").submit(function () {
+
+                if ($("#frmBuyProject").validate().form()) {
+
+                    // 验证余额不足
+                    var payVal = $("#inputPayment").val(); // 付款
+                    var payCard = $("#inputCard").val();
+                    var payType = $("#inputType").val();
+                    if (payType == '4' && payCard == "") {
+                        alert("请选择储值卡.");
+                        return false;
+                    }
+                    var myVal = payCard.split(":")[2]; //余额          // MemberCardId:Type:Amt
+                    var typeVal = payCard.split(":")[1]; //卡类型
+
+                    if (parseInt(payVal) > parseFloat(myVal)) {
+                        // 余额不足
+                        $.mobile.changePage("#popupDialog", "pop");
+                        if (typeVal != "0") {
+                            $("#btn_dialog_continue").hide();
+                        } else {
+                            $("#btn_dialog_continue").show();
+                        }
+                    } else {
+                        $.mobile.changePage("#nextPage");
+                    }
+                }
+                return false;
+            });
+
+            $("#btn_dialog_continue").click(function () {
+                // 欠款方式购买
+                var myVal = $("#inputCard").val().split(":")[2]; //余额
+                $("#inputBook").val(myVal);
+            });
+
+            // 表单验证
+            $("#frmPasswd").validate({
+                rules: {
+                    inputCustPwd: {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+                messages: {
+                    inputCustPwd: {
+                        required: "请输入密码",
+                        minlength: "请输入至少6位字符的密码"
+                    }
+                }
+            });
+
+            // 提交表单
+            $("#frmPasswd").submit(function () {
+                $('#btnSave').button('disable');
+                $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+                var sales = "";
+                $('#inputWorkers :selected').each(function (i, selected) {
+                    sales += $(selected).val() + ",";
+                });
+
+                // 占比
+                var p1 = userObject.majorPercentage;
+                var p2 = userObject.majorBeauticianPercentage;
+                if (userObject.percentageLock != "1") {
+                    p1 = $("#inputSalesRadix").val();
+                    p2 = $("#inputWorkerRadix").val();
+                }
+
+                var others = "";
+                for (var i = 0; i < payment_list.length; i++) {
+                    others += payment_list[i][1] + "," + payment_list[i][2] + "," + payment_list[i][3] + ";";
+                }
+
+                if ($("#frmPasswd").validate().form()) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            MemberId: memberObject.MemberID,
+                            MemberCardId: $("#inputCard").val().split(":")[0],
+                            ProjectID: $("#inputProject").val().split(",")[0],
+                            Payment: $("#inputPayment").val(),
+                            Count: $("#inputCount").val(),
+                            Password: $("#inputCustPwd").val(),
+                            user: userObject.userid,
+                            remark: "",
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Type: "0",
+                            PaymentType: $("#inputType").val(),
+                            Salesman: $("#inputSales").val(),
+                            Workers: sales,
+                            ExpiryDate: "",
+                            BookPrice: $("#inputBook").val(),
+                            IsEntity: "1", //$("#flipEntity").val(),
+                            SalesRadix: p1,
+                            WorkerRadix: p2,
+                            AllPay:$("#inputAllPayment").val(),
+                            OtherPay: others
+                        },
+                        url: serverUrl + "/MemberAdmin/AppBuyProject",
+                        success: function (result) {
+                            if (result.code != 1) {
+                                //购买失败
+                                console.log("BuyProject Fail");
+                                $("#failPage div.warning p:last").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else if (result.code != 1) {
+                                //购买失败
+                                console.log("BuyProject Fail");
+                                $("#failPage div.warning p:last").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else {
+                                //购买成功
+                                console.log("BuyProject Success");
+                                $.mobile.changePage("#successPage", 'pop');
+                            }
+                            $.mobile.loading('hide');
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            showNetErrMsg();
+                            $.mobile.loading('hide');
+
+                            //购买失败
+                            //console.log("BuyProject Fail");
+                            //$("#failPage div.warning p:last").text(XMLHttpRequest.responseText);
+                            //$.mobile.changePage("#failPage", 'pop');
+                        }
+                    });
+                    $("#btnSave").button("enable");
+                    return false;
+                }
+
+                $("#btnSave").button("enable");
+                return false;
+            });
+
+
+            $("#btn_add_payment").click(function () {
+                // 检查相同项目
+                try {
+                    var type = $("#inputType1").val();
+                    var typev = $("#inputType1 option:selected").text();
+                    var payVal = $("#inputPayment1").val();
+                    var cardid = $("#inputCard1").val();
+                    var cardName = $("#inputCard1 option:selected").text();
+                    var payment = $("#inputPayment").val();   // 主付款方式
+
+                    // 数据审查
+                    if (payVal == "") {
+                        alert("请添加付款金额.");
+                        return false;
+                    }
+
+                    var myVal = cardid.split(":")[2]; //余额          // MemberCardId:Type:Amt
+                    var typeVal = cardid.split(":")[1]; //卡类型
+                    var cardVal = cardid.split(":")[0];
+                    if (parseInt(payVal) > parseFloat(myVal)) {
+                        alert("卡内余额不足.");
+                        return false;
+                    }
+
+                    var nohas = true;
+                    for (var i = 0; i < payment_list.length; i++) {
+                        // 已含 修改数据
+                        if (payment_list[i][1] == type) {
+                            if (type != "4") {
+                                payment_list[i][2] = payVal;
+                                nohas = false;
+                            } else if (payment_list[i][3] == cardid) {
+                                nohas = false;
+                                payment_list[i][2] = payVal;
+
+                                $("#pi" + type + cardVal + " a h2").html(cardName + ":" + payVal);
+                            }
+                        }
+                    }
+
+                    // 添加到数组
+                    if (nohas) {
+                        var plt = [payment_list.length, type, payVal, cardid];
+                        payment_list.push(plt);
+                        if (type == "4") {
+                            $("#listProject2").append('<li id="pi' + type + cardVal + '"><a href="#paymentDialog?&pid=' + plt[0] + '"><h2>' + cardName + ":" + payVal + '</h2><p></p></a></li>');
+                        } else {
+                            $("#listProject2").append('<li id="pi' + type + cardVal + '"><a href="#paymentDialog?&pid=' + plt[0] + '"><h2>' + typev + ":" + payVal + '</h2><p></p></a></li>');
+                        }
+                        $('#listProject2').listview('refresh');
+                    }
+                    // 清理选择
+                    $("#inputType1").val("");
+                    $("#inputType1").selectmenu("refresh");
+                    $("#inputCard1").val("");
+                    $("#inputCard1").selectmenu("refresh");
+                    $("#inputPayment1").val("");
+
+
+                    $.mobile.changePage("#pagethree", { transition: "slide" });
+                    return false;
+
+                } catch (e) {
+                    $.mobile.toast({
+                        message: "操作失败，稍后再试!",
+                        position: "top"
+                    });
+                }
+            });
+
+            // 跳转到金额输入
+            $.mobile.paramsHandler.addPage("pagethree", ["pid", "pname", "punit"], [], function (args) {
+                //$("#ul_member1").empty();
+                //$("#ul_member1").append("<li>姓名：" + memberObject.Name + "</li><li>卡号：" + memberObject.CardNo + "</li><li>手机：" + memberObject.MobileNumber + "</li><li>余额：" + memberObject.Amt + "</li><li>积分：" + memberObject.Points + "</li>");
+                //$("#ul_member1").append("<li>购买项目：" + args.pname + "</li>");
+                //$("#ul_member1").listview('refresh');
+                $("#inputProject").val(args.pid + "," + args.punit);
+                //$.mobile.changePage("#pagethree");
+            });
+
+            // 跳转到项目选择页面
+            $.mobile.paramsHandler.addPage("paymentDialog", ["pid"], [], function (args) {
+                //数组回写到页面
+                for (var i = 0; i < payment_list.length; i++) {
+                    if (payment_list[i][0] == args.pid) {
+                        // 根据分类初始化项目列表
+
+                        $("#inputType1").val(payment_list[i][1]);
+                        $("#inputCard1").val(payment_list[i][3]);
+                        $("#inputPayment1").val(payment_list[i][2]);
+
+
+                        $("#inputCard1").selectmenu("refresh");
+                        $("#inputType1").selectmenu("refresh");
+
+
+                        if (payment_list[i][1] != '4') {
+                            $("#divCard1").hide();
+                        } else {
+                            $("#divCard1").show();
+                        }
+                    }
+                }
+
+            });
+            $.mobile.paramsHandler.init();
+        });
+
+        // 多种付款方式
+        var payment_list = new Array();
+
+    </script>
+
+</body>
+</html>

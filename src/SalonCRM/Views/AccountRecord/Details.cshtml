@@ -1,0 +1,84 @@
+﻿@model SalonCRM.Models.AccountRecordModel
+
+@{
+    ViewBag.Title = "交易详情";
+}
+@Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.PivotGrid },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Chart },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Scheduler },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+@Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.PivotGrid },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.Chart },
+    new Script { ExtensionSuite = ExtensionSuite.Report },
+    new Script { ExtensionSuite = ExtensionSuite.Scheduler },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+<h2>@ViewBag.Title.</h2>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            订单号
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BookID)
+        </dd>
+        <dt>
+            销售金额
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.InAmount)
+        </dd>
+        <dt>
+            门店
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Branch.Name)
+        </dd>
+        <dt>
+            交易类型
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TypeValue)
+        </dd>
+        <dt>
+            操作时间
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt>
+            是否有效
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsVaild)
+        </dd>
+    </dl>
+</div>
+@if (Model.Type == "3")
+{
+    <h4>购买项目</h4>
+    @Html.Partial("ProjectList", Model.MemberProjects)
+}
+<h4>美容师分拆</h4>
+@Html.Partial("SplitList", Model.Splits)
+<p>
+    @Html.ActionLink("返回交易列表", "Index", "AccountRecord")
+</p>
+<script type="text/javascript">
+    $(function () {
+
+    });
+</script>

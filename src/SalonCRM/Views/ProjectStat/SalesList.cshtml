@@ -1,0 +1,51 @@
+﻿@using System.Web.UI.WebControls;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSales";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "SalesList",
+            Action = "ProjectStat",
+            BranchID = ViewData["BranchID"],
+            ProjectCode = ViewData["ProjectID"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            CardType = ViewData["CardType"]
+        };
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+
+        settings.Columns.Add("MemberName", "客户姓名");
+        settings.Columns.Add("Quantity", "购买数量");
+        settings.Columns.Add("UnitPrice", "单价");
+        settings.Columns.Add("Amount", "总额");
+        settings.Columns.Add("CreatedDate", "购买时间");
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "美容师";
+            column.Width = 200;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                var bps = DataBinder.Eval(c.DataItem, "UserSplits") as SalonCRM.Models.AccountRecord;
+                if (bps != null)
+                {
+                    var bpsn = string.Join(",", bps.Splits.Select(t => t.User.UserCnName).ToArray());
+                    ViewContext.Writer.Write(bpsn);
+                }
+            });
+        });
+
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Quantity");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Amount").DisplayFormat = "c";
+        settings.Settings.ShowFooter = true;
+
+
+    }).Bind(Model).GetHtml()

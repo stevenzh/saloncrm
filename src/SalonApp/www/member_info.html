@@ -1,0 +1,404 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <div data-role="page" id="minfo" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>客户信息</h1>
+            <a id="m_edit" href="#" data-icon="edit">编辑信息</a>
+        </div>
+        <div data-role="content">
+            <ul id="u_member" data-role="listview"></ul>
+            <h3>已购买卡</h3>
+            <ul id="u_card" data-role="listview" data-inset="true"></ul>
+            <h3>已购买项目</h3>
+            <ul id="u_project" data-role="listview" data-inset="true"></ul>
+            <h3>欠款一览</h3>
+            <ul id="u_debt" data-role="listview" data-inset="true"></ul>
+        </div>
+        <div data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a id="m_recharge" href="#" data-icon="plus">客户充值</a></li>
+                    <!--<li><a id="m_project" href="#" data-icon="star">购买项目</a></li>-->
+                    <li><a id="m_settlement" href="#" data-icon="recycle">客户消费</a></li>
+                    <li><a id="m_card" href="#" data-icon="recycle">客户购卡</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="debtDialog" data-role="page" data-dialog="true">
+        <div data-role="header">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>还款</h1>
+        </div>
+        <div data-role="content">
+            <form id="frmDebt">
+                <ul id="ll_debt" data-role="listview"></ul>
+                <div data-role="fieldcontain">
+                    <label for="inputAmount"><em>*</em>还款金额</label>
+                    <input type="text" id="inputAmount" name="inputAmount">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPassword">密码：</label>
+                    <input type="password" name="inputPassword" id="inputPassword">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales"><em>*</em> 美容顾问：</label>
+                    <select name="inputSales" id="inputSales" data-native-menu="false">
+                        <option>请选择顾问</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSalesRadix">顾问分成:</label>
+                    <input type="range" name="inputSalesRadix" id="inputSalesRadix" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers"><em>*</em> 美容师</label>
+                    <select name="inputWorkers" id="inputWorkers" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain">
+                    <label for="inputWorkerRadix">美容师分成:</label>
+                    <input type="range" name="inputWorkerRadix" id="inputWorkerRadix" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <p>
+                    <button id="btn_debt" type="submit">还款</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("doInit");
+            FastClick.attach(document.body);
+            commonInit();
+
+            var memberId = getUrlParameter("mid");
+            $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+
+            // 美容顾问
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "3" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputSales").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+
+            // 取得美容师
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "1" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputWorkers").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            //---------------------------------------------------------------------
+            var html = "";
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: memberId },
+                url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                success: function (data) {
+                    $("#u_member").empty();
+                    var info = "<li>姓名：" + data.Name + "</li><li>性别：" + data.SexValue + "</li><li>地址：" + data.Address + "</li><li>手机：" + data.MobileNumber + "</li>";
+                    if (data.Vocation != null)
+                        info += "<li>职业：" + data.Vocation + "</li>";
+                    if (data.Source != null)
+                        info += "<li>来源：" + data.SourceValue + "</li>";
+                    info += "<li>状态：" + data.StatusValue + "</li><li>分店：" + data.JoinBranchStr + " </li><li>卡号：" + data.CardNo + " </li>";
+                    info += "<li>余额：" + data.Amt + "</li><li>积分：" + data.Points + "</li>";
+                    if (data.Birthday != null)
+                        info += "<li>生日：" + data.BirthdayStr+ " </li>"
+                    info += "<li>入会时间：" + getDate(data.JoinDate) + "</li>";
+                    $("#u_member").append(info);
+                    $("#u_member").listview('refresh');
+
+                    // 购买卡
+                    $("#u_card").empty();
+                    $.each(data.Cards, function (i, item) {
+                        // 卡片类型  0:储值卡 1:疗程卡 2: 单次卡 3:留客卡 4: 综合限时卡 5:综合限次卡 6:拓客增值卡 7:拓客优惠卡 8:综合限时限次卡
+                        if (item.Type == '0') {
+                            html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + '<br/>余额：￥' + item.Amt + '</p></li>';
+                        } else if (item.Type == '1') {
+                            html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + '(' + item.UsedTime + '/' + item.BookTime + ')' + '</p></li>';
+                        } else if (item.Type == '2') {
+                            html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + '</p></li>';
+                        } else if (item.Type == '3') {
+                            html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + '</p></li>';
+                        } else if (item.Type == '4') {
+                            if (item.ExpiryDate == null) {
+                                html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + '</p></li>';
+                            } else {
+                                html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + ' 时限：' + getDate(item.ExpiryDate) + '</p></li>';
+                            }
+                        } else if (item.Type == '5') {
+                            html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + '(' + item.UsedTime + '/' + item.BookTime + ')' + '</p></li>';
+                        } else if (item.Type == '6') {
+                            html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + ' ￥' + item.Amt + '</p></li>';
+                        } else if (item.Type == '7') {
+                            html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + '(' + item.UsedTime + '/' + item.BookTime + ')' + '</p></li>';
+                        } else if (item.Type == '8') {
+                            html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + ' (' + item.UsedTime + '/' + item.BookTime + ') <br/> 时限：' + getDate(item.ExpiryDate) + '</p></li>';
+                        } else {
+                            // html += '<li id=c' + item.MemberCardId + '><h2>' + (item.Title == null ? "标题" : item.Title) + '</h2><p>类型：' + item.TypeValue + '</p></li>';
+                        }
+                    });
+                    $('#u_card').html(html);
+                    $('#u_card').listview('refresh');
+                    html = "";
+
+                    // 购买项目
+                    $("#u_project").empty();
+                    $.each(data.Projects, function (i, item) {
+                        if (item.IsEntity == '0') {   // 不显示即销即耗
+                            var pjn = item.ProjectName;
+                            if (item.Type == "1") {
+                                pjn = item.ProjectName + "[赠]"
+                            } else if (item.Type == "1") {
+                                pjn = item.ProjectName + "[转]"
+                            }
+                            if (item.CardType == "1") {
+                                pjn = item.ProjectName + "[疗]"
+                            } else if (item.CardType == "3") {
+                                pjn = item.ProjectName + "[留]"
+                            } else if (item.CardType == "4" || item.CardType == "5" || item.CardType == "8") {
+                                pjn = item.ProjectName + "[综]"
+                            } else if (item.CardType == "7") {
+                                pjn = item.ProjectName + "[拓]"
+                            }
+                            html += '<li id=p' + item.ProjectID + '><h2>' + pjn + '</h2><p>可以次数：' + item.LastCount + '</p></li>';
+                        }
+                    });
+                    $('#u_project').html(html);
+                    $('#u_project').listview('refresh');
+
+
+                    // 欠款一览
+                    $("#u_debt").empty();
+                    debt_list = new Array();
+                    html = "";
+                    $.each(data.DebtRecord, function (i, item) {
+                        var title = (item.CardTitle == "" ? item.ProjectName : item.CardTitle);
+                        html += '<li><a href="#debtDialog?&mpid=' + item.MemberProjectId + '&mcid=' + item.MemberCardId + '"><h2>来源：' + title + '</h2><p>欠款金额：' + item.Debt + '</p><p>欠款时间：' + getDate(item.CreatedDate) + ' 美容顾问：' + item.Salesman + '</p></a></li>';
+
+                        debt_list.push([item.MemberProjectId, item.MemberCardId, item.Debt, item.SalesId, item.SalesRadix, item.BeauticianId, item.BeauticianRadix]);
+                    });
+
+                    $('#u_debt').html(html);
+                    $('#u_debt').listview('refresh');
+
+                    // 当前用户
+                    memberObject.MemberID = data.MemberID;
+                    memberObject.CardNo = data.CardNo;
+                    memberObject.Birthday = data.BirthdayStr;
+                    memberObject.Address = data.Address;
+                    memberObject.JoinBranch = data.JoinBranch;
+                    memberObject.JoinDate = data.JoinDateStr;
+                    memberObject.Name = data.Name;
+                    memberObject.MobileNumber = data.MobileNumber;
+                    memberObject.Remark = data.Remark;
+                    memberObject.Vocation = data.Vocation;
+                    memberObject.Source = data.Source;
+                    memberObject.Sex = data.Sex;
+
+                    // 连接修正
+                    $("#m_recharge").attr("href", "recharge.html?mid=" + memberObject.CardNo);
+                    // $("#m_project").attr("href", "buyproject.html?mid=" + memberObject.CardNo);
+                    $("#m_settlement").attr("href", "settlement.html?mid=" + memberObject.CardNo);
+                    $("#m_card").attr("href", "buycard.html?mid=" + memberObject.CardNo);
+                    $("#m_edit").attr("href", "member_edit.html?mid=" + memberObject.CardNo);
+
+                    // 加载完成
+                    $.mobile.loading('hide');
+                },
+                error: function () {
+                    showNetErrMsg();
+                }
+            });
+        }
+
+        $().ready(function () {
+            $("#m_edit").click(function () {
+                $.mobile.changePage("#medit");
+            });
+
+            // 表单验证
+            $("#frmDebt").validate({
+                rules: {
+                    inputAmount: {
+                        required: true,
+                        number: true,
+                        min: 1
+                    },
+                    inputPassword: {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+                messages: {
+                    inputAmount: {
+                        required: "请输入购买金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputPassword: {
+                        required: "请输入密码",
+                        minlength: "密码不少于六位"
+                    }
+                }
+            });
+
+            // 提交现金消费项目
+            $("#frmDebt").submit(function () {
+
+                // 检查相同项目
+                if ($("#frmDebt").validate().form()) {
+
+                    console.log("current_debt" + current_debt);
+                    console.log("inputAmount" + inputAmount);
+
+                    if (Number($("#inputAmount").val()) > Number(current_debt)) {
+                        alert("还款金额不对。");
+                        return false;
+                    }
+
+                    var sales = "";
+                    $('#inputWorkers :selected').each(function (i, selected) {
+                        sales += $(selected).val() + ",";
+                    });
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            HostId: userObject.host,
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            MemberId: memberObject.MemberID,
+                            MemberProjectId: current_mpid,
+                            MemberCardId: current_mcid,
+                            Amount: $("#inputAmount").val(),
+                            UserId: userObject.userid,
+                            Password: $("#inputPassword").val(),
+                            Salesman: $("#inputSales").val(),
+                            SalesRadix: $("#inputSalesRadix").val(),
+                            WorkerRadix: $("#inputWorkerRadix").val(),
+                            Workers: sales,
+                        },
+                        url: serverUrl + "/Debt/AppRepayment",
+                        success: function (data) {
+                            if (data.code == "1") {
+                                window.location.href = 'member_info.html?mid=' + memberObject.CardNo;
+                            } else {
+                                alert(data.message);
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+
+                return false;
+            });
+
+            // 跳转到项目选择页面
+            $.mobile.paramsHandler.addPage("debtDialog", ["mpid", "mcid"], [], function (args) {
+
+                current_mpid = args.mpid;
+                current_mcid = args.mcid;
+
+                for (var i = 0; i < debt_list.length; i++) {
+                    if (current_mpid != "0" && current_mpid == debt_list[i][0]) {
+                        $("#inputAmount").val(debt_list[i][2]);
+                        $("#inputSales").val(debt_list[i][3]);
+                        $("#inputSalesRadix").val(new Number(debt_list[i][4]));
+                        $("#inputWorkers").val(debt_list[i][5]);
+                        $("#inputWorkerRadix").val(new Number(debt_list[i][6]));
+                        current_debt = debt_list[i][2];
+
+                        if (page3Init == true) {
+                            $("#inputSales").selectmenu("refresh");
+                            $("#inputWorkers").selectmenu("refresh");
+                            $("#inputSalesRadix").slider("refresh")
+                            $("#inputWorkerRadix").slider("refresh")
+                        }
+
+                    }
+                    if (current_mcid != "0" && current_mcid == debt_list[i][1]) {
+                        $("#inputAmount").val(debt_list[i][2]);
+                        $("#inputSales").val(debt_list[i][3]);
+                        $("#inputSalesRadix").val(new Number(debt_list[i][4]));
+                        $("#inputWorkers").val(debt_list[i][5]);
+                        $("#inputWorkerRadix").val(new Number(debt_list[i][6]));
+                        current_debt = debt_list[i][2];
+
+                        if (page3Init == true) {
+                            $("#inputSales").selectmenu("refresh");
+                            $("#inputWorkers").selectmenu("refresh");
+                            $("#inputSalesRadix").slider("refresh")
+                            $("#inputWorkerRadix").slider("refresh")
+                        }
+                    }
+                }
+
+                page3Init = true;
+            });
+
+            $.mobile.paramsHandler.init();
+        });
+
+
+        var debt_list = new Array();
+        var page3Init = false;
+    </script>
+</body>
+</html>

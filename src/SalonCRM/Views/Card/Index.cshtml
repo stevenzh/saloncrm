@@ -1,0 +1,75 @@
+﻿@model SalonCRM.Models.CardRepQModel
+
+@{
+    ViewBag.Title = "换卡管理";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1 class="page-title">换卡管理</h1>
+</div>
+
+<div class="main-content">
+    @using (Html.BeginForm("ExportToPDF", "Card", FormMethod.Post))
+    {
+        <input type="hidden" name="Name" value="@Model.Name" />
+        <input type="hidden" name="CardNo" value="@Model.CardNo" />
+        <input type="hidden" name="BranchId" value="@Model.BranchId" />
+        <input type="hidden" name="Mobile" value="@Model.Mobile" />
+        <div class="btn-toolbar list-toolbar">
+            <input class="btn btn-default" type="submit" value="导出" />
+            <div class="btn-group">
+            </div>
+        </div>
+    }
+    @using (Html.BeginForm("Index", "Card", FormMethod.Post))
+    {
+        <table class="">
+            <tr>
+                <td style="padding-right: 4px">门店</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.BranchId,
+                      settings =>
+                      {
+                          settings.Name = "BranchId";
+                          settings.Width = 180;
+                          settings.Properties.TextField = "Text";
+                          settings.Properties.ValueField = "Value";
+                          settings.Properties.ValueType = typeof(Int32);
+                      }).BindList(ViewBag.OrganId).GetHtml()
+                </td>
+                <td style="padding-right: 4px">姓名</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.Name, settings => { settings.Name = "Name"; }).GetHtml()
+                </td>
+                <td style="padding-right: 4px">卡号</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.CardNo).GetHtml()
+                </td>
+                <td style="padding-right: 4px">客户手机</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.Mobile).GetHtml()
+                </td>
+                <td style="padding-right: 4px">
+                    <input type="submit" class="btn btn-default" value="查询" />
+                </td>
+            </tr>
+        </table>
+    }
+    <br />
+    @Html.Partial("ReplaceList", Model.RelaceList)
+</div>

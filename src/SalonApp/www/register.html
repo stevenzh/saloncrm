@@ -1,0 +1,349 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>客户建卡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <div data-role="page" id="register" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="menu_member.html" data-role="button" data-icon="back">返回首页</a>
+            <h3>客户建卡</h3>
+            <a href="memberlist.html" data-role="button" data-icon="bullets">客户列表</a>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <form id="frmRegist">
+                <label for="inputName"><em>*</em>姓名</label>
+                <input type="text" id="inputName" name="inputName" placeholder="姓名">
+                <label for="inputMobile"><em>*</em>手机</label>
+                <input type="number" id="inputMobile" name="inputMobile" placeholder="手机">
+                <label for="inputPassword"><em>*</em>密码</label>
+                <input type="password" id="inputPassword" name="inputPassword" value="888888" placeholder="密码">
+                <label for="inputCardNo"><em>*</em>卡号</label>
+                <input type="number" id="inputCardNo" name="inputCardNo" placeholder="卡号">
+                <label for="inputType">客户类型</label>
+                <select id="inputType" data-native-menu="false"></select>
+                <div data-role="fieldcontain">
+                    <label for="SalesmanId"><em>*</em> 美容顾问</label>
+                    <select id="SalesmanId" name="SalesmanId" data-native-menu="false"></select>
+                </div>
+                <button id="btn_register" type="submit" class="btn btn-default">下一步</button>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="page" id="register2" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">上一步</a>
+            <h3>输入个人信息</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <form id="frmMember">
+                <label for="inputSex"><em>*</em>性别</label>
+                <select id="inputSex" name="inputSex" data-native-menu="false"></select>
+                <label for="inputVocation">职业</label>
+                <select id="inputVocation" name="inputVocation" data-native-menu="false"></select>
+                <label for="inputSource">来源</label>
+                <select id="inputSource" name="inputSource" data-native-menu="false"></select>
+                <label for="inputBirthday">生日</label>
+                <input type="text" id="inputBirthday" data-role="datebox" value="" data-options='{"mode": "flipbox","beforeToday": true}' name="inputBirthday" placeholder="生日">
+                <label for="inputJoinDate">入会时间</label>
+                <input type="text" id="inputJoinDate" data-role="datebox" value="" data-options='{"mode": "flipbox","beforeToday": true}' name="inputJoinDate" placeholder="入会时间">
+
+                <label for="inputAdress">地址</label>
+                <textarea id="inputAdress" name="inputAdress" rows="3" placeholder="地址"></textarea>
+                <p>
+                    <button id="btn_submit" type="submit" class="btn btn-default">保存</button>
+                </p>
+            </form>
+        </div>
+
+    </div>
+
+    <div data-role="page" id="addSucess" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+
+        <div data-role="content">
+            <h3>客户开卡成功</h3>
+            <p></p>
+            <a href="register.html" class="ui-btn ui-shadow ui-corner-all ui-icon-bullets ui-btn-icon-left">继续客户开卡</a>
+            <a href="memberlist.html" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left">客户列表</a>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jqm-datebox-1.4.5.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+            $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+            commonInit();
+            commonList("#inputType", "MemberType");
+
+            // 销售顾问
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "3" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#SalesmanId").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+
+                    if (userObject.type == '3') {
+                        $("#SalesmanId").val(userObject.userid);
+                    }
+                    $("#SalesmanId").selectmenu("refresh", true);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+            // 加载完成
+            $.mobile.loading('hide');
+        }
+
+        $(document).on('pagebeforeshow', '#register2', function () {
+            commonList("#inputSex", "MemberGender");
+            commonList("#inputVocation", "MemberVocation");
+            commonList("#inputSource", "MemberSource");
+        });
+
+        $().ready(function () {
+
+            $("#frmRegist").validate({
+                rules: {
+                    inputName: {
+                        required: true
+                    },
+                    inputMobile: {
+                        required: true,
+                        digits: true,
+                        rangelength: [11, 11],
+                        //remote: {
+                        //    type: "post",
+                        //    url: serverUrl + "/MemberAdmin/AppRepeatMobile",
+                        //    data: {
+                        //        hostId: userObject.host,
+                        //        Mobile: function () { return $("#inputMobile").val(); }
+                        //    }
+                        //}
+                    },
+                    inputPassword: {
+                        required: true,
+                        minlength: 6
+                    },
+                    SalesmanId: {
+                        required: true
+                    },
+                    inputCardNo: {
+                        required: true,
+                        digits: true,
+                        //remote: {
+                        //    type: "post",
+                        //    url: serverUrl + "/MemberAdmin/AppRepeatCardNo",
+                        //    data: {
+                        //        hostId: userObject.host,
+                        //        CardNo: function () { return $("#inputCardNo").val(); }
+                        //    }
+                        //}
+                    }
+                },
+                messages: {
+                    inputName: {
+                        required: "请输入姓名"
+                    },
+                    inputMobile: {
+                        required: "请输入手机号码",
+                        digits: "手机号码请输入数字",
+                        rangelength: "手机号位数不正确",
+                        //remote: "手机号重复"
+                    },
+                    inputPassword: {
+                        required: "请输入初始密码",
+                        minlength: "密码不少于六位"
+                    },
+                    SalesmanId: {
+                        required: "请输入美容顾问"
+                    },
+                    inputCardNo: {
+                        required: "请输入卡号",
+                        digits: "请输入数字",
+                        //remote: "卡号重复"
+                    }
+                }
+            });
+
+            $("#frmMember").validate({
+                rules: {
+                    inputBirthday: {
+                        dateISO: true
+                    },
+                    inputJoinDate: {
+                        dateISO: true
+                    }
+                },
+                messages: {
+                    inputBirthday: {
+                        dateISO: "生日格式不正确"
+                    },
+                    inputJoinDate: {
+                        dateISO: "入会日期格式不正确"
+                    }
+                }
+            });
+
+            $("#frmRegist").submit(function () {
+                if (checkMobile() == false) {
+                    return false;
+                }
+                if (checkCardNo() == false) {
+                    return false;
+                }
+                if ($("#frmRegist").validate().form()) {
+                    $.mobile.changePage("#register2", { transition: "slide" });
+                }
+                return false;
+            });
+
+            $("#frmMember").submit(function () {
+                if (checkMobile() == false) {
+                    return false;
+                }
+                if (checkCardNo() == false) {
+                    return false;
+                }
+                if ($("#frmMember").validate().form()) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            Name: $("#inputName").val(),
+                            MobileNumber: $("#inputMobile").val(),
+                            CardNo: $("#inputCardNo").val(),
+                            Passwd: $("#inputPassword").val(),
+                            JoinDate: $("#inputJoinDate").val(),
+                            Address: $("#inputAdress").val(),
+                            Birthday: $("#inputBirthday").val(),
+                            Sex: $("#inputSex").val(),
+                            Vocation: $("#inputVocation").val(),
+                            Source: $("#inputSource").val(),
+                            Type: $("#inputType").val(),
+                            HostId: userObject.host,
+                            JoinBranch: userObject.branch,
+                            ClientId: userObject.uuid,
+                            CreatedBy: userObject.userid,
+                            SalesmanId: $("#SalesmanId").val()
+                        },
+                        url: serverUrl + "/MemberAdmin/AppCreate",
+                        success: function (result) {
+                            console.log("member create success. memberID:" + result.MemberID);
+
+                            if (result.MemberID == 0)
+                                alert("客户开卡失败,重新再试.");
+                            else
+                                $.mobile.changePage("#addSucess", { transition: "slide" });
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+                return false;
+            });
+
+            $("#inputMobile").change(function () {
+                checkMobile();
+            });
+            $("#inputCardNo").change(function () {
+                checkCardNo();
+            });
+        });
+
+        function checkCardNo() {
+            var repeat = true;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                async: false,
+                data: {
+                    CardNo: $("#inputCardNo").val(),
+                    hostId: userObject.host
+                },
+                url: serverUrl + "/MemberAdmin/AppRepeatCardNo",
+                success: function (result) {
+                    repeat = result;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            if (repeat == false) {
+                $("#inputCardNo").after("<label id='inputMobile-error' class='error' for='inputMobile'>会员卡重复</label>");
+                $("#inputCardNo").focus();
+            } else {
+                $("#inputCardNo").next("label").remove();
+            }
+            return repeat;
+        }
+
+        function checkMobile() {
+            var repeat = true;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                async: false,
+                data: {
+                    Mobile: $("#inputMobile").val(),
+                    hostId: userObject.host
+                },
+                url: serverUrl + "/MemberAdmin/AppRepeatMobile",
+                success: function (result) {
+                    repeat = result;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            if (repeat == false) {
+                $("#inputMobile").after("<label id='inputMobile-error' class='error' for='inputMobile'>手机号重复</label>");
+                $("#inputMobile").focus();
+            } else {
+                $("#inputMobile").next("label").remove();
+            }
+            return repeat;
+        }
+
+    </script>
+
+</body>
+</html>

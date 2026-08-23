@@ -1,0 +1,102 @@
+﻿@using System.Web.UI.WebControls;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "WorkerStat",
+            Action = "PageList",
+            BranchID = ViewData["BranchID"],
+            WorkerType = ViewData["WorkerType"],
+            WorkerName = ViewData["WorkerName"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            MemberType = ViewData["MemberType"],
+            MemberNewType = ViewData["MemberNewType"],
+            Sort = ViewData["Sort"]
+        };
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "No.";
+            column.FieldName = "RowNumber";
+            column.Width = 50;
+            column.ColumnType = MVCxGridViewColumnType.TextBox;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
+        });
+        settings.Columns.Add("WorkerName", "美容师");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "业绩.";
+            column.FieldName = "InCome";
+            column.PropertiesEdit.DisplayFormatString = "#0.00";
+        });
+
+        settings.Columns.Add("Expend", "购买项目").PropertiesEdit.DisplayFormatString = "#0.00";
+        settings.Columns.Add("EntityExpend", "即消即耗").PropertiesEdit.DisplayFormatString = "#0.00";
+
+
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "顾问消耗业绩.";
+            column.FieldName = "SalesServiceExpend";
+            column.PropertiesEdit.DisplayFormatString = "#0.00";
+            column.CellStyle.BackColor = System.Drawing.Color.Moccasin;
+        });
+        settings.Columns.Add("SaleRS", "顾问接待人次").CellStyle.BackColor = System.Drawing.Color.Moccasin; ;
+
+
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "美容师实操.";
+            column.FieldName = "ServiceExpend";
+            column.PropertiesEdit.DisplayFormatString = "#0.00";
+            column.CellStyle.BackColor = System.Drawing.Color.LightSteelBlue;
+        });
+        settings.Columns.Add("ServiceRC", "服务人次").CellStyle.BackColor = System.Drawing.Color.LightSteelBlue;
+        settings.Columns.Add("ServiceXC", "服务项目量").CellStyle.BackColor = System.Drawing.Color.LightSteelBlue;
+        settings.Columns.Add("ServiceRT", "服务人头数").CellStyle.BackColor = System.Drawing.Color.LightSteelBlue;
+
+        settings.FormatConditions.AddColorScale("Expend", GridConditionColorScaleFormat.RedWhiteGreen);
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                //ViewContext.Writer.Write(Html.ActionLink("详细", "Details", "WorkerStat", new
+                //{
+                //    WorkerID = DataBinder.Eval(c.DataItem, "Worker"),
+                //    StartDate = ViewData["StartDate"],
+                //    EndDate = ViewData["EndDate"],
+                //    BranchID = ViewData["BranchID"]
+                //}, new { target = "_self" }).ToHtmlString());
+                ViewContext.Writer.Write("<a href=\"/Stat/Financial_Service_details.aspx?ID=" + DataBinder.Eval(c.DataItem, "Worker") + "&StartDate=" + ViewData["StartDate"] + "&EndDate=" + ViewData["EndDate"] + "\" targe=\"_self\">详细</a>");
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.CustomUnboundColumnData = (s, e) =>
+        {
+            if (e.Column.FieldName == "RowNumber")
+                e.Value = e.ListSourceRowIndex + 1;
+        };
+
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "InCome").DisplayFormat = "c";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Expend").DisplayFormat = "c";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "ServiceExpend").DisplayFormat = "c";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "EntityExpend").DisplayFormat = "c";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "ServiceRC");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "ServiceXC");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "ServiceRT");
+        settings.Settings.ShowFooter = true;
+
+    }).Bind(Model).GetHtml()

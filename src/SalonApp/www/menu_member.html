@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+    <meta charset="utf-8"> 
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <div data-role="page" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>
+                客户管理
+            </h1>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" data-inset="true">
+                <li>
+                    <a href="register.html" rel="external">
+                        <h2>客户建档</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="memberlist.html" rel="external">
+                        <h2>客户管理</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="appointmentlist.html" rel="external">
+                        <h2>客户预约</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="gives.html" rel="external">
+                        <h2>客户赠送</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="member_select.html?pac=buyproject&pat=menu_member" rel="external">
+                        <h2>购买家居产品</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="exchange.html">
+                        <h2>客户转卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="points.html">
+                        <h2>积分换购</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <!--<li>
+                    <a href="member_select.html?pac=recharge&pat=menu_member" rel="external">
+                        <h2>客户储值</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="member_select.html?pac=buyproject&pat=menu_member" rel="external">
+                        <h2>卡扣疗程</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="member_select.html?pac=buycard&pat=menu_member" rel="external">
+                        <h2>客户购卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="member_select.html?pac=settlement&pat=menu_member" rel="external">
+                        <h2>客户消费</h2>
+                        <p></p>
+                    </a>
+                </li>-->
+            </ul>
+        </div>
+
+        <div data-id="PersistentFooter" data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="index.html" data-icon="home">我的门店</a></li>
+                    <li><a href="#" data-icon="grid" class="ui-btn-active ui-state-persist">客户管理</a></li>
+                    <!--<li><a href="menu_stat.html" data-icon="search">统计查询</a></li>-->
+                    <li><a href="menu_setting.html" data-icon="gear">用户设置</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+        }
+    </script>
+</body>
+</html>

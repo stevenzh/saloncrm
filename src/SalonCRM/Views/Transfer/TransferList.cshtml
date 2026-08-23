@@ -1,0 +1,72 @@
+﻿@using System.Web.UI.WebControls;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Transfer", Action = "TransferList", Name = ViewData["Name"], BranchId = ViewData["BranchId"], CardNo = ViewData["CardNo"], Mobile = ViewData["Mobile"] };
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+
+        //settings.Columns.Add("MemberName", "姓名").SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+        var clumn = settings.Columns.Add("MemberId", "姓名", MVCxGridViewColumnType.HyperLink);
+        var hyperLinkProperties = clumn.PropertiesEdit as HyperLinkProperties;
+        hyperLinkProperties.NavigateUrlFormatString = "~/MemberAdmin/Details/{0}";
+        hyperLinkProperties.TextFormatString = "{0}";
+        hyperLinkProperties.TextField = "MemberName";
+        clumn.CellStyle.HorizontalAlign = HorizontalAlign.Left;
+
+        settings.Columns.Add("BranchName", "门店名称");
+        settings.Columns.Add("UserName", "操作人");
+        settings.Columns.Add("Content", "内容");
+        settings.Columns.Add("OriginalProjects", "原项目");
+        settings.Columns.Add("OriginalPrjAmt", "原项目金额");
+        settings.Columns.Add("NewProjects", "新项目");
+        settings.Columns.Add("NewPrjAmt", "新项目金额");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CreatedDate";
+            column.Caption = "操作时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd HH:mm:ss";
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = "操作";
+        //    column.SetDataItemTemplateContent(delegate(GridViewDataItemTemplateContainer c)
+        //    {
+        //        ViewContext.Writer.Write(Html.ActionLink("详细", "TransferDetails", "Card", new
+        //        {
+        //            Id = DataBinder.Eval(c.DataItem, "LogId")
+        //        }, new { target = "_self" }).ToHtmlString());
+
+        //    });
+        //});
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.HeaderFilterFillItems = (sender, e) =>
+        {
+            ASPxGridView grid = (ASPxGridView)sender;
+            if (e.Column.FieldName == "Amt")
+            {
+                e.Values.Clear();
+                if (e.Column.Settings.HeaderFilterMode == HeaderFilterMode.List)
+                    e.AddShowAll();
+                e.AddValue("欠款", string.Empty, "[Amt] < 0");
+                e.AddValue("0-4999", string.Empty, "[Amt] >= 0 and [Amt] < 5000");
+                e.AddValue("5000-2万", string.Empty, "[Amt] >= 5000 and [Amt] < 20000");
+                e.AddValue("2万-10万", string.Empty, "[Amt] >= 20000 and [Amt] < 10000");
+                e.AddValue("10万以上", string.Empty, "[Amt] > 100000");
+            }
+            else if (e.Column.FieldName == "Sex")
+            {
+                e.Values.Clear();
+                if (e.Column.Settings.HeaderFilterMode == HeaderFilterMode.List)
+                    e.AddShowAll();
+                e.AddValue("先生", string.Empty, "[Sex] == 'M'");
+                e.AddValue("女士", string.Empty, "[Sex] == 'F'");
+            }
+        };
+    }).Bind(Model).GetHtml()

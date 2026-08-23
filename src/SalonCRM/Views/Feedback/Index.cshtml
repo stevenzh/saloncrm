@@ -1,0 +1,182 @@
+﻿@model SalonCRM.Models.FeedbackQModel
+@using SalonCRM.Identity
+@{
+    ViewBag.Title = "客户回访";
+    CustomPrincipal cu = (CustomPrincipal)User;
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<script type="text/javascript">
+    //<![CDATA[
+    function OnGridFocusedRowChanged(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'Centent', OnGetRowValues);
+    }
+    function OnGetRowValues(values) {
+        DetailNotes.SetText(values);
+    }
+    // ]]>
+</script>
+<div class="header">
+    <h1>客户回访</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li class="active">客户回访</li>
+    </ul>
+</div>
+<div class="main-content">
+    @using (Html.BeginForm("Index", "Feedback", FormMethod.Post))
+    {
+        <table class="">
+            <tr style="height:45px;">
+                <td style="padding-right: 4px">门店</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "2")
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.BranchId,
+                      settings =>
+                      {
+                          settings.Name = "BranchId";
+                          settings.Width = 180;
+                          settings.Properties.TextField = "Text";
+                          settings.Properties.ValueField = "Value";
+                          settings.Properties.ValueType = typeof(Int32);
+                      }).BindList(ViewBag.OrganId).GetHtml()
+                    }
+                    else
+                    {
+                        @Html.DevExpress().TextBox(settings =>
+                          {
+                              settings.Name = "BranchName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserDepartment.Name;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.BranchId);
+                    }
+                </td>
+                <td style="padding-right: 4px">姓名</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.Name, settings => { settings.Name = "Name"; }).GetHtml()
+                </td>
+                <td style="padding-right: 4px">卡号</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.CardNo).GetHtml()
+                </td>
+                <td style="padding-right: 4px">客户手机</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.Mobile).GetHtml()
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="padding-right: 4px">美容师</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "1")
+                    {
+                        @Html.DevExpress().TextBox(
+                         settings =>
+                          {
+                              settings.Name = "BeauticianName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserInfo.UserCnName;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.BeauticianId);
+                    }
+                    else
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.BeauticianId,
+                       settings =>
+                       {
+                           settings.Name = "BeauticianId";
+                           settings.Width = 180;
+                           settings.Properties.TextField = "Text";
+                           settings.Properties.ValueField = "Value";
+                           settings.Properties.ValueType = typeof(string);
+                       }).BindList(ViewBag.Beautician).GetHtml()
+                    }
+                </td>
+                <td style="padding-right: 4px">美容顾问</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "3")
+                    {
+                        @Html.DevExpress().TextBox(
+                         settings =>
+                          {
+                              settings.Name = "SalesmanName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserInfo.UserCnName;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.SalesmanId);
+                    }
+                    else
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.SalesmanId,
+                       settings =>
+                       {
+                           settings.Name = "SalesmanId";
+                           settings.Width = 180;
+                           settings.Properties.TextField = "Text";
+                           settings.Properties.ValueField = "Value";
+                           settings.Properties.ValueType = typeof(string);
+                       }).BindList(ViewBag.Salesman).GetHtml()
+                    }
+                </td>
+                <td style="padding-right: 4px">回访类型</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.Purpose,
+                      settings =>
+                      {
+                          settings.Name = "Purpose";
+                          settings.Width = 180;
+                          settings.Properties.TextField = "Text";
+                          settings.Properties.ValueField = "Value";
+                          settings.Properties.ValueType = typeof(string);
+                      }).BindList(ViewBag.FeedbackType).GetHtml()
+                </td>
+                <td style="padding-right: 4px">跟进日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.FeedbackDate,
+                      settings =>
+                      {
+                          settings.Name = "FeedbackDate";
+                          settings.Width = 180;
+                      }).GetHtml()
+                </td>
+                <td style="padding-right: 4px">
+                    <input type="submit" class="btn btn-default" value="查询" />
+                </td>
+            </tr>
+        </table>
+    }
+    <br />
+    <img src="~/Content/stat_color.png" />
+    @Html.Partial("FeedbackList", Model.FeedbackList)
+
+    @*<div class="details_form">
+            回访内容:<br />
+
+            @Html.DevExpress().Memo(
+            settings =>
+            {
+                settings.Name = "DetailNotes";
+                settings.Properties.EnableClientSideAPI = true;
+                settings.ControlStyle.CssClass = "memo";
+                settings.ReadOnly = true;
+                settings.Width = 530;
+                settings.Height = 170;
+            }
+        ).GetHtml()*@
+</div>

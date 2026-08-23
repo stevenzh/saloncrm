@@ -1,0 +1,48 @@
+﻿@using SalonCRM.Models;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Project", Action = "ProjectList", Category = ViewData["Category"], ProjectName = ViewData["ProjectName"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.Columns.Add("CategoryName", "类别");
+        //settings.Columns.Add("Code", "编码");
+        settings.Columns.Add("Name", "项目名称");
+        settings.Columns.Add("BrandValue", "品牌");
+        settings.Columns.Add("ExtCategoryName", "消费类型");
+        settings.Columns.Add("MinUnit", "最低价");
+        settings.Columns.Add("HandicraftFee", "手工费");
+        settings.Columns.Add("StatusValue", "状态");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "即销即耗";
+            column.Width = 90;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                string type = Convert.ToString(DataBinder.Eval(c.DataItem, "IsEntity"));
+                if (type == "1")
+                    ViewContext.Writer.Write("是");
+                else if (type == "0")
+                    ViewContext.Writer.Write("否");
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.Width = 90;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("编辑", "Edit", "Project", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "ProjectID")
+                }, new { target = "_self" }).ToHtmlString());
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    }).Bind(Model).GetHtml()

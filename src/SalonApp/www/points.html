@@ -1,0 +1,264 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>积分换购</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+    <meta charset="utf-8">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- 分支 转换项目 -->
+    <div data-role="page" id="mlist" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="menu_member.html" data-role="button" data-icon="back">返回</a>
+            <h3>积分换购</h3>
+        </div>
+        <div data-role="content">
+            <p>选择客户</p>
+            <ol id="ol_member" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="搜索姓名、卡号、手机号..."></ol>
+        </div>
+    </div>
+
+    <div data-role="page" id="minfo" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>客户积分兑换</h1>
+        </div>
+        <div data-role="content">
+            <ul id="u_member" data-role="listview"></ul>
+            <br />
+            <form id="frmPoint">
+                <div data-role="fieldcontain">
+                    <label for="inputPoint">使用积分</label>
+                    <input id="inputPoint" name="inputPoint" type="number" />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputRemark">兑换产品说明</label>
+                    <textarea rows="5" name="inputRemark" id="inputRemark"></textarea>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPassword">密码：</label>
+                    <input type="password" name="inputPassword" id="inputPassword">
+                </div>
+                <button id="btn_submit" class="btn btn-default">提交</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 公用 -->
+    <div data-role="page" id="successPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <div role="main" class="success">
+                <h1>积分扣除成功！</h1>
+                <p></p>
+                <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="page" id="failPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <h1>积分扣除失败</h1>
+            <p id="returnMsg"></p>
+            <a href="points.html" class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left">重新扣除积分</a>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("doInit");
+            FastClick.attach(document.body);
+            commonInit();
+
+            // 客户过滤
+            $("#ol_member").on("listviewbeforefilter", function (e, data) {
+                var $ul = $(this),
+                    $input = $(data.input),
+                    value = $input.val(),
+                    html = "";
+                if (value && value.length > 1) {
+                    $ul.html("<li> <div class='ui-loader'> <span class='ui-icon ui-icon-loading'> </span> </div> </li> ");
+                    $ul.listview("refresh");
+                    $.ajax({
+                        type: "POST",
+                        url: serverUrl + "/MemberAdmin/AppList",
+                        dataType: "json",
+                        data: { "hostId": userObject.host, "branchId": userObject.branch, userId: userObject.userid, pageNum: 10, q: $input.val() },
+                        success: function (result) {
+                            $ul.empty();
+                            $.each(result, function (i, item) {
+                                html += "<li><a href=\"#minfo?mid=" + item.CardNo + "\"><h3>姓名：" + item.Name + "</h3>";
+                                // html += "<p><b>地址：</b>" + item.Address + " </p>";
+                                html += "<p><b>手机</b>：" + item.MobileNumber + " <b>卡号</b>：" + item.CardNo + "</p>";
+                                html += "<p><b>状态</b>：" + item.StatusValue + "</p></a></li>";
+                            });
+                            $ul.html(html);
+                            $ul.listview('refresh');
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+            });
+
+            // 客户信息
+            $.mobile.paramsHandler.addPage("minfo", ["mid"], [], function (args) {
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: args.mid },
+                    url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                    success: function (data) {
+                        $("#u_member").empty();
+                        $("#u_member").append("<li>姓名：" + data.Name + "</li><li>手机：" + data.MobileNumber + "</li><li>余额："
+                            + data.Amt + "</li><li>等级：" + data.LevelValue + "</li><li>状态：" + data.StatusValue + "</li><li>积分：" + data.Points + "</li>");
+                        $("#u_member").listview('refresh');
+
+                        // 客户现有的项目
+                        $.each(data.Projects, function (i, item) {
+                            $('<label for="pt' + item.MemberProjectId + '">' + item.ProjectName + ' ∑:' + item.UnitPrice + "×" + item.LastCount + "=" + (item.UnitPrice * item.LastCount) + '</label><input type="checkbox" name="favcolor" id="pt' + item.MemberProjectId + '" value="' + item.MemberProjectId + '" data-val="' + (item.UnitPrice * item.LastCount) + '">').appendTo('#ul_project');
+                        });
+
+                        $('#ul_project').trigger('create');
+
+                        // 当前用户
+                        memberObject.MemberID = data.MemberID;
+                        memberObject.CardNo = data.CardNo;
+                        memberObject.Birthday = data.BirthdayStr;
+                        memberObject.Amt = Number(data.Amt);
+                        memberObject.Address = data.Address;
+                        memberObject.JoinBranch = data.JoinBranch;
+                        memberObject.JoinDate = data.JoinDateStr;
+                        memberObject.Name = data.Name;
+                        memberObject.MobileNumber = data.MobileNumber;
+                        memberObject.Remark = data.Remark;
+                        memberObject.Vocation = data.Vocation;
+                        memberObject.Source = data.Source;
+                        memberObject.Sex = data.Sex;
+
+                        $.mobile.changePage("#minfo");
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+
+
+            $.mobile.paramsHandler.init();
+        }
+
+        $().ready(function () {
+
+            $("#frmPoint").validate({
+                rules: {
+                    inputRemark: {
+                        required: true
+                    },
+                    inputPoint: {
+                        required: true,
+                        digits: true,
+                    },
+                    inputPassword: {
+                        required: true,
+                        minlength: 6
+                    },
+                },
+                messages: {
+                    inputRemark: {
+                        required: "请输入兑换产品说明"
+                    },
+                    inputPoint: {
+                        required: "请输入积分数额",
+                        digits: "积分数额请输入数字",
+                    },
+                    inputPassword: {
+                        required: "请输入密码",
+                        minlength: "密码不少于六位"
+                    }
+                }
+            });
+
+            // 转卡
+            $("#frmPoint").submit(function () {
+
+                if ($("#frmPoint").validate().form()) {
+                    $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            HostID: userObject.host,
+                            MemberId: memberObject.MemberID,
+                            OutPoints: $("#inputPoint").val(),
+                            Remark: $("#inputRemark").val(),
+                            CreatedBy: userObject.userid,
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Password: $("#inputPassword").val()
+                        },
+                        url: serverUrl + "/PointBook/AppCreate",
+                        success: function (result) {
+                            if (result.code != 1) {
+                                //购买失败
+                                //  console.log("BuyProject Fail");
+                                $("#returnMsg").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else {
+                                //购买成功
+                                console.log("BuyProject Success");
+                                $.mobile.changePage("#successPage", 'pop');
+                            }
+                            $.mobile.loading('hide');
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            showNetErrMsg();
+
+                            //购买失败
+                            //console.log("BuyProject Fail");
+                            //$("#failPage div.warning p:last").text(XMLHttpRequest.responseText);
+                            //$.mobile.changePage("#failPage", 'pop');
+                            $.mobile.loading('hide');
+                        }
+                    });
+                }
+                return false;
+            });
+
+          
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+    <meta charset="utf-8"> 
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div data-role="page" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>用户设置</h1>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" data-inset="true">
+
+                <!--<li>
+                    <a href="#">
+                        <h2>门店月度指标</h2>
+                        <p></p>
+                    </a>
+                </li>-->
+            </ul>
+            <p>安全中心</p>
+            <ul data-role="listview" data-inset="true">
+                <!--<li>
+                    <a href="#">
+                        <h2>账号管理</h2>
+                        <p></p>
+                    </a>
+                </li>-->
+                <li>
+                    <a href="help.html">
+                        <h2>账号注销</h2>
+                        <p>清空登陆信息，确保您的账户安全！</p>
+                    </a>
+                </li>
+            </ul>
+
+            <!--<p>其他</p>
+            <ul data-role="listview" data-inset="true">
+
+                <li>
+                    <a href="advice.html">
+                        <h2>意见反馈</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="about.html">
+                        <h2>关于我们</h2>
+                        <p></p>
+                    </a>
+                </li>
+            </ul>-->
+        </div>
+        <div data-id="PersistentFooter" data-role="footer" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="index.html" data-icon="home">我的门店</a></li>
+                    <li><a href="menu_member.html" data-icon="grid">客户管理</a></li>
+                    <!--<li><a href="menu_stat.html" data-icon="search">统计查询</a></li>-->
+                    <li><a href="#" data-icon="gear" class="ui-btn-active ui-state-persist">用户设置</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+        }
+    </script>
+</body>
+</html>

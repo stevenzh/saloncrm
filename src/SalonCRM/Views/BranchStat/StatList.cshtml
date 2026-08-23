@@ -1,0 +1,45 @@
+﻿@using System.Web.UI.WebControls;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "StatList",
+            Action = "BranchStat",
+            BranchID = ViewData["BranchID"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"]
+        };
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+
+        settings.Columns.Add("BranchName", "门店");
+        settings.Columns.Add("Income", "业绩金额");
+        settings.Columns.Add("SalesAmount", "卡扣项目金额");
+        settings.Columns.Add("CashSalesAmount", "现金购买项目");
+        settings.Columns.Add("ExpenseAmount", "实耗金额");
+        settings.Columns.Add("EntityAmount", "即销即耗");
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("详细", "Details", "BranchStat", new
+                {
+                    //ID = DataBinder.Eval(c.DataItem, "BranchID"),
+                    StartDate = ((DateTime)ViewData["StartDate"]).ToShortDateString(),
+                    EndDate = ((DateTime)ViewData["EndDate"]).ToShortDateString(),
+                    BranchID = DataBinder.Eval(c.DataItem, "BranchID")
+                }, new { target = "_self" }).ToHtmlString());
+            });
+        });
+
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    }).Bind(Model).GetHtml()

@@ -1,0 +1,179 @@
+﻿@using SalonCRM.Web
+@{
+    ViewBag.Title = "今日预约、消耗记录";
+    int hostId = GlobalContext.Current.UserHost.HostID;
+    int branchId = GlobalContext.Current.UserDepartment.OrganID;
+}
+
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+</div>
+
+<div class="main-content">
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="theDate">请选择日期</label>
+            <input name="theDate" id="theDate" class="form-control" />
+        </div>
+        <button type="button" class="btn btn-default" onclick="refreshPage();">刷新</button>
+    </form>
+    <div class="row">
+        <div class="col-md-4">
+            <ul class="list-group item-summary" id="ul_books"></ul>
+        </div>
+        <div class="col-md-4">
+            <ul class="list-group item-summary" id="ul_appointments"></ul>
+        </div>
+        <div class="col-md-4">
+            <ul class="list-group item-summary" id="ul_event"></ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    $().ready(function () {
+        refreshPage();
+        setInterval(function () { refreshPage(); }, 20000)
+
+
+        $('#theDate').datepicker({
+            format: "yyyy-mm-dd",
+            language: "zh-CN"
+        });
+    });
+
+    function getDateTime(time) {
+        if (typeof (time) !== "undefined" && time !== "") {
+            var date = new Date(parseInt(time.replace(/\D/igm, "")));
+            return date.getFullYear() + "-" + eval(date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+        }
+        return "";
+    }
+
+    function refreshPage() {
+
+        $("#ul_books").empty();
+        $("#ul_appointments").empty();
+
+        // 取得数据
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            crossDomain: true,
+            data: {
+                "hostId": @hostId,
+                "branchId": @branchId,
+                "dayindex": 0,
+                "userId": @Html.Raw("'" + GlobalContext.Current.UserInfo.Id+"'"),
+            },
+            url: "/Appointment/AppDayList",
+            success: function (result) {
+                var html = "";
+                $.each(result.list, function (i, item) {
+
+                    html += '<li class="list-group-item">' +
+                        '<div class="col-md-4">' +
+                        '<div class="overview pull-left padding-right">' +
+                        '<p class="main-detail h4 text-warning" style="margin-top: 0px;">' + item.Name+'</p>' +
+                        '<p class="sub-detail">预约时间：' + getDateTime(item.BookDate)+'</p>' +
+                        (item.BookStatus == '0' ? '<span class="label label-success">未到</span> ' : '') +
+                        (item.BookStatus == '1' ? '<span class="label label-info">已到<span>' : '') +                        '</div>' +
+                        '</div>' +
+                        '<div class="info">' +
+                        '<p>预约项目：' + item.ProjectName + '</p>' +
+                        '<p>美容师：' + item.Wokers + '</p>' +
+                        '</div>' +
+                        '<div class="clearfix"></div>' +
+                        '</li>';
+                });
+                $("#ul_books").html(html);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            }
+        });
+
+
+        // 取得数据
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            crossDomain: true,
+            data: {
+                "hostId": @hostId,
+                "branchId": @branchId,
+                "userId": @Html.Raw("'" + GlobalContext.Current.UserInfo.Id + "'"),
+                "date": $('#theDate').val()
+            },
+            url:  "/Book/AppDayList",
+            success: function (result) {
+                var html = '';
+                $.each(result.list, function (i, item) {
+
+                    html += '<li class="list-group-item">' +
+                        '<div class="col-md-4">' +
+                        '<div class="overview pull-left padding-right">' +
+                        '<p class="main-detail h4 text-warning" style="margin-top: 0px;">' + item.MemberName + '</p>' +
+                        '<p class="sub-detail">下单时间：' + getDateTime(item.BookDate) + '</p>' +
+                        (item.State == '0'? '<span class="label label-success">下单</span> ':'') +
+                        (item.State == '20' ? '<span class="label label-info">已结算<span>':'') +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="info">' +
+                        '<p>服务项目：' + item.ProjectName + '.</p>' +
+                        '<p>美容师：' + item.Workers + '.</p>' +
+                        '<a class="btn btn-default btn-sm" href="/Book/Edit/'+item.Id+'">详细</a>' +
+                        ' <a class="btn btn-default btn-sm" href="/Book/Details/'+item.Id+'">打印小票</a>' +
+                        '</div>' +
+                        '<div class="clearfix"></div>' +
+                        ' </li>';
+                });
+                $("#ul_appointments").html(html);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            }
+        });
+
+
+
+        // 取得购卡和买项目数据
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            crossDomain: true,
+            data: {
+                "hostId": @hostId,
+                "branchId": @branchId,
+                "userId": @Html.Raw("'" + GlobalContext.Current.UserInfo.Id + "'"),
+                "date": $('#theDate').val()
+            },
+            url:  "/EventLog/AppDayList",
+            success: function (result) {
+                var html = '';
+                $.each(result.list, function (i, item) {
+
+                    html += '<li class="list-group-item">' +
+                        '<div class="col-md-4">' +
+                        '<div class="overview pull-left padding-right">' +
+                        '<p class="main-detail h4 text-warning" style="margin-top: 0px;">' + item.MemberName + '</p>' +
+                        '<p class="sub-detail">操作时间：' + getDateTime(item.CreatedDate) + '</p>' +
+                        (item.TypeID == '8'? '<span class="label label-success">购卡</span> ':'') +
+                        (item.TypeID == '9'?'<span class="label label-info">购买项目<span>':'') +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="info">' +
+                        '<p>' + item.Content + '.</p>' +
+                        '<p>顾问：' + item.Sales + '.</p>' +
+                        '<a class="btn btn-default btn-sm" href="/EventLog/Details/'+item.Id+'">详细</a>' +
+                        ' <a class="btn btn-default btn-sm" href="/EventLog/Print/'+item.Id+'">打印小票</a>' +
+                        '</div>' +
+                        '<div class="clearfix"></div>' +
+                        ' </li>';
+                });
+                $("#ul_event").html(html);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            }
+        });
+    }
+
+</script>

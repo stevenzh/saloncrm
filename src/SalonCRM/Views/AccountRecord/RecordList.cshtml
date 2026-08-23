@@ -1,0 +1,126 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "AccountRecord",
+            Action = "RecordList",
+            BranchId = ViewData["BranchId"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            SalesmanId = ViewData["SalesmanId"],
+            BeauticianId = ViewData["BeauticianId"],
+            Type = ViewData["Type"],
+            CardType = ViewData["CardType"],
+            CardNo = ViewData["CardNo"]
+        };
+        settings.KeyFieldName = "RecordID";
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.Columns.Add("RecordID", "记录ID");
+        settings.Columns.Add("Member.CardNo", "客户卡号");
+        settings.Columns.Add("Member.Name", "客户姓名");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "卡类型";
+            column.Width = 90;
+            column.FieldName = "MemberCard.TypeValue";
+        });
+        settings.Columns.Add("MemberCard.Title", "卡标题");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "类型";
+            column.Width = 70;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                var type = Convert.ToString(DataBinder.Eval(c.DataItem, "Type"));
+                int salesType = Convert.ToInt32(DataBinder.Eval(c.DataItem, "SalesType"));
+                var typeValue = Convert.ToString(DataBinder.Eval(c.DataItem, "TypeValue"));
+                if (type == "3")
+                    if (salesType == 1)
+                    {
+                        ViewContext.Writer.Write("卡扣");
+                    }else
+                    {
+                        ViewContext.Writer.Write("现金购买");
+                    }
+                else
+                    ViewContext.Writer.Write(typeValue);
+            });
+        });
+        settings.Columns.Add("OutAmount", "支出金额");
+        settings.Columns.Add("InAmount", "收入金额");
+        settings.Columns.Add("Balance", "卡内余额");
+        settings.Columns.Add("Debt", "欠款");
+        settings.Columns.Add("Salesman.UserCnName", "美容顾问");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CreatedDate";
+            column.Width = 150;
+            column.Caption = "操作时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd HH:mm:ss";
+            //column.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+            //column.SortIndex = 1;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "是否有效";
+            column.FieldName = "IsVaild";
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.Items.Add(new ListEditItem("有效", 1));
+            comboBoxProperties.Items.Add(new ListEditItem("无效", 0));
+            comboBoxProperties.ValueType = typeof(Int32);
+        });
+        //settings.Columns.Add("Remark", "备注");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.Width = 80;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("查看", "Details", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "RecordID")
+                }, new { target = "_self" }).ToHtmlString());
+
+            });
+        });
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
+        settings.ClientSideEvents.SelectionChanged = "SelectionChanged";
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsPager.PageSize = 20;
+
+
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "RecordID");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "OutAmount").DisplayFormat = "c";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "InAmount").DisplayFormat = "c";
+        settings.Settings.ShowFooter = true;
+
+        settings.HtmlRowPrepared = (sender, e) =>
+        {
+            try
+            {
+                if (e.RowType != GridViewRowType.Data) return;
+                string value = e.GetValue("IsVaild").ToString();
+                //  0 失效 1 有效 
+                if (value == "0")
+                    e.Row.BackColor = System.Drawing.Color.Moccasin;
+                //else if (value == "30")
+                //    e.Row.BackColor = System.Drawing.Color.Moccasin;
+                //else if (value == "休眠会员" || value == "沉睡会员")
+                //    e.Row.BackColor = System.Drawing.Color.LightBlue;
+                //else if (value == "流失会员")
+                //    e.Row.BackColor = System.Drawing.Color.DarkSalmon;
+            }
+            catch { }
+        };
+
+    }).Bind(Model).GetHtml()

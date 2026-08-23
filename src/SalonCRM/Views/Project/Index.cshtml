@@ -1,0 +1,90 @@
+﻿@model SalonCRM.Models.ProjectQModel
+@{
+    ViewBag.Title = "项目管理";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/Home/Index">首页</a> </li>
+        <li class="active">项目列表</li>
+    </ul>
+</div>
+<div class="main-content">
+    <div class="alert-error">@ViewBag.Message</div>
+    <div class="btn-toolbar list-toolbar">
+        <a class="btn btn-primary" href="/Project/Create"><i class="fa fa-plus"></i> 添加项目</a>
+        <div class="btn-group">
+        </div>
+    </div>
+    @using (Html.BeginForm("Index", "Project"))
+    {
+        <table>
+            <tr style="height: 45px;">
+                <td style="padding-right: 4px">选择类型:</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.Category,
+                     settings =>
+                     {
+                         settings.Name = "Category";
+                         settings.Width = 180;
+                         settings.Properties.TextField = "Text";
+                         settings.Properties.ValueField = "Value";
+                         settings.Properties.ValueType = typeof(string);
+                     }).BindList(ViewBag.CategoryList).GetHtml()
+                </td>
+                <td style="padding-right: 4px">项目名称</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.ProjectName).GetHtml()
+                </td>
+                <td>
+                    <input type="submit" value="搜索" />
+                </td>
+            </tr>
+        </table>
+    }
+    @Html.Partial("ProjectList", Model.ProjectList)
+    <br />
+    @using (Html.BeginForm("XlsImport", "Project", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <table class="">
+            <tr>
+                <td style="padding-right: 4px">
+                    <a href="~/UploadFiles/项目导入模板.xls">项目导入模板下载</a>
+                </td>
+                <td>
+                    Excel文件：
+                </td>
+                <td style="padding-right: 4px">
+                    <input type="file" name="postedFile" />
+                </td>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="IsDataCheck" checked="checked" value="true"> 数据检验
+                            <input name="IsDataCheck" type="hidden" value="false" />
+                        </label>
+                    </div>
+                </td>
+                <td style="padding-right: 4px">
+                    <input id="ButtonUpload" type="submit" value="导入到数据库" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>

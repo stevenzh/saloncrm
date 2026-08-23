@@ -1,0 +1,36 @@
+﻿@model SalonCRM.Models.BranchQModel
+
+@{
+    ViewBag.Title = "门店管理";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/Home/Index">首页</a> </li>
+        <li class="active">门店管理</li>
+    </ul>
+</div>
+<div class="main-content">
+    <div class="btn-toolbar list-toolbar">
+        <a class="btn btn-primary" href="/Branch/Create"><i class="fa fa-plus"></i> 添加门店</a>
+        <div class="btn-group">
+        </div>
+    </div>
+    @Html.Partial("BranchList", Model.BranchList)
+</div>

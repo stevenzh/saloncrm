@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <div data-role="page" id="mlist" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="menu_member.html" data-role="button" data-icon="back">返回首页</a>
+            <h3>会员列表</h3>
+            <a href="register.html" class="ui-btn-right" data-role="button" data-icon="plus">客户建档</a>
+        </div>
+
+        <div data-role="content">
+            <ol id="ol_member" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="搜索姓名、卡号、手机号..." data-filter-theme="a"></ol>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("doInit");
+            FastClick.attach(document.body);
+            commonInit();
+
+            $("#ol_member").on("filterablebeforefilter", function (e, data) {
+                var $ul = $(this),
+                    $input = $(data.input),
+                    value = $input.val(),
+                    html = "";
+                $ul.html("");
+                if (value && value.length > 1) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: serverUrl + "/MemberAdmin/AppList",
+                        timeout: 10000,
+                        dataType: "json",
+                        //crossDomain: true,
+                        data: {
+                            hostId: userObject.host, branchId: userObject.branch, userId: userObject.userid, pageNum: 10, q: $input.val()
+                        },
+                        success: function (result) {
+                            console.log("get member result:" + result);
+                            $.each(result, function (i, item) {
+                                html += "<li><a href=\"member_info.html?mid=" + item.CardNo + "\"><h3>姓名：" + item.Name + "</h3>";
+                                // html += "<p><b>地址：</b>" + item.Address + " </p>";
+                                html += "<p><b>手机</b>：" + item.MobileNumber + " <b>卡号</b>：" + item.CardNo + "</p>";
+                                html += "<p><b>状态</b>：" + item.StatusValue + "</p></a></li>";
+                            });
+                            $ul.html(html);
+                            $ul.listview("refresh");
+                            $ul.trigger("updatelayout");
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+            });
+        }
+
+
+        $().ready(function () {
+
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Dictionary", Action = "PageList", Category = ViewData["Category"], FCategory = ViewData["FCategory"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        if (ViewData["Category"] == null)
+            settings.Columns.Add("IdentifierName", "标识").GroupIndex = 0;
+
+        //settings.Columns.Add("Identifier", "标识");
+        settings.Columns.Add("KeyValue", "数值");
+        settings.Columns.Add("Contents", "内容");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "默认";
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                bool type = Convert.ToBoolean(DataBinder.Eval(c.DataItem, "IsDefault"));
+                var bpsn = (type == true ? "默认" : "");
+                ViewContext.Writer.Write(bpsn);
+            });
+        });
+
+        settings.Columns.Add("SortOrder", "权重");
+        // settings.Columns.Add("IsVaild", "是否有效");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "是否有效";
+            //column.Width = 90;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                string type = Convert.ToString(DataBinder.Eval(c.DataItem, "IsVaild"));
+                if (type == "1")
+                    ViewContext.Writer.Write("有效");
+                else if (type == "0")
+                    ViewContext.Writer.Write("无效");
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            //column.Caption = "管理";
+            //column.Width = 90;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("编辑", "Edit", "Dictionary", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "TypeId"),
+                    Category = ViewData["Category"]
+                }, new { target = "_self" }).ToHtmlString());
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        //settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.SettingsPager.PageSize = 20;
+
+    }).Bind(Model).GetHtml()

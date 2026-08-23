@@ -1,0 +1,559 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户赠送</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <div data-role="page" id="giveproject" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="menu_setting.html" data-role="button" data-rel="back">返回首页</a>
+            <h3>赠送</h3>
+        </div>
+
+        <div data-role="content">
+            <ul data-role="listview" data-inset="true" role="listbox">
+                <li>
+                    <a href="#mlist?route=1">
+                        <h2>赠送消费积分</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#mlist?route=2">
+                        <h2>赠送消费项目</h2>
+                        <p></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div data-role="footer" data-position="fixed"></div>
+    </div>
+
+    <div data-role="page" id="mlist" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>选择客户</h3>
+        </div>
+
+        <div data-role="content">
+            <ol id="ol_member" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="搜索姓名、卡号、手机号..."></ol>
+        </div>
+    </div>
+
+    <div data-role="page" id="buyproject" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>赠送消费项目</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ul_member" data-role="listview"></ul>
+            <br />
+
+            <form id="frmBuyProject">
+                <div data-role="fieldcontain">
+                    <label for="inputCategory">项目类型</label>
+                    <select id="inputCategory">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+
+                <div data-role="fieldcontain">
+                    <label for="inputProject"> 产品</label>
+                    <select id="inputProject" name="inputProject" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputCount"><em>*</em> 赠送次数</label>
+                    <input type="text" id="inputCount" name="inputCount">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputExpiryDate"> 消费时限</label>
+                    <input type="text" id="inputExpiryDate" name="inputExpiryDate" autocomplete="off" data-role="datebox" data-options='{"mode": "flipbox","useClearButton":"true"}' />
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers"><em>*</em> 美容顾问</label>
+                    <select name="inputWorkers" id="inputWorkers" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain">
+                    <label for="inputCustPwd"><em>*</em> 密码</label>
+                    <input type="password" id="inputCustPwd" name="inputCustPwd" autocomplete="off">
+                </div>
+                <div>
+                    <input id="btnSave" type="submit" value="赠送">
+                </div>
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="rechargeamount" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>赠送消费积分</h1>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="u_member" data-role="listview"></ul>
+            <br />
+            <form id="frmRechargeAmount" autocomplete="off">
+                <div data-role="fieldcontain">
+                    <label for="inputMoney"><em>*</em> 赠送积分：</label>
+                    <input type="text" id="inputMoney" name="inputMoney">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputExpiryDate1"> 消费时限</label>
+                    <input type="text" id="inputExpiryDate1" name="inputExpiryDate1" value="" autocomplete="off" data-role="datebox" data-options='{"mode": "flipbox","useClearButton":"true"}' />
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers1"><em>*</em> 美容顾问</label>
+                    <select name="inputWorkers1" id="inputWorkers1" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain">
+                    <label for="inputPasswd"><em>*</em> 密码：</label>
+                    <input type="password" id="inputPasswd" name="inputPasswd" autocomplete="off">
+                </div>
+                <div>
+                    <button id="btnSave" type="submit">赠送</button>
+                </div>
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="successPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <h1>赠送成功</h1>
+            <p></p>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <div data-role="page" id="failPage" data-close-btn="none" data-dialog="true" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content" class="warning">
+            <h1>赠送失败</h1>
+            <p></p>
+            <a href="gives.html" class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left">重新赠送</a>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/jqm-datebox-1.4.5.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+            commonInit();
+
+            // 选择客户
+            $.mobile.paramsHandler.addPage("mlist", ["route"], [], function (args) {
+                if (args.route == "1") {
+                    route = "1";
+                    $("#buyproject h3").text("赠送积分");
+                } else {
+                    $("#buyproject h3").text("赠送项目");
+                    route = "2";
+                }
+            });
+
+
+            // 客户过滤
+            $("#ol_member").on("listviewbeforefilter", function (e, data) {
+                var $ul = $(this),
+					$input = $(data.input),
+					value = $input.val(),
+					html = "";
+                if (value && value.length > 1) {
+                    $ul.html("<li> <div class='ui-loader'> <span class='ui-icon ui-icon-loading'> </span> </div> </li> ");
+                    $ul.listview("refresh");
+                    $.ajax({
+                        type: "POST",
+                        url: serverUrl + "/MemberAdmin/AppList",
+                        dataType: "json",
+                        data: { "hostId": userObject.host, "branchId": userObject.branch, userId: userObject.userid, pageNum: 10, q: $input.val() },
+                        success: function (result) {
+                            $ul.empty();
+                            $.each(result, function (i, item) {
+                                if (route == "1")
+                                    html += "<li><a href=\"#rechargeamount?mid=" + item.CardNo + "\"><h3>姓名：" + item.Name + "</h3>";
+                                else
+                                    html += "<li><a href=\"#buyproject?mid=" + item.CardNo + "\"><h3>姓名：" + item.Name + "</h3>";
+                                // html += "<p><b>地址：</b>" + item.Address + " </p>";
+                                html += "<p><b>手机</b>：" + item.MobileNumber + " <b>卡号</b>：" + item.CardNo + "</p>";
+                                html += "<p><b>状态</b>：" + item.StatusValue + "</p></a></li>";
+                            });
+                            $ul.html(html);
+                            $ul.listview('refresh');
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+            });
+
+            // 客户信息
+            $.mobile.paramsHandler.addPage("rechargeamount", ["mid"], [], function (args) {
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: args.mid },
+                    url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                    success: function (data) {
+                        $("#u_member").empty();
+                        $("#u_member").append("<li>姓名：" + data.Name + "</li><li>手机：" + data.MobileNumber + "</li><li>余额：" + data.Amt + "</li><li>积分：" + data.Points + "</li><li>等级：" + data.LevelValue + "</li><li>状态：" + data.StatusValue + "</li>");
+                        $("#u_member").listview('refresh');
+
+                        // 当前用户
+                        memberObject.MemberID = data.MemberID;
+                        memberObject.CardNo = data.CardNo;
+                        memberObject.Birthday = data.BirthdayStr;
+                        memberObject.Amt = Number(data.Amt);
+                        memberObject.Address = data.Address;
+                        memberObject.JoinBranch = data.JoinBranch;
+                        memberObject.JoinDate = data.JoinDateStr;
+                        memberObject.Name = data.Name;
+                        memberObject.MobileNumber = data.MobileNumber;
+                        memberObject.Remark = data.Remark;
+                        memberObject.Vocation = data.Vocation;
+                        memberObject.Source = data.Source;
+                        memberObject.Sex = data.Sex;
+
+                        //$.mobile.changePage("#minfo");
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+            $.mobile.paramsHandler.addPage("buyproject", ["mid"], [], function (args) {
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: args.mid },
+                    url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                    success: function (data) {
+                        $("#ul_member").empty();
+                        $("#ul_member").append("<li>姓名：" + data.Name + "</li><li>手机：" + data.MobileNumber + "</li><li>余额：" + data.Amt + "</li><li>等级：" + data.LevelValue + "</li><li>状态：" + data.StatusValue + "</li>");
+                        $("#ul_member").listview('refresh');
+
+                        // 当前用户
+                        memberObject.MemberID = data.MemberID;
+                        memberObject.CardNo = data.CardNo;
+                        memberObject.Birthday = data.BirthdayStr;
+                        memberObject.Amt = Number(data.Amt);
+                        memberObject.Address = data.Address;
+                        memberObject.JoinBranch = data.JoinBranch;
+                        memberObject.JoinDate = data.JoinDateStr;
+                        memberObject.Name = data.Name;
+                        memberObject.MobileNumber = data.MobileNumber;
+                        memberObject.Remark = data.Remark;
+                        memberObject.Vocation = data.Vocation;
+                        memberObject.Source = data.Source;
+                        memberObject.Sex = data.Sex;
+
+                        //$.mobile.changePage("#minfo");
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+            $.mobile.paramsHandler.init();
+
+            // 项目类型
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch },
+                url: serverUrl + "/Project/AppCategory",
+                success: function (data) {
+                    $(data).each(function (i) {
+                        var option = "<option value=\"" + data[i].code + "\">" + data[i].name + "</option>";
+                        $("#inputCategory").append(option);
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+
+            // 美容师
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "3" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $("#inputWorkers").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                        $("#inputWorkers1").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+        }
+
+
+        $().ready(function () {
+
+            $("#inputCategory").change(function () {
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: { hostId: userObject.host, Category: $("#inputCategory").val() },
+                    url: serverUrl + "/Project/AppList",
+                    success: function (data) {
+                        $("#inputProject").empty();
+                        $("#inputProject").append('<option value="">请选择</option>');
+                        $(data).each(function (i, item) {
+                            $("#inputProject").append('<option value="' + item.id + '">' + item.code + '-' + item.name + '</option>');
+                        });
+                        $("#inputProject").selectmenu('refresh');
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+            $("#frmBuyProject").validate({
+                rules: {
+                    inputWorkers: {
+                        required: true
+                    },
+                    inputProject: {
+                        required: true
+                    },
+                    inputCount: {
+                        required: true,
+                        digits: true,
+                        min: 1
+                    },
+                    inputExpiryDate: {
+                        dateISO: true
+                    },
+                    inputCustPwd: {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+                messages: {
+                    inputWorkers: {
+                        required: "请选择美容顾问"
+                    },
+                    inputProject: {
+                        required: "请选择产品"
+                    },
+                    inputCount: {
+                        required: "请输入赠送次数",
+                        digits: "请输入非零的整数",
+                        min: "请输入非零的整数"
+                    },
+                    inputExpiryDate: {
+                        dateISO: "您输入消费时限有误",
+                    },
+                    inputCustPwd: {
+                        required: "请输入密码",
+                        minlength: "请输入至少6位字符的密码"
+                    }
+                }
+            });
+
+            $("#frmBuyProject").submit(function () {
+
+                if ($("#frmBuyProject").validate().form()) {
+
+                    $('#btnSave').button('disable');
+                    $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            MemberId: memberObject.MemberID,
+                            ProjectID: $("#inputProject").val(),
+                            Payment: 0,
+                            Count: $("#inputCount").val(),
+                            Password: $("#inputCustPwd").val(),
+                            Type: "1",
+                            Salesman: $("#inputWorkers").val(),
+                            ExpiryDate: $("#inputExpiryDate").val(),
+                            user: userObject.userid,
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Points: 0,
+                            remark: "赠送",
+                            BookPrice: 0,
+                            UserId: userObject.userid,
+                        },
+                        url: serverUrl + "/MemberAdmin/AppGiveProject",
+                        success: function (result) {
+                            if (result.code != 1) {
+                                //购买失败
+                                console.log("BuyProject Fail");
+                                $("#failPage div.warning p:last").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else {
+                                //购买成功
+                                console.log("BuyProject Success");
+                                $.mobile.changePage("#successPage", 'pop');
+                            }
+                            $.mobile.loading('hide');
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            showNetErrMsg();
+                            $.mobile.loading('hide');
+
+                            //购买失败
+                            //console.log("BuyProject Fail");
+                            //$("#failPage div.warning p:last").text(XMLHttpRequest.responseText);
+                            //$.mobile.changePage("#failPage", 'pop');
+                        }
+                    });
+                    return false;
+                }
+
+                $.mobile.loading('hide');
+                return false;
+            });
+
+
+            $("#frmRechargeAmount").validate({
+                rules: {
+                    inputMoney: {
+                        required: true,
+                        digits: true,
+                        min: 1
+                    },
+                    inputType: "required",
+                    inputExpiryDate1: "dateISO",
+                    inputWorkers1: "required",
+                    inputPasswd: {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+                messages: {
+                    inputMoney: {
+                        required: "请输入充值金额",
+                        digits: "请输入非零的整数",
+                        min: "请输入非零的整数"
+                    },
+                    inputType: "请选择充值类型",
+                    inputExpiryDate1: "您输入的时限有误",
+                    inputWorkers1: "请输入美容顾问",
+                    inputPasswd: {
+                        required: "请输入密码",
+                        minlength: "请输入至少6位字符的密码"
+                    }
+                }
+            });
+
+            $("#frmRechargeAmount").submit(function () {
+                if ($("#frmRechargeAmount").validate().form()) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            MemberId: memberObject.MemberID,
+                            Money: $("#inputMoney").val(),
+                            ExpiryDate: $("#inputExpiryDate1").val(),
+                            Type: "4",
+                            Salesman: $("#inputWorkers1").val(),
+                            Password: $("#inputPasswd").val(),
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Remark: "赠送",
+                            UserId: userObject.userid
+                        },
+                        url: serverUrl + "/MemberAdmin/AppGiveAmount",
+                        success: function (result) {
+                            if (result.code != 1) {
+                                //会员卡无效、密码无效或其他错误
+                                //console.log("RechargeAmount Fail");
+                                $("#failPage div.warning p:last").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else {
+                                //充值成功
+                                console.log("RechargeAmount Success");
+                                $.mobile.changePage("#successPage", 'pop');
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            showNetErrMsg();
+
+                            ////充值失败
+                            //console.log("RechargeAmount Fail");
+                            ////$("#failPage div.warning p:last").text(XMLHttpRequest.responseText);
+                            //$.mobile.changePage("#failPage", 'pop');
+                        }
+                    });
+                    return false;
+                }
+                return false;
+            });
+
+        });
+
+
+        // 赠送参数选择
+        //var route = "1";
+
+    </script>
+</body>
+</html>

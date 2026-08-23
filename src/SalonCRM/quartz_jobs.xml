@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<job-scheduling-data xmlns="http://quartznet.sourceforge.net/JobSchedulingData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+
+  <processing-directives>
+    <overwrite-existing-data>true</overwrite-existing-data>
+  </processing-directives>
+
+  <schedule>
+    <!--
+    <job>
+      <name>fiveJob</name>
+      <group>fiveGroup</group>
+      <description>Sample job for Quartz Server</description>
+      <job-type> SalonCRM.Job.FiveJob, SalonCRM</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <cron>
+        <name>fiveTrigger</name>
+        <group>fiveGroup</group>
+        <job-name>fiveJob</job-name>
+        <job-group>fiveGroup</job-group>
+        <cron-expression>0 0/5 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+     -->
+    <!--<job>
+      <name>dayJob</name>
+      <group>dayGroup</group>
+      <description>Sample job for Quartz Server</description>
+      <job-type> SalonCRM.Job.DayJob, SalonCRM</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <trigger>
+      <cron>
+        <name>dayTrigger</name>
+        <group>dayGroup</group>
+        <job-name>dayJob</job-name>
+        <job-group>dayGroup</job-group>
+        <cron-expression>0 0 2 * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+    
+  </schedule>
+</job-scheduling-data>

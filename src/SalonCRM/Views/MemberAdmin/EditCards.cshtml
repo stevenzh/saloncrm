@@ -1,0 +1,41 @@
+﻿@model IEnumerable<SalonCRM.Models.MemberCard>
+
+@{
+    ViewBag.Title = "客户卡项设置";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+
+<script type="text/javascript">
+    function OnSelectedCountryChanged() {
+        gvProject.GetEditor("Project.Name").PerformCallback();
+    }
+    function CityComboBox_BeginCallback(s, e) {
+        e.customArgs["Category"] = gvProject.GetEditor("Project.Category").GetValue();
+    }
+</script>
+
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/Home/Index">首页</a> </li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+</div>
+<div class="main-content">
+    @Html.Partial("CardList", Model)
+</div>

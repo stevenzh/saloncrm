@@ -1,0 +1,52 @@
+﻿@model SalonCRM.Models.MemberViewModel
+@{
+    Layout = "~/Views/Shared/_WapLayout.cshtml";
+    ViewBag.Title = "客户详细";
+}
+@using SalonCRM.Web.MVC;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-body">
+                <div class="box-header with-border">
+                    <h3 class="box-title">客户消费记录</h3>
+                </div>
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                                <tr>
+                                    <th>门店</th>
+                                    <th>消费项目</th>
+                                    <th>消费金额</th>
+                                    <th>消费时间</th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model.ExpenseBooks)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Branch.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+    });
+</script>

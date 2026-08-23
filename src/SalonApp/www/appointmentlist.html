@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户预约</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .ui-filter-inset { margin-top: 0; }
+        #alists .loader { border: none; height: 40px; line-height: 40px; text-align: center; vertical-align: middle; font-size: 12px; }
+        #alists img { vertical-align: middle; margin-right: 5px; }
+        #footer a { margin-left: 8px; }
+        #tips { left: 0; bottom: 0; background: #000; color: #fff; position: fixed; font-size: 12px; text-shadow: none; padding: 8px 10px; border-radius: 2px 2px 0px 0px; display: none; }
+    </style>
+</head>
+<body>
+    <div data-role="page" id="mlist" data-theme="a">
+        <div data-role="header">
+            <a href="menu_member.html" data-role="button" data-icon="back">返回首页</a>
+            <h3>客户预约</h3>
+            <a href="member_select.html?pac=appointment&pat=appointmentlist" data-role="button" data-icon="plus">新增</a>
+        </div>
+
+        <div data-role="content">
+            <ul id="alists" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="请输入卡号..." data-filter-theme="a"></ul>
+        </div>
+        <div id="tips"></div>
+        <div id="footer" data-role="footer" data-position="fixed">
+            <a href="#" id="preday" data-icon="carat-l" data-iconpos="notext" data-role="button">上一天</a>
+            <a href="#" id="btn_day" data-role="button">2017-2-25</a>
+            <a href="#" id="nextday" data-icon="carat-r" data-iconpos="notext" data-role="button">下一天</a>
+            <a href="#" id="today" data-role="button">今天</a>
+        </div>
+    </div>
+
+    <div data-role="page" id="minfo" data-theme="a">
+        <div data-theme="a" data-role="header">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>客户预约信息</h3>
+            <a id="edit" href="#" data-role="button" data-icon="edit">修改</a>
+        </div>
+        <div data-role="content">
+            <div class="ui-body ui-body-a ui-corner-all">
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        var index = 0,
+            totalpage = 0,
+            dayindex = 0;
+
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("doInit");
+            FastClick.attach(document.body);
+            commonInit();
+            GetAjaxDayList(0);
+        }
+
+        $(document).on("pagecreate", "#mlist", function () {
+
+            $("#alists").on("filterablebeforefilter", function (e, data) {
+                var $ul = $(this),
+                    $input = $(data.input),
+                    value = $input.val(),
+                    html = "";
+                index = 0;
+                if (value && value.length > 2) {
+                    $ul.html("");
+                    $ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
+                    $ul.listview("refresh");
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        timeout: 10000,
+                        crossDomain: true,
+                        data: {
+                            "hostId": userObject.host,
+                            "branchId": userObject.branch,
+                            "cardNo": value,
+                            "dayindex": dayindex,
+                            "userId": userObject.userid,
+                        },
+                        url: serverUrl + "/Appointment/AppDayList",
+                        success: function (result) {
+                            //AppointmentArray = result.list;
+                            totalpage = result.count;
+                            $.each(result.list, function (i, item) {
+                                console.log(' item.Id=' + item.Id);
+                                html += "<li><a href=\"#minfo?id=" + item.Id + "\">" +
+                                        "<h3>" + item.Name + "</h3>" +
+                                        "<p>卡号：" + item.CardNo + " 电话：" + item.Phone + "</p>" +
+                                        "<p>预约时间：" + getDateTime(item.BookDate) + " 预约项目：" + (item.ProjectName == null ? "空" : item.ProjectName) + "</p>" +
+                                        "<p>服务人：" + item.Wokers + " 状态：" + item.BookStatus + "</p>" +
+                                        "</a></li>";
+                            });
+                            $ul.html(html);
+                            $ul.listview("refresh");
+                            $ul.trigger("updatelayout");
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                }
+            });
+        });
+
+        $.mobile.paramsHandler.addPage("minfo", ["id"], [], function (args) {
+            //var item = AppointmentArray[args.id];
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "id": args.id },
+                url: serverUrl + "/Appointment/GetAppDetailById",
+                success: function (data) {
+                    // console.log("GetAppDetailById Success");
+                    var $linkedit = $("#minfo").find("a[id=edit]");
+                    $linkedit.attr("href", "appointment.html?id=" + data.AppointmentID + "&mid=" + data.CardNo);
+                    var html = "<p>卡号：" + data.CardNo + "</p>" +
+                        "<p>姓名：" + data.Name + "</p>" +
+                        "<p>电话：" + data.Phone + "</p>" +
+                        "<p>预约时间：" + getDateTime(data.BookDate) + "</p>" +
+                        "<p>服务项目：" + data.ProjectNames + "</p>" +
+                        "<p>服务人：" + data.Wokers + "</p>" +
+                        "<p>使用房间：" + data.BookRooms + "</p>" +
+                        "<p>状态：" + data.BookStatus + "</p>";
+                    var $body = $("#minfo").find("div.ui-body");
+                    $body.empty();
+                    $body.append(html);
+
+                    //window.localStorage.removeItem("appointmentid");
+                    //window.localStorage.setItem("appointmentid", item.Id);
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+        });
+
+        $.mobile.paramsHandler.init();
+
+        $("#preday").click(function () {
+            dayindex--;
+            GetAjaxDayList(dayindex);
+        });
+
+        $("#nextday").click(function () {
+            dayindex++;
+            GetAjaxDayList(dayindex);
+        });
+
+        $("#today").click(function () {
+            dayindex = 0;
+            GetAjaxDayList(dayindex);
+        });
+
+        function GetAjaxDayList(pageindex) {
+            var $ul = $("#alists"),
+                html = "";
+            $.mobile.loading('show', { text: '加载中...', textVisible: true });
+
+            var myDate = new Date().DateAdd('d', pageindex); //修改日期
+            $("#btn_day").text(getLocaleDate(myDate));
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                crossDomain: true,
+                data: {
+                    "hostId": userObject.host,
+                    "branchId": userObject.branch,
+                    "cardNo": $("input[data-type=search]").val(),
+                    "dayindex": pageindex,
+                    "userId": userObject.userid,
+                },
+                url: serverUrl + "/Appointment/AppDayList",
+                success: function (result) {
+                    //AppointmentArray = result.list;
+                    totalpage = result.count;
+                    $.each(result.list, function (i, item) {
+                        html += "<li><a href=\"#minfo?id=" + item.Id + "\">" +
+                                "<h3>" + item.Name + "</h3>" +
+                                "<p>卡号：" + item.CardNo + " 电话：" + item.Phone + "</p>" +
+                                "<p>预约时间：" + getDateTime(item.BookDate) + " 预约项目：" + (item.ProjectName == null ? "空" : item.ProjectName) + "</p>" +
+                                "<p>服务人：" + item.Wokers + " 状态：" + item.BookStatus + "</p>" +
+                                "</a></li>";
+                    });
+                    $ul.html(html);
+                    $ul.listview("refresh");
+                    $ul.trigger("updatelayout");
+
+                    $.mobile.loading('hide');
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                    $.mobile.loading('hide');
+                }
+            });
+
+        }
+    </script>
+</body>
+</html>

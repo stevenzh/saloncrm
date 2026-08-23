@@ -1,0 +1,49 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "Branch", Action = "BranchList" };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.Columns.Add("HostName", "商户");
+        settings.Columns.Add("Name", "名称");
+        settings.Columns.Add("Province", "省份");
+        settings.Columns.Add("City", "城市");
+        settings.Columns.Add("Manager", "店长");
+        settings.Columns.Add("ClientNum", "终端数量");
+        // settings.Columns.Add("IsVaild", "是否有效");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "是否有效";
+            column.Width = 90;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                string type = Convert.ToString(DataBinder.Eval(c.DataItem, "IsVaild"));
+                if (type == "1")
+                    ViewContext.Writer.Write("有效");
+                else if (type == "0")
+                    ViewContext.Writer.Write("无效");
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            //column.Caption = "管理";
+            column.Width = 60;
+            column.SetDataItemTemplateContent(delegate(GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("编辑", "Edit", "Branch", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "OrganID")
+                }, new { target = "_self" }).ToHtmlString());
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "Name");
+        settings.Settings.ShowFooter = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        //settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+
+    }).Bind(Model).GetHtml()

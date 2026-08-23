@@ -1,0 +1,78 @@
+﻿@model SalonCRM.Models.WxMemberQModel
+@{
+    ViewBag.Title = "用户管理";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<section class="header">
+    <h1>
+        @ViewBag.Title.
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Home"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li class="active">客户管理</li>
+    </ol>
+</section>
+
+<section class="main-content">
+    @*@using (Html.BeginForm("Index", "Member", FormMethod.Post, new { role = "form" }))
+    {
+        <div class="form-inline">
+            <label>姓名:</label> <input id="Name" name="Name" class="form-control" />
+            <label>销售顾问:</label> @Html.DropDownListFor(t => t.Sales, (List<SelectListItem>)ViewBag.SalesList, new { @class = "form-control" })
+            <label>是否关注:</label> @Html.DropDownListFor(t => t.Subscribe, (List<SelectListItem>)ViewBag.SubscribeList, new { @class = "form-control" })
+            <label>是否员工:</label> @Html.DropDownListFor(t => t.Employee, (List<SelectListItem>)ViewBag.EmployeeList, new { @class = "form-control" })
+            <input type="submit" value="搜索" class="btn btn-default" />
+        </div>
+    }*@
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    @*<h3 class="box-title">客户列表</h3>*@
+                    <div class="box-tools">
+                        <input type="button" id="usersyn" value="微信用户获取（危险）" class="btn btn-sm btn-danger" />
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body no-padding">
+                    @Html.Partial("PageList", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- /.content -->
+
+<script>
+    $(function () {
+        $("#usersyn").click(function () {
+            $.ajax({
+                url: '/Member/SyncUser',
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Success) {
+                        alert("提示", "同步成功");
+                    }
+                    else {
+                        alert("提示", "同步失败:" + data.ErrorMessage);
+                    }
+                },
+                data: ''
+            });
+        });
+    });
+</script>

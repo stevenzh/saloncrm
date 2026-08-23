@@ -1,0 +1,54 @@
+﻿@using SalonCRM.Models;
+@using SalonCRM.Web;
+@{
+    ApplicationDbContext dbcontent = new ApplicationDbContext();
+    int hostId = GlobalContext.Current.UserHost.HostID;
+    var grid = Html.DevExpress().GridView(
+settings =>
+{
+    settings.Name = "gvProject";
+    settings.CallbackRouteValues = new { Controller = "AccountRecord", Action = "ProjectList", RecordID = ViewData["RecordID"] };
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+    settings.Columns.Add("Project.Name", "项目名称");
+    // settings.Columns.Add("Project.Category", "项目类型");
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Project.Category";
+        column.Caption = "项目类型";
+        column.EditorProperties().ComboBox(p =>
+        {
+            p.TextField = "Contents";
+            p.ValueField = "KeyValue";
+            p.ValueType = typeof(string);
+            p.DataSource = dbcontent.Dictionaries.Where(t => t.Identifier == "ProjectCategory").ToList();
+        });
+    });
+    settings.Columns.Add("BookTime", "购买次数");
+    settings.Columns.Add("Amount", "金额");
+    settings.Columns.Add(column =>
+    {
+        column.Caption = "项目类型";
+        column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+        {
+            string type = Convert.ToString(DataBinder.Eval(c.DataItem, "IsEntity"));
+            if (type == "1")
+            {
+                ViewContext.Writer.Write("现消现耗");
+            }
+            else
+            {
+                ViewContext.Writer.Write("操作服务");
+            }
+        });
+    });
+
+    settings.Settings.ShowHeaderFilterButton = false;
+    settings.Settings.ShowFilterRow = false;
+    settings.Settings.ShowFilterRowMenu = false;
+    settings.SettingsPager.PageSize = 20;
+
+});
+}
+
+@grid.Bind(Model).GetHtml()

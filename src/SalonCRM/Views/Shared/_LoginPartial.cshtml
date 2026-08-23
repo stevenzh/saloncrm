@@ -1,0 +1,23 @@
+﻿@{
+    CustomPrincipal cUser = User as CustomPrincipal;
+}
+@using SalonCRM.Identity;
+@if (Request.IsAuthenticated) {
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" })) {
+        @Html.AntiForgeryToken()
+
+    <ul id="main-menu" class="nav navbar-nav navbar-right">
+        <li>
+            @*@Html.ActionLink(cUser.UserCnName + "您好!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
+            <a href="###">@(cUser.UserCnName + "您好!")</a>
+        </li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">登出</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("登陆", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

@@ -1,0 +1,113 @@
+﻿@model SalonCRM.Models.BranchViewModel
+@{
+    ViewBag.Title = "创建门店";
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li><a href="/branch">门店列表</a></li>
+        <li class="active">添加门店</li>
+    </ul>
+</div>
+<div class="main-content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken() 
+        @Html.ValidationSummary(true)
+        <div class="form-horizontal">
+            @if (User.IsInRole("超级管理员"))
+            {
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        选择商户
+                    </label>
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.HostID, (SelectList)ViewBag.HostList, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+            else
+            {
+                @Html.Hidden("HostId", SalonCRM.Web.GlobalContext.Current.UserHost.HostID)
+            }
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Manager, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Manager, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Phone, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Province, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.Province, (SelectList)ViewBag.Provinces, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.City, (SelectList)ViewBag.Citys, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ClientNum, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.ClientNum, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="创建" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+
+    $("#Province").change(function () {
+        $("#City").empty();
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            data: { "province": $(this).val() },
+            url: "/Region/AppCityList",
+            success: function (data) {
+                var html = "";
+                $(data).each(function (i) {
+                    html += "<option value=\"" + data[i].key + "\">" + data[i].Name + "</option>";
+
+                });
+                $("#City").html(html);
+            }
+        });
+    });
+</script>

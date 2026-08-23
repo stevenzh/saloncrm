@@ -1,0 +1,60 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvProject";
+        settings.SettingsDetail.MasterGridName = "gvSorting";
+        settings.CallbackRouteValues = new { Controller = "CardTmpl", Action = "ProjectList", TmplID = ViewData["TmplID"] };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.KeyFieldName = "TmplProjectID";
+
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Project.Category";
+            column.Caption = "类型";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "Contents";
+                p.ValueField = "KeyValue";
+                p.ValueType = typeof(string);
+                p.DataSource = ViewBag.CategoryList;
+                p.ClientSideEvents.SelectedIndexChanged = "OnSelectedCountryChanged";
+            });
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Project.Name";
+            column.Caption = "项目名称";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.CallbackRouteValues = new { Controller = "CardTmpl", Action = "GetProjects", TextField = "Name" };
+                p.TextField = "Name";
+                p.ValueField = "ProjectID";
+                p.ClientSideEvents.BeginCallback = "CityComboBox_BeginCallback";
+                // p.ValueType = typeof(string);
+                //p.DataSource = ViewBag.ProjectList;
+            });
+        });
+        settings.Columns.Add("Quantity", "数量");
+        settings.Columns.Add("Price", "单价");
+        settings.Columns.Add("Amount", "总金额");
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 120;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "CardTmpl", Action = "AddNewSplitPartial", TmplID = ViewData["TmplID"] };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "CardTmpl", Action = "UpdateSplitPartial", TmplID = ViewData["TmplID"] };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "CardTmpl", Action = "DeleteSplitPartial", TmplID = ViewData["TmplID"] };
+
+
+        settings.Settings.ShowHeaderFilterButton = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+        settings.SettingsPager.PageSize = 20;
+
+    }).Bind(Model).GetHtml()

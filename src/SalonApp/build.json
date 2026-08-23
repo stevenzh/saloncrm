@@ -1,0 +1,11 @@
+{
+     "android": {
+      "release": {
+        "keystore": "E:\\Projects\\SalonCRM\\Docs\\zhimei.keystore",
+        "storePassword": "336699",
+        "alias": "ZhangstS",
+        "password": "336699",
+        "keystoreType": ""
+      }
+     }
+ }

@@ -1,0 +1,137 @@
+﻿@using SalonCRM.Web.MVC
+@using SalonCRM.Web
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - @GlobalContext.Current.SiteNavName</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/page.pagination.css" rel="stylesheet" />
+    <link href="~/Content/premium/premium.css" rel="stylesheet" />
+    <link href="~/Content/premium/theme.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <style type="text/css">
+        .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover { color: #fff; }
+    </style>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("AdditionalResources", false)
+</head>
+<body class=" theme-blue">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="" href="/Home/Index"><span class="navbar-brand"><span class="fa fa-paper-plane"></span> @GlobalContext.Current.SiteNavName</span></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            @if (GlobalContext.Current.SiteNav == "SN1")
+            {
+                <ul class="nav navbar-nav">
+                    <li @(GlobalContext.Current.SiteNavNext == "SNN1" ? "class=active" : "")><a href="/Home/Member">客户类</a></li>
+                    <li @(GlobalContext.Current.SiteNavNext == "SNN2" ? "class=active" : "")><a href="/Home/Employee">员工类</a></li>
+                    <li @(GlobalContext.Current.SiteNavNext == "SNN3" ? "class=active" : "")><a href="/Home/Project">品项类</a></li>
+                    <li @(GlobalContext.Current.SiteNavNext == "SNN4" ? "class=active" : "")><a href="/Home/Stat">综合统计类</a></li>
+                </ul>
+            }
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+    <div class="sidebar-nav">
+        <ul>
+            @Html.MenuBuild(GlobalContext.Current.SiteNav, GlobalContext.Current.SiteNavNext)
+
+            @if (User.IsInRole("超级管理员"))
+            {
+                <li>
+                    <a href="#" data-target=".host-menu" class="nav-header collapsed" data-toggle="collapse">
+                        <i class="fa fa-fw fa-cogs"></i>运营商设置<i class="fa fa-collapse"></i>
+                    </a>
+                </li>
+                <li>
+                    <ul id="host-menu" class="host-menu nav nav-list collapse">
+                        <li><a href="/Menu/Index"><span class="fa fa-caret-right"></span>菜单设置</a></li>
+                        <li><a href="/Host/Index"><span class="fa fa-caret-right"></span>商户管理</a></li>
+                        <li><a href="/Dictionary/Index"><span class="fa fa-caret-right"></span>词典管理</a></li>
+                        <li><a href="/Dictionary/Index?category=ProjectCategory"><span class="fa fa-caret-right"></span>项目类型管理</a></li>
+                        <li><a href="#"><span class="fa fa-caret-right"></span>数据库自动备份</a></li>
+                        <li><a href="#"><span class="fa fa-caret-right"></span>数据导入导出</a></li>
+                        <li><a href="/EventLog/Index"><span class="fa fa-caret-right"></span>操作日志</a></li>
+                    </ul>
+                </li>
+            }
+            @*<li><a href="/Home/About" class="nav-header"><i class="fa fa-fw fa-question-circle"></i> 关于我们</a></li>
+                <li><a href="/Home/Contact" class="nav-header"><i class="fa fa-fw fa-question-circle"></i> 联系我们</a></li>*@
+        </ul>
+    </div>
+    <div class="content">
+        @RenderBody()
+        <footer>
+            <p>&copy; MDSS </p>
+        </footer>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+    <script type="text/javascript">
+        $(function () {
+            var match = document.cookie.match(new RegExp('color=([^;]+)'));
+            if (match) var color = match[1];
+            if (color) {
+                $('body').removeClass(function (index, css) {
+                    return (css.match(/\btheme-\S+/g) || []).join(' ')
+                })
+                $('body').addClass('theme-' + color);
+            }
+
+            //$('[data-popover="true"]').popover({ html: true });
+
+            //for bootstrap 3 use 'shown.bs.tab' instead of 'shown' in the next line
+            $('ul .collapse').on('shown.bs.collapse', function () {
+                //save the latest tab; use cookies if you like 'em better:
+                localStorage.setItem('lastTab', $(this).attr('id'));
+                console.log("save lastTab:" + $(this).attr('id'));
+            });
+        });
+
+        function stripTrailingSlash(str) {
+            if (str.substr(-1) == '/') {
+                return str.substr(0, str.length - 1);
+            }
+            return str;
+        }
+
+        var url = window.location.pathname;
+        if (url == '/Dictionary/Index')
+            url = window.location.pathname + window.location.search;
+        var activePage = stripTrailingSlash(url);
+        var menuIn = false;
+        $('.sidebar-nav li a').each(function () {
+            var currentPage = stripTrailingSlash($(this).attr('href'));
+            if (activePage == currentPage) {
+                $(this).parent().parent().addClass('in');
+                menuIn = true;
+            }
+        });
+
+        if (menuIn == false) {
+            //go to the latest tab, if it exists:
+            var lastTab = localStorage.getItem('lastTab');
+            if (lastTab) {
+                $("#" + lastTab).addClass('in');
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            var uls = $('.sidebar-nav > ul > *').clone();
+            uls.addClass('visible-xs');
+            $('#main-menu').append(uls.clone());
+        });
+    </script>
+</body>
+</html>

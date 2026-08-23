@@ -1,0 +1,101 @@
+﻿@using System.Web.UI.WebControls;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvFeedback";
+        settings.KeyFieldName = "FeedbackId";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "Feedback",
+            Action = "FeedbackList",
+            Name = ViewData["Name"],
+            BranchId = ViewData["BranchId"],
+            CardNo = ViewData["CardNo"],
+            Mobile = ViewData["Mobile"],
+            FeedbackDate = ViewData["FeedbackDate"],
+            Purpose = ViewData["Purpose"],
+            SalesmanId = ViewData["SalesmanId"],
+            BeauticianId = ViewData["BeauticianId"]
+        };
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+        // settings.SettingsBehavior.AllowFocusedRow = true;
+        // settings.Columns.Add("MemberName", "客户姓名");
+        var clumn = settings.Columns.Add("MemberId", "姓名", MVCxGridViewColumnType.HyperLink);
+        var hyperLinkProperties = clumn.PropertiesEdit as HyperLinkProperties;
+        hyperLinkProperties.NavigateUrlFormatString = "~/MemberAdmin/Details/{0}";
+        hyperLinkProperties.TextFormatString = "{0}";
+        hyperLinkProperties.TextField = "MemberName";
+        clumn.CellStyle.HorizontalAlign = HorizontalAlign.Left;
+
+        settings.Columns.Add("CardNo", "卡号");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "客户类别";
+            column.FieldName = "StatusValue";
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+            column.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+            column.SortIndex = 2;
+        });
+        settings.Columns.Add("Purpose", "回访类型");
+        settings.Columns.Add("CallUserName", "回访人");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CreatedDate";
+            column.Caption = "回访时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd HH:mm:ss";
+            column.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "NextDate";
+            column.Caption = "下次回访时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd";
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = "操作";
+        //    column.Width = 60;
+        //    column.SetDataItemTemplateContent(delegate(GridViewDataItemTemplateContainer c)
+        //    {
+        //        ViewContext.Writer.Write(Html.ActionLink("客户详细", "Details", "MemberAdmin", new
+        //        {
+        //            Id = DataBinder.Eval(c.DataItem, "MemberID")
+        //        }, new { target = "_self" }).ToHtmlString());
+        //    });
+        //});
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        settings.HeaderFilterFillItems = (sender, e) =>
+        {
+            ASPxGridView grid = (ASPxGridView)sender;
+            if (e.Column.FieldName == "Amt")
+            {
+                e.Values.Clear();
+                if (e.Column.Settings.HeaderFilterMode == HeaderFilterMode.List)
+                    e.AddShowAll();
+                e.AddValue("欠款", string.Empty, "[Amt] < 0");
+            }
+        };
+        settings.HtmlRowPrepared = (sender, e) =>
+        {
+            try
+            {
+                if (e.RowType != GridViewRowType.Data) return;
+                string value = e.GetValue("StatusValue").ToString();
+
+                if (value == "有效会员" || value == "准有效会员")
+                    e.Row.BackColor = System.Drawing.Color.PaleGreen;
+                else if (value == "休眠会员" || value == "沉睡会员")
+                    e.Row.BackColor = System.Drawing.Color.Moccasin;
+                else if (value == "流失会员")
+                    e.Row.BackColor = System.Drawing.Color.DarkSalmon;
+            }
+            catch { }
+        };
+        // settings.ClientSideEvents.FocusedRowChanged = "OnGridFocusedRowChanged";
+    }).Bind(Model).GetHtml()

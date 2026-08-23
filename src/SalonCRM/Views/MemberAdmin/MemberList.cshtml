@@ -1,0 +1,136 @@
+﻿@using System.Web.UI.WebControls;
+@using SalonCRM.Identity
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "MemberAdmin",
+            Action = "MemberList",
+            Name = ViewData["Name"],
+            BranchId = ViewData["BranchId"],
+            Level = ViewData["Level"],
+            Type = ViewData["Type"],
+            CardNo = ViewData["CardNo"],
+            Mobile = ViewData["Mobile"],
+            BeauticianId = ViewData["BeauticianId"],
+            SalesmanId = ViewData["SalesmanId"],
+            IsNew = ViewData["IsNew"]
+        };
+        settings.Width = Unit.Percentage(100);
+        settings.KeyFieldName = "MemberID";
+        settings.SettingsPager.PageSize = 20;
+
+        var clumn = settings.Columns.Add("MemberID", "姓名", MVCxGridViewColumnType.HyperLink);
+        var hyperLinkProperties = clumn.PropertiesEdit as HyperLinkProperties;
+        hyperLinkProperties.NavigateUrlFormatString = "~/MemberAdmin/Details/{0}";
+        hyperLinkProperties.TextFormatString = "{0}";
+        hyperLinkProperties.TextField = "Name";
+        clumn.CellStyle.HorizontalAlign = HorizontalAlign.Left;
+
+        settings.Columns.Add("CardNo", "卡号");
+        settings.Columns.Add("SexValue", "性别");
+        settings.Columns.Add("MobileNumber", "手机号");
+        settings.Columns.Add("JoinBranchStr", "所属门店");
+        settings.Columns.Add("StatusValue", "状态");
+        settings.Columns.Add("TypeValue", "类型");
+        settings.Columns.Add("LevelValue", "等级");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Birthday";
+            column.Caption = "生日";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd";
+        });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CreatedDate";
+            column.Visible = false;
+            column.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+        });
+        settings.Columns.Add("Salesman.UserCnName", "美容顾问");
+        settings.Columns.Add("Beautician.UserCnName", "美容师");
+        //settings.Columns.Add("Points", "积分");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "新老客户";
+            column.Width = 100;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                var IsNew = Convert.ToInt32(DataBinder.Eval(c.DataItem, "IsNew"));
+                if (IsNew == 1)
+                {
+                    ViewContext.Writer.Write("新客户");
+                }
+                else if (IsNew == 0)
+                {
+                    ViewContext.Writer.Write("老客户");
+                }
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.Width = 100;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                CustomPrincipal cu = (CustomPrincipal)User;
+                ViewContext.Writer.Write(Html.ActionLink("查看", "Details", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "MemberID")
+                }, new { target = "_self" }).ToHtmlString());
+                if (cu.Type == "2")
+                {
+                    ViewContext.Writer.Write("&nbsp;");
+                    ViewContext.Writer.Write(Html.ActionLink("编辑", "Edit", new
+                    {
+                        Id = DataBinder.Eval(c.DataItem, "MemberID")
+                    }, new { target = "_self" }).ToHtmlString());
+                    ViewContext.Writer.Write("&nbsp;");
+                    ViewContext.Writer.Write(Html.ActionLink("卡项", "EditCards", new
+                    {
+                        Id = DataBinder.Eval(c.DataItem, "MemberID")
+                    }, new { target = "_self" }).ToHtmlString());
+                }
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "CardNo");
+        settings.Settings.ShowFooter = true;
+
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
+        settings.ClientSideEvents.SelectionChanged = "SelectionChanged";
+
+        settings.HeaderFilterFillItems = (sender, e) =>
+        {
+            ASPxGridView grid = (ASPxGridView)sender;
+            if (e.Column.FieldName == "Amt")
+            {
+                e.Values.Clear();
+                if (e.Column.Settings.HeaderFilterMode == HeaderFilterMode.List)
+                    e.AddShowAll();
+                e.AddValue("欠款", string.Empty, "[Amt] < 0");
+                e.AddValue("0-4999", string.Empty, "[Amt] >= 0 and [Amt] < 5000");
+                e.AddValue("5000-2万", string.Empty, "[Amt] >= 5000 and [Amt] < 20000");
+                e.AddValue("2万-10万", string.Empty, "[Amt] >= 20000 and [Amt] < 10000");
+                e.AddValue("10万以上", string.Empty, "[Amt] > 100000");
+            }
+            else if (e.Column.FieldName == "Sex")
+            {
+                e.Values.Clear();
+                if (e.Column.Settings.HeaderFilterMode == HeaderFilterMode.List)
+                    e.AddShowAll();
+                e.AddValue("先生", string.Empty, "[Sex] == 'M'");
+                e.AddValue("女士", string.Empty, "[Sex] == 'F'");
+            }
+        };
+
+    }).Bind(Model).GetHtml()

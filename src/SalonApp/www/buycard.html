@@ -1,0 +1,2976 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户购卡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/jqm-datebox-1.4.5.min.css" rel="stylesheet" />
+    <link href="themes/salon.css" rel="stylesheet" />
+    <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div data-role="page" id="cardList" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-icon="back" data-rel="back">返回</a>
+            <h3>选择购卡类型</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ul_member" class="ul_member" data-role="listview"></ul>
+            <br />
+            <ul data-role="listview" data-inset="true" role="listbox">
+                <li>
+                    <a href="#chuzhi">
+                        <h2>储值卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#liaocheng">
+                        <h2>疗程卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#selectPage1">
+                        <h2>体验卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#selectPage2">
+                        <h2>综合卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="selectPage1" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-icon="back" data-rel="back">返回</a>
+            <h3>选择购卡类型</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <!--<ul id="ul_member" class="ul_member" data-role="listview"></ul>
+            <br />-->
+            <ul data-role="listview" data-inset="true" role="listbox">
+                <li>
+                    <a href="#danci">
+                        <h2>单次卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#tuoke3">
+                        <h2>拓客卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <!--<li>
+                    <a href="gives.html">
+                        <h2>赠送</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#wailian">
+                        <h2>外联</h2>
+                        <p></p>
+                    </a>
+                </li>-->
+            </ul>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="selectPage2" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-icon="back" data-rel="back">返回</a>
+            <h3>选择购卡类型</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <!--<ul id="ul_member" class="ul_member" data-role="listview"></ul>
+            <br />-->
+            <ul data-role="listview" data-inset="true" role="listbox">
+                <li>
+                    <a href="#zonghe">
+                        <h2>综合卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#liuke">
+                        <h2>留客卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="liaocheng" data-theme="a">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>购买疗程卡</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ll_member" class="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmLiaocheng">
+                <div data-role="fieldcontain">
+                    <label for="inputCardTmpl"> 固定卡：</label>
+                    <select id="inputCardTmpl" name="inputCardTmpl" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputTitle"><em>*</em> 疗程卡标题</label>
+                    <input type="text" id="inputTitle" name="inputTitle">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="listProject">购买项目</label>
+                    <ul id="listProject" data-role="listview" data-inset="true"></ul>
+                </div>
+                <a id="btn_newproject" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left">添加项目</a>
+                <div data-role="fieldcontain">
+                    <label for="inputType"><em>*</em> 付款类型：</label>
+                    <select id="inputType" name="inputType" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                        <option value="4">储值卡</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divCard" style="display:none;">
+                    <label for="inputCard"><em>*</em>储值卡选择</label>
+                    <select id="inputCard" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayment"><em>*</em> 应付金额</label>
+                    <input type="text" id="inputPayment" name="inputPayment">
+                </div>
+                <div data-role="collapsible" data-content-theme="false">
+                    <h4>欠款方式购买</h4>
+                    <div data-role="fieldcontain">
+                        <label for="inputBook"> 实付金额（剩余金额作为欠款）</label>
+                        <input type="text" id="inputBook" name="inputBook">
+                    </div>
+                </div>
+
+                <div data-role="fieldcontain">
+                    <label for="listPayment">其他付款方式</label>
+                    <ul id="listPayment" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newpayment" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left">添加其他付款</a>
+                </div>
+
+                <div data-role="fieldcontain" id="divPoint" style="display:none;">
+                    <label for="inputPoint"> 赠送积分</label>
+                    <input type="text" id="inputPoint" name="inputPoint" value="0">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales"><em>*</em> 美容顾问</label>
+                    <select id="inputSales" name="inputSales" class="sales" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain" id="divSalesRadix">
+                    <label for="inputSalesRadix">顾问分成:</label>
+                    <input type="range" name="inputSalesRadix" id="inputSalesRadix" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers"> <em>*</em> 美容师</label>
+                    <select name="inputWorkers" id="inputWorkers" class="worker" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain" id="divWorkerRadix">
+                    <label for="inputWorkerRadix">美容师分成:</label>
+                    <input type="range" name="inputWorkerRadix" id="inputWorkerRadix" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <p>
+                    <button type="submit">下一步</button>
+                </p>
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="liuke">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>购买留客卡</h1>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ll_member1" class="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmLiuke">
+                <div data-role="fieldcontain">
+                    <label for="inputCardTmpl1"> 固定卡：</label>
+                    <select id="inputCardTmpl1" name="inputCardTmpl1" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputTitle1"><em>*</em> 留客卡标题</label>
+                    <input type="text" id="inputTitle1" name="inputTitle1">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="listProject1">购买项目</label>
+                    <ul id="listProject1" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newproject1" data-role="button">添加项目</a>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputType1"><em>*</em> 充值类型：</label>
+                    <select id="inputType1" name="inputType1" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                        <option value="4">储值卡</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divCard1" style="display:none;">
+                    <label for="inputCard1"><em>*</em>客户卡选择</label>
+                    <select id="inputCard1" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayment1"><em>*</em> 应付金额 </label>
+                    <input type="text" id="inputPayment1" name="inputPayment1">
+                </div>
+                <div data-role="collapsible" data-content-theme="false">
+                    <h4>欠款方式购买</h4>
+                    <div data-role="fieldcontain">
+                        <label for="inputBook1"> 实付金额（剩余金额作为欠款）</label>
+                        <input type="text" id="inputBook1" name="inputBook1">
+                    </div>
+                </div>
+
+                <div data-role="fieldcontain">
+                    <label for="listPayment1">其他付款方式</label>
+                    <ul id="listPayment1" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newpayment1" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left">添加其他付款</a>
+                </div>
+
+                <div data-role="fieldcontain" style="display:none;">
+                    <label for="inputPoint1"> 赠送积分</label>
+                    <input type="text" id="inputPoint1" name="inputPoint1" value="0">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales1"><em>*</em>美容顾问</label>
+                    <select id="inputSales1" name="inputSales1" class="sales" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain" id="divSalesRadix1">
+                    <label for="inputSalesRadix1">顾问分成:</label>
+                    <input type="range" name="inputSalesRadix1" id="inputSalesRadix1" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers1"> <em>*</em> 美容师</label>
+                    <select name="inputWorkers1" id="inputWorkers1" class="worker" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain" id="divWorkerRadix1">
+                    <label for="inputWorkerRadix1">美容师分成:</label>
+                    <input type="range" name="inputWorkerRadix1" id="inputWorkerRadix1" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <p>
+                    <button type="submit">下一步</button>
+                </p>
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="danci">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>购买单次卡</h1>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ll_member2" class="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmDanci">
+                <div data-role="fieldcontain">
+                    <label for="inputCardTmpl2"><em>*</em> 固定卡：</label>
+                    <select id="inputCardTmpl2" name="inputCardTmpl2" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputTitle2"><em>*</em> 单次卡标题</label>
+                    <input type="text" id="inputTitle2" name="inputTitle2">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="listProject2">购买项目</label>
+                    <ul id="listProject2" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newproject2" data-role="button">添加项目</a>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputType2"><em>*</em> 充值类型：</label>
+                    <select id="inputType2" name="inputType2" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                        <option value="4">储值卡</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divCard2" style="display:none;">
+                    <label for="inputCard2"><em>*</em>储值卡选择</label>
+                    <select id="inputCard2" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayment2"><em>*</em> 应付金额 </label>
+                    <input type="text" id="inputPayment2" name="inputPayment2">
+                </div>
+                <div data-role="collapsible" data-content-theme="false">
+                    <h4>欠款方式购买</h4>
+                    <div data-role="fieldcontain">
+                        <label for="inputBook2"> 实付金额（剩余金额作为欠款）</label>
+                        <input type="text" id="inputBook2" name="inputBook2">
+                    </div>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="listPayment2">其他付款方式</label>
+                    <ul id="listPayment2" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newpayment2" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left">添加其他付款</a>
+                </div>
+                <div data-role="fieldcontain" style="display:none;">
+                    <label for="inputPoint2"> 赠送积分</label>
+                    <input type="text" id="inputPoint2" name="inputPoint2" value="0">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales2"><em>*</em> 美容顾问</label>
+                    <select id="inputSales2" name="inputSales2" class="sales" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain" id="divSalesRadix2">
+                    <label for="inputSalesRadix2">顾问分成:</label>
+                    <input type="range" name="inputSalesRadix2" id="inputSalesRadix2" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers2"> <em>*</em> 美容师</label>
+                    <select name="inputWorkers2" id="inputWorkers2" class="worker" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain" id="divWorkerRadix2">
+                    <label for="inputWorkerRadix2">美容师分成:</label>
+                    <input type="range" name="inputWorkerRadix2" id="inputWorkerRadix2" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <p>
+                    <button type="submit">下一步</button>
+                </p>
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="zonghe">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>购买综合卡</h1>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ll_member3" class="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmZonghe">
+                <fieldset data-role="controlgroup">
+                    <legend>类型:</legend>
+                    <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2a" value="on" checked="checked">
+                    <label for="radio-choice-v-2a">限次</label>
+                    <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2b" value="off">
+                    <label for="radio-choice-v-2b">限时</label>
+                    <input type="radio" name="radio-choice-v-2" id="radio-choice-v-2c" value="shuang">
+                    <label for="radio-choice-v-2c">限时又限次</label>
+                </fieldset>
+                <div data-role="fieldcontain">
+                    <label for="inputCardTmpl3"> 固定卡：</label>
+                    <select id="inputCardTmpl3" name="inputCardTmpl3" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputTitle3"><em>*</em> 综合卡标题</label>
+                    <input type="text" id="inputTitle3" name="inputTitle3">
+                </div>
+                <div data-role="fieldcontain" id="div-v-2a">
+                    <label for="inputCount3"><em>*</em> 次数限制</label>
+                    <input type="text" id="inputCount3" name="inputCount3">
+                </div>
+                <div data-role="fieldcontain" id="div-v-2b" style="display:none;">
+                    <label for="inputTime"><em>*</em> 时间限制</label>
+                    <input type="text" id="inputTime" name="inputTime" data-role="datebox" value="" data-options='{"mode": "flipbox"}' placeholder="失效日期">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="listProject3">购买项目</label>
+                    <ul id="listProject3" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newproject3" data-role="button">添加项目</a>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputType3"><em>*</em> 充值类型：</label>
+                    <select id="inputType3" name="inputType3" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                        <option value="4">储值卡</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divCard3" style="display:none;">
+                    <label for="inputCard3"><em>*</em>储值卡选择</label>
+                    <select id="inputCard3" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayment3"><em>*</em> 应付金额 </label>
+                    <input type="text" id="inputPayment3" name="inputPayment3">
+                </div>
+                <div data-role="collapsible" data-content-theme="false">
+                    <h4>欠款方式购买</h4>
+                    <div data-role="fieldcontain">
+                        <label for="inputBook3"> 实付金额（剩余金额作为欠款）</label>
+                        <input type="text" id="inputBook3" name="inputBook3">
+                    </div>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="listPayment3">其他付款方式</label>
+                    <ul id="listPayment3" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newpayment3" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left">添加其他付款</a>
+                </div>
+                <div data-role="fieldcontain" style="display:none;">
+                    <label for="inputPoint3"> 赠送积分</label>
+                    <input type="text" id="inputPoint3" name="inputPoint3" value="0">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales3"><em>*</em> 美容顾问</label>
+                    <select id="inputSales3" name="inputSales3" class="sales" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain" id="divSalesRadix3">
+                    <label for="inputSalesRadix3">顾问分成:</label>
+                    <input type="range" name="inputSalesRadix3" id="inputSalesRadix3" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers3"> <em>*</em> 美容师</label>
+                    <select name="inputWorkers3" id="inputWorkers3" class="worker" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain" id="divWorkerRadix3">
+                    <label for="inputWorkerRadix3">美容师分成:</label>
+                    <input type="range" name="inputWorkerRadix3" id="inputWorkerRadix3" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <p>
+                    <button type="submit">下一步</button>
+                </p>
+            </form>
+
+        </div>
+
+    </div>
+
+    <!--<div data-role="page" id="tuoke">
+        <div data-role="header" data-position="fixed">
+            <a href="#cardList" data-role="button" data-icon="back">返回</a>
+            <h3>选择拓客卡类型</h3>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul data-role="listview" data-inset="true" role="listbox">
+                <li>
+                    <a href="#tuoke2">
+                        <h2>充值增值卡</h2>
+                        <p></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#tuoke3">
+                        <h2>优惠购疗程</h2>
+                        <p></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="tuoke2">
+        <div data-role="header" data-position="fixed">
+            <a href="#tuoke" data-role="button" data-icon="back">返回</a>
+            <h1>拓客增值卡</h1>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ll_member4" class="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmTuoke2">
+                <div data-role="fieldcontain">
+                    <label for="inputTitle4"><em>*</em> 拓客卡标题</label>
+                    <input type="text" id="inputTitle4" name="inputTitle4">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayment4"><em>*</em> 应付金额 </label>
+                    <input type="text" id="inputPayment4" name="inputPayment4">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputType4"><em>*</em> 充值类型：</label>
+                    <select id="inputType4" name="inputType4">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputBook4"><em>*</em> 增值金额</label>
+                    <input type="text" id="inputBook4" name="inputBook4" value="0">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales4"><em>*</em> 美容顾问</label>
+                    <select id="inputSales4" name="inputSales4" class="sales" data-native-menu="false"></select>
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers4">美容顾问</label>
+                    <select name="inputWorkers4" id="inputWorkers4" class="worker" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <p>
+                    <button type="submit">下一步</button>
+                </p>
+            </form>
+
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>-->
+
+    <div data-role="page" id="tuoke3">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>购买拓客卡</h1>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ll_member5" class="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmTuoke4">
+                <div data-role="fieldcontain">
+                    <label for="inputCardTmpl5"> 固定卡：</label>
+                    <select id="inputCardTmpl5" name="inputCardTmpl5" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputTitle5"><em>*</em> 拓客卡标题</label>
+                    <input type="text" id="inputTitle5" name="inputTitle5">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="listProject5">购买项目</label>
+                    <ul id="listProject5" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newproject5" data-role="button">添加项目</a>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayment5"><em>*</em> 应付金额</label>
+                    <input type="text" id="inputPayment5" name="inputPayment5">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputType5"><em>*</em> 充值类型：</label>
+                    <select id="inputType5" name="inputType5">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="listPayment5">其他付款方式</label>
+                    <ul id="listPayment5" data-role="listview" data-inset="true"></ul>
+                    <a id="btn_newpayment5" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left">添加其他付款</a>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales5"><em>*</em> 美容顾问</label>
+                    <select id="inputSales5" name="inputSales5" class="sales" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain" id="divSalesRadix5">
+                    <label for="inputSalesRadix5">顾问分成:</label>
+                    <input type="range" name="inputSalesRadix5" id="inputSalesRadix5" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers5"> <em>*</em> 美容师</label>
+                    <select name="inputWorkers5" id="inputWorkers5" class="worker" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain" id="divWorkerRadix5">
+                    <label for="inputWorkerRadix5">美容师分成:</label>
+                    <input type="range" name="inputWorkerRadix5" id="inputWorkerRadix5" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <p>
+                    <button type="submit">下一步</button>
+                </p>
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div data-role="page" id="chuzhi">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-icon="back" data-rel="back">返回</a>
+            <h1>储值卡</h1>
+        </div>
+
+        <div data-role="content" class="portrait">
+            <ul id="ll_member6" class="ul_member" data-role="listview"></ul>
+            <br />
+            <form id="frmChuzhi">
+                <div data-role="fieldcontain">
+                    <label for="inputCardTmpl6"> 固定卡：</label>
+                    <select id="inputCardTmpl6" name="inputCardTmpl6" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputTitle6"><em>*</em> 储值卡标题</label>
+                    <input type="text" id="inputTitle6" name="inputTitle6">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayment6"><em>*</em> 应付金额</label>
+                    <input type="text" id="inputPayment6" name="inputPayment6">
+                </div>
+                <div data-role="collapsible" data-content-theme="false">
+                    <h4>增值卡设置</h4>
+                    <div data-role="fieldcontain">
+                        <label for="inputIncrease6"> 增值金额（输入增加的部分）</label>
+                        <input type="text" id="inputIncrease6" name="inputIncrease6">
+                    </div>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputType6"><em>*</em> 充值类型：</label>
+                    <select id="inputType6" name="inputType6" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                    </select>
+                </div>
+                <div data-role="collapsible" data-content-theme="false">
+                    <h4>欠款方式购买</h4>
+                    <div data-role="fieldcontain">
+                        <label for="inputBook6"> 实付金额（剩余金额作为欠款）</label>
+                        <input type="text" id="inputBook6" name="inputBook6">
+                    </div>
+                </div>
+                <div data-role="fieldcontain" style="display:none;">
+                    <label for="inputPoint6"> 赠送积分</label>
+                    <input type="text" id="inputPoint6" name="inputPoint6" value="0">
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputSales6"><em>*</em> 美容顾问</label>
+                    <select id="inputSales6" name="inputSales6" class="sales" data-native-menu="false"></select>
+                </div>
+                <div data-role="fieldcontain" id="divSalesRadix6">
+                    <label for="inputSalesRadix6">顾问分成:</label>
+                    <input type="range" name="inputSalesRadix6" id="inputSalesRadix6" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <fieldset data-role="fieldcontain">
+                    <label for="inputWorkers6"><em>*</em> 美容师</label>
+                    <select name="inputWorkers6" id="inputWorkers6" class="worker" multiple="multiple" data-native-menu="false">
+                        <option value="">请选择</option>
+                    </select>
+                </fieldset>
+                <div data-role="fieldcontain" id="divWorkerRadix6">
+                    <label for="inputWorkerRadix6">美容师分成:</label>
+                    <input type="range" name="inputWorkerRadix6" id="inputWorkerRadix6" value="0.5" min="0" step=".1" max="1">
+                </div>
+                <p>
+                    <button type="submit">下一步</button>
+                </p>
+            </form>
+        </div>
+
+        <div data-role="footer" data-position="fixed">
+        </div>
+    </div>
+
+    <div id="projectDialog" data-role="page" data-dialog="true">
+        <div data-role="header">
+            <a id="dialogBack" href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>添加项目</h1>
+        </div>
+        <div data-role="content">
+            <form id="frmBuyProject">
+                <label for="inputExtCategory">项目来源类型</label>
+                <select id="inputExtCategory" data-native-menu="false">
+                    <option value="">请选择...</option>
+                    <option value="LY01">基础类</option>
+                    <option value="LY02">合作类</option>
+                </select>
+                <label for="inputCategory"><em>*</em>项目类型</label>
+                <select id="inputCategory" class="category" data-native-menu="false">
+                    <option value="">请选择...</option>
+                </select>
+                <label for="inputProject"><em>*</em>项目列表</label>
+                <select id="inputProject" data-native-menu="false">
+                    <option value="">请选择...</option>
+                </select>
+                <label for="inputAmount">金额</label>
+                <input type="text" id="inputAmount" placeholder="金额">
+                <label for="inputNum">数量</label>
+                <input type="text" id="inputNum" placeholder="数量">
+                <select name="flipEntity" id="flipEntity" data-role="slider" disabled="disabled">
+                    <option value="0">操作服务</option>
+                    <option value="1">现消现耗</option>
+                </select>
+                <p>
+                    <button id="btn_add_project" type="submit">保存</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div id="productDialog" data-role="page" data-dialog="true">
+        <div data-role="header">
+            <a id="dialogBack1" href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>添加项目</h1>
+        </div>
+        <div data-role="content">
+            <form id="frmBuyProduct">
+                <label for="inputCategory2"><em>*</em>项目类型</label>
+                <select id="inputCategory2" class="category">
+                    <option value="">请选择...</option>
+                </select>
+                <label for="inputProject2"><em>*</em>项目列表</label>
+                <select id="inputProject2">
+                    <option value="">请选择...</option>
+                </select>
+                <p>
+                    <button id="btn_add_product" type="submit">保存</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div id="paymentDialog" data-role="page" data-dialog="true">
+        <div data-role="header">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h1>添加其他付款方式</h1>
+        </div>
+        <div data-role="content">
+            <form id="frmPayment">
+                <div data-role="fieldcontain">
+                    <label for="inputPayType"><em>*</em> 付款类型：</label>
+                    <select id="inputPayType" name="inputPayType" data-native-menu="false">
+                        <option value="1">现金</option>
+                        <option value="2">刷卡</option>
+                        <option value="3">转账</option>
+                        <option value="4">储值卡</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain" id="divPayCard" style="display:none;">
+                    <label for="inputPayCard"><em>*</em> 储值卡选择</label>
+                    <select id="inputPayCard" name="inputPayCard" data-native-menu="false">
+                        <option value="">请选择...</option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="inputPayPayment"><em>*</em> 付款金额 </label>
+                    <input type="text" id="inputPayPayment" name="inputPayPayment">
+                </div>
+                <p>
+                    <button id="btn_add_payment" type="submit">保存</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div id="popupDialog" data-role="page" data-dialog="true">
+        <div data-role="header">
+            <h1>余额不足</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <p class="ui-title">账户余额不足，差额选择定金方式支付，是否继续购买?</p>
+            <a href="#pagethree" data-role="button" data-inline="true">取消</a>
+            <a href="#nextPage" data-inline="true" data-role="button">继续</a>
+        </div>
+    </div>
+
+    <div data-role="page" id="nextPage">
+        <div data-role="header" data-position="fixed">
+            <a href="#" data-role="button" data-rel="back" data-icon="back">返回</a>
+            <h3>客户输入密码</h3>
+        </div>
+        <div data-role="content">
+            <form id="frmPasswd">
+                <div data-role="fieldcontain">
+                    <label for="inputCustPwd"><em>*</em> 密码：</label>
+                    <input type="password" id="inputCustPwd" name="inputCustPwd">
+                </div>
+                <div class="btn-default btn btn-default btn-block">
+                    <input id="btnSave" type="submit" value="确认购买" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div data-role="page" data-close-btn="none" data-dialog="true" id="successPage">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content">
+            <h1>购卡成功</h1>
+            <p>您已成功添加会员卡.</p>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+            <a href="#" id="link_member" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">客户继续消费</a>
+        </div>
+    </div>
+
+    <div data-role="page" data-close-btn="none" data-dialog="true" id="failPage">
+        <div data-role="header" data-position="fixed">
+            <h1>操作提示</h1>
+        </div>
+        <div data-role="content" class="warning">
+            <h1>购卡失败</h1>
+            <p>购买失败.</p>
+            <a href="menu_member.html" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left">返回首页</a>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script src="scripts/jqm-datebox-1.4.5.js"></script>
+    <script src="scripts/jquery.mobile.toast.min.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/jquery.mobile.paramsHandler-1.4.3.js"></script>
+    <script src="scripts/fastclick.js"></script>
+    <script type="text/javascript">
+        if (platform == "cordova")
+            $.when(deviceReadyDeferred, jqmReadyDeferred).done(doInit);
+        else
+            $.when(jqmReadyDeferred).done(doInit);
+
+        function doInit() {
+            console.log("do init.");
+            FastClick.attach(document.body);
+            commonInit();
+
+            var memberCardNo = getUrlParameter("mid");
+            // 返回按钮
+            $("#link_member").attr("href", "member_info.html?mid=" + memberCardNo);
+
+            // 取得客户信息
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "branchId": userObject.branch, cardNo: memberCardNo },
+                url: serverUrl + "/MemberAdmin/AppMemberInfo",
+                success: function (data) {
+                    // 当前用户
+                    memberObject.MemberID = data.MemberID;
+                    memberObject.CardNo = data.CardNo;
+                    memberObject.Name = data.Name;
+                    memberObject.MobileNumber = data.MobileNumber;
+                    memberObject.Amt = data.Amt;
+                    memberObject.Points = data.Points;
+                    memberObject.SalesmanId = data.SalesmanId;
+
+                    $(".ul_member").empty();
+                    $(".ul_member").append("<li>姓名：" + data.Name + "</li><li>卡号：" + data.CardNo + "</li><li>手机：" + data.MobileNumber + "</li><li>余额：" + data.Amt + "</li><li>积分：" + data.Points + "</li>");
+
+                    $("#ul_member").listview('refresh');
+                    //$(".ul_member").listview('refresh');
+                    //$.mobile.changePage("#buyproject");
+
+                    // 客户卡
+                    // 卡片类型 0:储值卡 1: 疗程卡 2: 单次卡 3: 体验卡 4: 综合限时卡 5: 综合限次卡 6: 拓客增值卡 7: 拓客优惠卡
+                    $(data.Cards).each(function (i, item) {
+                        if (item.Type == '0' || item.Type == '6') {
+                            var option = "<option value=\"" + item.MemberCardId + "\" data-amt=\"" + item.Amt + "\">" + item.TypeValue + (item.Title == null ? "" : (":" + item.Title)) + ":" + item.Amt + "元</option>";
+                            $("#inputCard").append(option);
+                            $("#inputCard1").append(option);
+                            $("#inputCard2").append(option);
+                            $("#inputCard3").append(option);
+                            $("#inputPayCard").append(option);
+                        }
+                    });
+                },
+                error: function () {
+                    showNetErrMsg();
+                }
+            });
+
+            // 初始项目类型
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "branchId": userObject.branch },
+                url: serverUrl + "/Project/AppCategory",
+                success: function (data) {
+                    $(data).each(function (i) {
+                        var option = "<option value=\"" + data[i].code + "\">" + data[i].name + "</option>";
+                        $(".category").append(option);
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            // 销售顾问
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "3" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $(".sales").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    showNetErrMsg();
+                }
+            });
+
+            // 取得美容师列表
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "branchId": userObject.branch, "type": "1" },
+                url: serverUrl + "/UsersAdmin/AppListWorkers",
+                success: function (result) {
+                    $.each(result, function (i, item) {
+                        $(".worker").append('<option value="' + item.Text + '">' + item.Value + '</option>');
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+        }
+
+        $(document).on("pageinit", "#liaocheng", function (event) {
+
+            // 自动设置顾问
+            if (memberObject.SalesmanId != "") {
+                $("#inputSales").val(memberObject.SalesmanId);
+                $("#inputSales").selectmenu("refresh");
+            }
+            $("#ll_member").listview('refresh');
+
+            // 业绩占比
+            if (userObject.percentageLock == "1") {
+                // 锁定
+                $("#divSalesRadix").hide();
+                $("#divWorkerRadix").hide();
+            } else {
+                // 放开
+                if (userObject.majorPercentage != "") {   // 顾问占比
+                    $("#inputSalesRadix").val(new Number(userObject.majorPercentage));
+                    $("#inputSalesRadix").slider("refresh")
+                }
+                if (userObject.majorBeauticianPercentage != "") {   // 美容师占比
+                    $("#inputWorkerRadix").val(new Number(userObject.majorBeauticianPercentage));
+                    $("#inputWorkerRadix").slider("refresh")
+                }
+            }
+
+            // 提取固定卡  [重复]
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "type": "1" },
+                url: serverUrl + "/CardTmpl/GetList",
+                success: function (data) {
+                    $("#inputCardTmpl").empty();
+                    $("#inputCardTmpl").append("<option value=\"\">-请选择-</option>");
+                    tmpl_list = new Array();
+                    $(data).each(function (i, item) {
+                        var option = "<option value=\"" + item.id + "\">" + item.title + "--" + item.amount + "</option>";
+                        $("#inputCardTmpl").append(option);
+                        $("#inputCardTmpl").selectmenu("refresh");
+                        tmpl_list.push(item);
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+            route = 1;
+        });
+
+        $(document).on("pageinit", "#liuke", function (event) {
+            // 自动设置顾问
+            if (memberObject.SalesmanId != "") {
+                $("#inputSales1").val(memberObject.SalesmanId);
+                $("#inputSales1").selectmenu("refresh");
+            }
+            $("#ll_member1").listview('refresh');
+
+
+            // 业绩占比
+            if (userObject.percentageLock == "1") {
+                // 锁定
+                $("#divSalesRadix1").hide();
+                $("#divWorkerRadix1").hide();
+            } else {
+                // 放开
+                if (userObject.majorPercentage != "") {   // 顾问占比
+                    $("#inputSalesRadix1").val(new Number(userObject.majorPercentage));
+                    $("#inputSalesRadix1").slider("refresh")
+                }
+                if (userObject.majorBeauticianPercentage != "") {   // 美容师占比
+                    $("#inputWorkerRadix1").val(new Number(userObject.majorBeauticianPercentage));
+                    $("#inputWorkerRadix1").slider("refresh")
+                }
+            }
+
+            // 提取固定卡  [重复]
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "type": "3" },
+                url: serverUrl + "/CardTmpl/GetList",
+                success: function (data) {
+                    $("#inputCardTmpl1").empty();
+                    $("#inputCardTmpl1").append("<option value=\"\">-请选择-</option>");
+                    tmpl_list = new Array();
+                    $(data).each(function (i, item) {
+                        var option = "<option value=\"" + item.id + "\">" + item.title + "--" + item.amount + "</option>";
+                        $("#inputCardTmpl1").append(option);
+                        $("#inputCardTmpl1").selectmenu("refresh");
+                        tmpl_list.push(item);
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+            route = 3;
+        });
+
+        $(document).on("pageinit", "#danci", function (event) {
+            // 自动设置顾问
+            if (memberObject.SalesmanId != "") {
+                $("#inputSales2").val(memberObject.SalesmanId);
+                $("#inputSales2").selectmenu("refresh");
+            }
+            $("#ll_member2").listview('refresh');
+
+            // 业绩占比
+            if (userObject.percentageLock == "1") {
+                // 锁定
+                $("#divSalesRadix2").hide();
+                $("#divWorkerRadix2").hide();
+            } else {
+                // 放开
+                if (userObject.majorPercentage != "") {   // 顾问占比
+                    $("#inputSalesRadix2").val(new Number(userObject.majorPercentage));
+                    $("#inputSalesRadix2").slider("refresh")
+                }
+                if (userObject.majorBeauticianPercentage != "") {   // 美容师占比
+                    $("#inputWorkerRadix2").val(new Number(userObject.majorBeauticianPercentage));
+                    $("#inputWorkerRadix12").slider("refresh")
+                }
+            }
+            // 提取固定卡  [重复]
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "type": "2" },
+                url: serverUrl + "/CardTmpl/GetList",
+                success: function (data) {
+                    $("#inputCardTmpl2").empty();
+                    $("#inputCardTmpl2").append("<option value=\"\">-请选择-</option>");
+                    tmpl_list = new Array();
+                    $(data).each(function (i, item) {
+                        var option = "<option value=\"" + item.id + "\">" + item.title + "--" + item.amount + "</option>";
+                        $("#inputCardTmpl2").append(option);
+                        $("#inputCardTmpl2").selectmenu("refresh");
+                        tmpl_list.push(item);
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+            route = 2;
+        });
+
+        $(document).on("pageinit", "#zonghe", function (event) {
+            // 自动设置顾问
+            if (memberObject.SalesmanId != "") {
+                $("#inputSales3").val(memberObject.SalesmanId);
+                $("#inputSales3").selectmenu("refresh");
+            }
+            $("#ll_member3").listview('refresh');
+
+            // 业绩占比
+            if (userObject.percentageLock == "1") {
+                // 锁定
+                $("#divSalesRadix3").hide();
+                $("#divWorkerRadix3").hide();
+            } else {
+                // 放开
+                if (userObject.majorPercentage != "") {   // 顾问占比
+                    $("#inputSalesRadix3").val(new Number(userObject.majorPercentage));
+                    $("#inputSalesRadix3").slider("refresh")
+                }
+                if (userObject.majorBeauticianPercentage != "") {   // 美容师占比
+                    $("#inputWorkerRadix3").val(new Number(userObject.majorBeauticianPercentage));
+                    $("#inputWorkerRadix3").slider("refresh")
+                }
+            }
+
+            // 提取固定卡  [重复]
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "type": "5" },
+                url: serverUrl + "/CardTmpl/GetList",
+                success: function (data) {
+                    $("#inputCardTmpl3").empty();
+                    $("#inputCardTmpl3").append("<option value=\"\">-请选择-</option>");
+                    tmpl_list = new Array();
+                    $(data).each(function (i, item) {
+                        var option = "<option value=\"" + item.id + "\">" + item.title + "--" + item.amount + "</option>";
+                        $("#inputCardTmpl3").append(option);
+                        $("#inputCardTmpl3").selectmenu("refresh");
+                        tmpl_list.push(item);
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+            route = 4;
+        });
+
+        $(document).on("pageinit", "#tuoke3", function (event) {
+            // 自动设置顾问
+            if (memberObject.SalesmanId != "") {
+                $("#inputSales5").val(memberObject.SalesmanId);
+                $("#inputSales5").selectmenu("refresh");
+            }
+            $("#ll_member5").listview('refresh');
+
+            // 业绩占比
+            if (userObject.percentageLock == "1") {
+                // 锁定
+                $("#divSalesRadix5").hide();
+                $("#divWorkerRadix5").hide();
+            } else {
+                // 放开
+                if (userObject.majorPercentage != "") {   // 顾问占比
+                    $("#inputSalesRadix5").val(new Number(userObject.majorPercentage));
+                    $("#inputSalesRadix5").slider("refresh")
+                }
+                if (userObject.majorBeauticianPercentage != "") {   // 美容师占比
+                    $("#inputWorkerRadix5").val(new Number(userObject.majorBeauticianPercentage));
+                    $("#inputWorkerRadix5").slider("refresh")
+                }
+            }
+
+            // 提取固定卡  [重复]
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "type": "7" },
+                url: serverUrl + "/CardTmpl/GetList",
+                success: function (data) {
+                    $("#inputCardTmpl5").empty();
+                    $("#inputCardTmpl5").append("<option value=\"\">-请选择-</option>");
+                    tmpl_list = new Array();
+                    $(data).each(function (i, item) {
+                        var option = "<option value=\"" + item.id + "\">" + item.title + "--" + item.amount + "</option>";
+                        $("#inputCardTmpl5").append(option);
+                        $("#inputCardTmpl5").selectmenu("refresh");
+                        tmpl_list.push(item);
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+            route = 7;
+        });
+
+        $(document).on("pageinit", "#chuzhi", function (event) {
+            // 自动设置顾问
+            if (memberObject.SalesmanId != "") {
+                $("#inputSales6").val(memberObject.SalesmanId);
+                $("#inputSales6").selectmenu("refresh");
+            }
+            $("#ll_member6").listview('refresh');
+
+            // 业绩占比
+            if (userObject.percentageLock == "1") {
+                // 锁定
+                $("#divSalesRadix6").hide();
+                $("#divWorkerRadix6").hide();
+            } else {
+                // 放开
+                if (userObject.majorPercentage != "") {   // 顾问占比
+                    $("#inputSalesRadix6").val(new Number(userObject.majorPercentage));
+                    $("#inputSalesRadix6").slider("refresh")
+                }
+                if (userObject.majorBeauticianPercentage != "") {   // 美容师占比
+                    $("#inputWorkerRadix6").val(new Number(userObject.majorBeauticianPercentage));
+                    $("#inputWorkerRadix6").slider("refresh")
+                }
+            }
+            // 提取固定卡
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                data: { "hostId": userObject.host, "type": "0" },
+                url: serverUrl + "/CardTmpl/GetList",
+                success: function (data) {
+                    $("#inputCardTmpl6").empty();
+                    $("#inputCardTmpl6").append("<option value=\"\">-请选择-</option>");
+                    tmpl_list = new Array();
+                    $(data).each(function (i, item) {
+                        var option = "<option value=\"" + item.id + "\">" + item.title + "--" + item.amount + "</option>";
+                        $("#inputCardTmpl6").append(option);
+                        $("#inputCardTmpl6").selectmenu("refresh");
+                        tmpl_list.push(item);
+                    });
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+
+            route = 0;
+        });
+
+        $().ready(function () {
+
+            // 添加疗程卡项目
+            $("#btn_newproject").click(function () {
+                $.mobile.changePage("#projectDialog", { transition: "slide" });
+            });
+            // 添加留客卡项目
+            $("#btn_newproject1").click(function () {
+                $.mobile.changePage("#projectDialog", { transition: "slide" });
+            });
+            // 添加单次卡项目
+            $("#btn_newproject2").click(function () {
+                $.mobile.changePage("#projectDialog", { transition: "slide" });
+            });
+            // 添加综合项目
+            $("#btn_newproject3").click(function () {
+                $.mobile.changePage("#productDialog", { transition: "slide" });
+            });
+            // 添加拓客卡项目
+            $("#btn_newproject5").click(function () {
+                $.mobile.changePage("#projectDialog", { transition: "slide" });
+            });
+
+            // 付款方式变更 疗程卡
+            $("#inputType").change(function () {
+                if ($(this).val() == '4') {
+                    $("#divCard").show();
+                } else {
+                    $("#divCard").hide();
+                }
+            });
+            // 付款方式变更 留客卡
+            $("#inputType1").change(function () {
+                if ($(this).val() == '4') {
+                    $("#divCard1").show();
+                } else {
+                    $("#divCard1").hide();
+                }
+            });
+            // 付款方式变更 单次卡
+            $("#inputType2").change(function () {
+                if ($(this).val() == '4') {
+                    $("#divCard2").show();
+                } else {
+                    $("#divCard2").hide();
+                }
+            });
+            // 付款方式变更 综合卡
+            $("#inputType3").change(function () {
+                if ($(this).val() == '4') {
+                    $("#divCard3").show();
+                } else {
+                    $("#divCard3").hide();
+                }
+            });
+            // 其他付款方式
+            $("#inputPayType").change(function () {
+                if ($(this).val() == '4') {
+                    $("#divPayCard").show();
+                } else {
+                    $("#divPayCard").hide();
+                }
+            });
+
+            // 弹出其他付款方式
+            $("#btn_newpayment").click(function () {
+                $.mobile.changePage("#paymentDialog", { transition: "slide" });
+                page_main = "#liaocheng";
+                page_main_list = "#listPayment";
+            });
+            $("#btn_newpayment1").click(function () {
+                $.mobile.changePage("#paymentDialog", { transition: "slide" });
+                page_main = "#liuke";
+                page_main_list = "#listPayment1";
+            });
+            $("#btn_newpayment2").click(function () {
+                $.mobile.changePage("#paymentDialog", { transition: "slide" });
+                page_main = "#danci";
+                page_main_list = "#listPayment2";
+            });
+            $("#btn_newpayment3").click(function () {
+                $.mobile.changePage("#paymentDialog", { transition: "slide" });
+                page_main = "#zonghe";
+                page_main_list = "#listPayment3";
+            });
+            $("#btn_newpayment5").click(function () {
+                $.mobile.changePage("#paymentDialog", { transition: "slide" });
+                page_main = "#tuoke3";
+                page_main_list = "#listPayment5";
+            });
+
+            // 固定卡选择 - 储值卡
+            $("#inputCardTmpl6").change(function () {
+                if ($(this).val() != "") {
+                    for (var i = 0; i < tmpl_list.length; i++) {
+                        if (tmpl_list[i].id == $(this).val()) {
+                            $("#inputTitle6").val(tmpl_list[i].title);
+                            $("#inputPayment6").val(tmpl_list[i].amount);
+
+                            //$("#inputTitle6").attr("readonly", "readonly");
+                            //$("#inputPayment6").attr("readonly", "readonly");
+                        }
+                    }
+                } else {
+                    $("#inputTitle6").val("");
+                    $("#inputPayment6").val("");
+
+                    //$("#inputTitle6").removeAttr("readonly");
+                    //$("#inputPayment6").removeAttr("readonly");
+                }
+            });
+            // 固定卡选择 - 疗程卡 【重复】
+            $("#inputCardTmpl").change(function () {
+                if ($(this).val() != "") {
+                    for (var i = 0; i < tmpl_list.length; i++) {
+                        if (tmpl_list[i].id == $(this).val()) {
+                            $("#inputTitle").val(tmpl_list[i].title);
+                            $("#inputPayment").val(tmpl_list[i].amount);
+
+                            //$("#inputTitle").attr("readonly", "readonly");
+                            //$("#inputPayment").attr("readonly", "readonly");
+
+                            // 清除现有选择项目
+                            project_list = new Array();
+                            $("#listProject").empty();
+                            $.each(tmpl_list[i].projects, function (i, item) {
+                                $("#listProject").append('<li id="p' + 1 + item.projectid + '"><a href="#projectDialog?&pid=' + item.projectid + '"><h2>' + item.projectname + '</h2><p></p><span class="ui-li-count">￥' + item.amount + '/' + item.quantity + '</span></a></li>');
+                                project_list.push([item.projectid, item.category, item.quantity, item.amount, "0", item.price]);
+                            });
+                            $('#listProject').listview('refresh');
+                        }
+                    }
+                    // 添加项目Button
+                    $("#btn_newproject").button({ disabled: true });
+                    $("#btn_newproject").button("option", "disabled", true);
+
+                } else {
+                    $("#inputTitle").val("");
+                    $("#inputPayment").val("");
+
+                    //$("#inputTitle").removeAttr("readonly");
+                    //$("#inputPayment").removeAttr("readonly");
+
+                    // 添加项目Button
+                    $("#btn_newproject").button("option", "disabled", false);
+
+                    // 清除现有选择项目
+                    project_list = new Array();
+                    $("#listProject").empty();
+                }
+            });
+            // 固定卡选择 - 留客卡 【重复】
+            $("#inputCardTmpl1").change(function () {
+                if ($(this).val() != "") {
+                    for (var i = 0; i < tmpl_list.length; i++) {
+                        if (tmpl_list[i].id == $(this).val()) {
+                            $("#inputTitle1").val(tmpl_list[i].title);
+                            $("#inputPayment1").val(tmpl_list[i].amount);
+
+                            //$("#inputTitle1").attr("readonly", "readonly");
+                            //$("#inputPayment1").attr("readonly", "readonly");
+
+                            // 清除现有选择项目
+                            project_list = new Array();
+                            $("#listProject1").empty();
+                            $.each(tmpl_list[i].projects, function (i, item) {
+                                $("#listProject1").append('<li id="p' + 1 + item.projectid + '"><a href="#projectDialog?&pid=' + item.projectid + '"><h2>' + item.projectname + '</h2><p></p><span class="ui-li-count">￥' + item.amount + '/' + item.quantity + '</span></a></li>');
+                                project_list.push([item.projectid, item.category, item.quantity, item.amount, "0", item.price]);
+                            });
+                            $('#listProject1').listview('refresh');
+                        }
+                    }
+                    // 添加项目Button
+                    $("#btn_newproject1").button({ disabled: true });
+                    $("#btn_newproject1").button("option", "disabled", true);
+
+                } else {
+                    $("#inputTitle1").val("");
+                    $("#inputPayment1").val("");
+
+                    //$("#inputTitle1").removeAttr("readonly");
+                    //$("#inputPayment1").removeAttr("readonly");
+
+                    // 添加项目Button
+                    $("#btn_newproject1").button("option", "disabled", false);
+
+                    // 清除现有选择项目
+                    project_list = new Array();
+                    $("#listProject1").empty();
+                }
+            });
+            // 固定卡选择 - 单次卡 【重复】
+            $("#inputCardTmpl2").change(function () {
+                if ($(this).val() != "") {
+                    for (var i = 0; i < tmpl_list.length; i++) {
+                        if (tmpl_list[i].id == $(this).val()) {
+                            $("#inputTitle2").val(tmpl_list[i].title);
+                            $("#inputPayment2").val(tmpl_list[i].amount);
+
+                            //$("#inputTitle2").attr("readonly", "readonly");
+                            //$("#inputPayment2").attr("readonly", "readonly");
+
+                            // 清除现有选择项目
+                            project_list = new Array();
+                            $("#listProject2").empty();
+                            $.each(tmpl_list[i].projects, function (i, item) {
+                                $("#listProject2").append('<li id="p' + 1 + item.projectid + '"><a href="#projectDialog?&pid=' + item.projectid + '"><h2>' + item.projectname + '</h2><p></p><span class="ui-li-count">￥' + item.amount + '/' + item.quantity + '</span></a></li>');
+                                project_list.push([item.projectid, item.category, item.quantity, item.amount, "0", item.price]);
+                            });
+                            $('#listProject2').listview('refresh');
+                        }
+                    }
+                    // 添加项目Button
+                    $("#btn_newproject2").button({ disabled: true });
+                    $("#btn_newproject2").button("option", "disabled", true);
+
+                } else {
+                    $("#inputTitle2").val("");
+                    $("#inputPayment2").val("");
+
+                    //$("#inputTitle2").removeAttr("readonly");
+                    //$("#inputPayment2").removeAttr("readonly");
+
+                    // 添加项目Button
+                    $("#btn_newproject2").button("option", "disabled", false);
+
+                    // 清除现有选择项目
+                    project_list = new Array();
+                    $("#listProject2").empty();
+                }
+            });
+            // 固定卡选择 - 综合卡 【重复】
+            $("#inputCardTmpl3").change(function () {
+                if ($(this).val() != "") {
+                    for (var i = 0; i < tmpl_list.length; i++) {
+                        if (tmpl_list[i].id == $(this).val()) {
+                            $("#inputTitle3").val(tmpl_list[i].title);
+                            $("#inputPayment3").val(tmpl_list[i].amount);
+
+                            //$("#inputTitle3").attr("readonly", "readonly");
+                            //$("#inputPayment3").attr("readonly", "readonly");
+
+                            // 清除现有选择项目
+                            project_list = new Array();
+                            $("#listProject3").empty();
+                            $.each(tmpl_list[i].projects, function (i, item) {
+                                $("#listProject3").append('<li id="p' + 1 + item.projectid + '"><a href="#projectDialog?&pid=' + item.projectid + '"><h2>' + item.projectname + '</h2><p></p><span class="ui-li-count">￥' + item.amount + '/' + item.quantity + '</span></a></li>');
+                                project_list.push([item.projectid, item.category, item.quantity, item.amount, "0", item.price]);
+                            });
+                            $('#listProject3').listview('refresh');
+                        }
+                    }
+                    // 添加项目Button
+                    $("#btn_newproject3").button({ disabled: true });
+                    $("#btn_newproject3").button("option", "disabled", true);
+
+                } else {
+                    $("#inputTitle3").val("");
+                    $("#inputPayment3").val("");
+
+                    //$("#inputTitle3").removeAttr("readonly");
+                    //$("#inputPayment3").removeAttr("readonly");
+
+                    // 添加项目Button
+                    $("#btn_newproject3").button("option", "disabled", false);
+
+                    // 清除现有选择项目
+                    project_list = new Array();
+                    $("#listProject3").empty();
+                }
+            });
+            // 固定卡选择 - 拓客卡 【重复】
+            $("#inputCardTmpl5").change(function () {
+                if ($(this).val() != "") {
+                    for (var i = 0; i < tmpl_list.length; i++) {
+                        if (tmpl_list[i].id == $(this).val()) {
+                            $("#inputTitle5").val(tmpl_list[i].title);
+                            $("#inputPayment5").val(tmpl_list[i].amount);
+
+                            //$("#inputTitle5").attr("readonly", "readonly");
+                            //$("#inputPayment5").attr("readonly", "readonly");
+
+                            // 清除现有选择项目
+                            project_list = new Array();
+                            $("#listProject5").empty();
+                            $.each(tmpl_list[i].projects, function (i, item) {
+                                $("#listProject5").append('<li id="p' + 1 + item.projectid + '"><a href="#projectDialog?&pid=' + item.projectid + '"><h2>' + item.projectname + '</h2><p></p><span class="ui-li-count">￥' + item.amount + '/' + item.quantity + '</span></a></li>');
+                                project_list.push([item.projectid, item.category, item.quantity, item.amount, "0", item.price]);
+                            });
+                            $('#listProject5').listview('refresh');
+                        }
+                    }
+                    // 添加项目Button
+                    $("#btn_newproject5").button({ disabled: true });
+                    $("#btn_newproject5").button("option", "disabled", true);
+
+                } else {
+                    $("#inputTitle5").val("");
+                    $("#inputPayment5").val("");
+
+                    //$("#inputTitle5").removeAttr("readonly");
+                    //$("#inputPayment5").removeAttr("readonly");
+
+                    // 添加项目Button
+                    $("#btn_newproject5").button("option", "disabled", false);
+
+                    // 清除现有选择项目
+                    project_list = new Array();
+                    $("#listProject5").empty();
+                }
+            });
+
+            // 自定义验证
+            $.validator.addMethod("ltdeposit", function (value, element, param) {
+                var paramVal = $(param).val(); // 余额
+                if (parseInt(value) > parseInt(paramVal)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }, "定金不能超过应付余额");
+            $.validator.addMethod("ltcost", function (value, element, param) {
+                var countVal = $("#inputNum").val();
+                var payment = $("#inputPayment").val();
+                if (countVal == "") return true;
+                var unit = $("#inputProject").find("option:selected").attr("data-unin");
+                if (parseInt(unit) * parseInt(countVal) > parseInt(payment)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }, "单价不得低于成本");
+
+            // 疗程卡-表单验证
+            $("#frmLiaocheng").validate({
+                rules: {
+                    inputTitle: {
+                        required: true
+                    },
+                    inputPayment: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                    },
+                    inputPoint: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    inputBook: {
+                        number: true,
+                        min: 0,
+                        ltdeposit: '#inputPayment',
+                    },
+                    inputSales: {
+                        required: true
+                    },
+                    inputWorkers: {
+                        required: true
+                    }
+                },
+                messages: {
+                    inputTitle: {
+                        required: "请输入标题"
+                    },
+                    inputPayment: {
+                        required: "请输入购买金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputPoint: {
+                        required: "请输入赠送积分",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputBook: {
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputSales: {
+                        required: "请选择美容顾问"
+                    },
+                    inputWorkers: {
+                        required: "请选择美容师"
+                    }
+                }
+            });
+
+            // 疗程卡-表单提交
+            $("#frmLiaocheng").submit(function () {
+
+                if ($("#frmLiaocheng").validate().form()) {
+                    // 项目列表
+                    if (project_list.length == 0) {
+                        alert("请选择项目！");
+                        return false;
+                    }
+                    if ($("#inputType").val() == '4') {
+                        if ($("#inputCard").val() == null || $("#inputCard").val() == "") {
+                            alert("请选择储值卡！");
+                            return false;
+                        }
+                        // 检查储值卡内余额
+                        var ppv = $("#inputPayment").val();
+                        var cpv = $("#inputCard").find("option:selected").attr('data-amt');
+                        var vpv = $("#inputBook").val();
+                        if (vpv != '') {
+                            if ((vpv) > parseInt(cpv)) {
+                                alert("储值卡余额不足！");
+                                return false;
+                            }
+                        } else {
+                            if (parseInt(ppv) > parseInt(cpv)) {
+                                alert("储值卡余额不足！");
+                                return false;
+                            }
+                        }
+                    }
+
+                    route = 1;
+                    $.mobile.changePage("#nextPage");
+                }
+                return false;
+            });
+
+            // 留客卡
+            $("#frmLiuke").validate({
+                rules: {
+                    inputTitle1: {
+                        required: true
+                    },
+                    inputPayment1: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                    },
+                    inputPoint1: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    inputBook1: {
+                        number: true,
+                        min: 0,
+                        ltdeposit: '#inputPayment1',
+                    },
+                    inputSales1: {
+                        required: true
+                    },
+                    inputWorkers1: {
+                        required: true
+                    }
+                },
+                messages: {
+                    inputTitle1: {
+                        required: "请输入标题"
+                    },
+                    inputPayment1: {
+                        required: "请输入购买金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputPoint1: {
+                        required: "请输入赠送积分",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputBook1: {
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputSales1: {
+                        required: "请选择美容顾问"
+                    },
+                    inputWorkers1: {
+                        required: "请选择美容师"
+                    }
+                }
+            });
+
+            // 留客卡-表单提交
+            $("#frmLiuke").submit(function () {
+                if ($("#frmLiuke").validate().form()) {
+                    // 项目列表
+                    if (project_list.length == 0) {
+                        alert("请选择项目！");
+                        return false;
+                    }
+                    // 验证余额不足
+                    if ($("#inputType1").val() == '4') {
+                        if ($("#inputCard1").val() == null || $("#inputCard1").val() == '') {
+                            alert("请选择储值卡！");
+                            return false;
+                        }
+                        // 检查储值卡内余额
+                        var ppv = $("#inputPayment1").val();
+                        var cpv = $("#inputCard1").find("option:selected").attr('data-amt');
+                        var vpv = $("#inputBook1").val();
+                        if (vpv != '') {
+                            if ((vpv) > parseInt(cpv)) {
+                                alert("储值卡余额不足！");
+                                return false;
+                            }
+                        } else {
+                            if (parseInt(ppv) > parseInt(cpv)) {
+                                alert("储值卡余额不足！");
+                                return false;
+                            }
+                        }
+                    }
+                    route = 3;
+                    $.mobile.changePage("#nextPage");
+                }
+                return false;
+            });
+
+            // 单次卡-表单验证
+            $("#frmDanci").validate({
+                rules: {
+                    inputTitle2: {
+                        required: true
+                    },
+                    inputPayment2: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                    },
+                    inputPoint2: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    inputBook2: {
+                        number: true,
+                        min: 0,
+                        ltdeposit: '#inputPayment2',
+                    },
+                    inputSales2: {
+                        required: true
+                    },
+                    inputWorkers2: {
+                        required: true
+                    }
+                },
+                messages: {
+                    inputTitle2: {
+                        required: "请输入标题"
+                    },
+                    inputPayment2: {
+                        required: "请输入购买金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputPoint2: {
+                        required: "请输入赠送积分",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputBook2: {
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputSales2: {
+                        required: "请选择美容顾问"
+                    },
+                    inputWorkers2: {
+                        required: "请选择美容师"
+                    }
+                }
+            });
+
+            // 单次卡-表单提交
+            $("#frmDanci").submit(function () {
+                if ($("#frmDanci").validate().form()) {
+
+                    // 项目列表
+                    if (project_list.length == 0) {
+                        alert("请选择项目！");
+                        return false;
+                    }
+                    if ($("#inputType2").val() == '4') {
+                        if ($("#inputCard2").val() == null || $("#inputCard2").val() == '') {
+                            alert("请选择储值卡！");
+                            return false;
+                        }
+                        // 检查储值卡内余额
+                        var ppv = $("#inputPayment2").val();
+                        var cpv = $("#inputCard2").find("option:selected").attr('data-amt');
+                        var vpv = $("#inputBook2").val();
+                        if (vpv != '') {
+                            if ((vpv) > parseInt(cpv)) {
+                                alert("储值卡余额不足！");
+                                return false;
+                            }
+                        } else {
+                            if (parseInt(ppv) > parseInt(cpv)) {
+                                alert("储值卡余额不足！");
+                                return false;
+                            }
+                        }
+                    }
+
+                    route = 2;
+                    $.mobile.changePage("#nextPage");
+                }
+                return false;
+            });
+
+            // 综合卡-表单验证
+            $("#frmZonghe").validate({
+                rules: {
+                    inputTitle3: {
+                        required: true
+                    },
+                    inputPayment3: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                    },
+                    inputPoint3: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    inputBook3: {
+                        number: true,
+                        min: 0,
+                        ltdeposit: '#inputPayment3',
+                    },
+                    inputCount3: {
+                        required: true,
+                        digits: true,
+                        min: 1,
+                    },
+                    inputSales3: {
+                        required: true
+                    },
+                    inputWorkers3: {
+                        required: true
+                    }
+                },
+                messages: {
+                    inputTitle3: {
+                        required: "请输入标题"
+                    },
+                    inputPayment3: {
+                        required: "请输入购买金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputPoint3: {
+                        required: "请输入赠送积分",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputBook3: {
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputCount3: {
+                        required: "请输入购买次数",
+                        digits: "请输入非零的整数",
+                        min: "请输入非零的整数"
+                    },
+                    inputSales3: {
+                        required: "请选择美容顾问"
+                    },
+                    inputWorkers3: {
+                        required: "请选择美容师"
+                    }
+                }
+            });
+
+            // 综合卡-表单提交
+            $("#frmZonghe").submit(function () {
+                if ($("#frmZonghe").validate().form()) {
+
+                    // 项目列表
+                    if (project_list.length == 0) {
+                        alert("请选择项目！");
+                        return false;
+                    }
+
+                    if ($("#inputType3").val() == '4') {
+                        if ($("#inputCard3").val() == null || $("#inputCard3").val() == '') {
+                            alert("请选择储值卡！");
+                            return false;
+                        }
+                        // 检查储值卡内余额
+                        var ppv = $("#inputPayment3").val();
+                        var cpv = $("#inputCard3").find("option:selected").attr('data-amt');
+                        var vpv = $("#inputBook3").val();
+                        if (vpv != '') {
+                            if ((vpv) > parseInt(cpv)) {
+                                alert("储值卡余额不足！");
+                                return false;
+                            }
+                        } else {
+                            if (parseInt(ppv) > parseInt(cpv)) {
+                                alert("储值卡余额不足！");
+                                return false;
+                            }
+                        }
+                    }
+
+                    // 验证
+                    var v2a = $('#frmZonghe input[name="radio-choice-v-2"]:checked ').val();
+                    if (v2a == "on") {
+                        // 限次
+                        if ($("#inputCount3").val() == "") {
+                            alert("请输入限次！");
+                            return false;
+                        }
+                    } else if (v2a == "off") {
+                        // 限时
+                        if ($("#inputTime").val() == "") {
+                            alert("请输入时间限定！");
+                            return false;
+                        }
+                    } else {
+                        // 限次又限时
+                        if ($("#inputCount3").val() == "") {
+                            alert("请输入限次！");
+                            return false;
+                        }
+                        if ($("#inputTime").val() == "") {
+                            alert("请输入时间限定！");
+                            return false;
+                        }
+                    }
+                    route = 4;
+                    $.mobile.changePage("#nextPage");
+                }
+                return false;
+            });
+
+            // 拓客增值卡-表单验证
+            $("#frmTuoke2").validate({
+                rules: {
+                    inputPayment4: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    inputBook4: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    inputSales4: {
+                        required: true
+                    }
+                },
+                messages: {
+                    inputPayment4: {
+                        required: "请输入现付金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputBook4: {
+                        required: "请输入增值金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputSales4: {
+                        required: "请选择美容顾问"
+                    }
+                }
+            });
+
+            // 拓客增值卡-表单提交
+            $("#frmTuoke2").submit(function () {
+                if ($("#frmTuoke2").validate().form()) {
+                    route = 6;
+                    $.mobile.changePage("#nextPage");
+                }
+                return false;
+            });
+
+            // 拓客优惠卡-表单验证
+            $("#frmTuoke4").validate({
+                rules: {
+                    inputTitle5: {
+                        required: true
+                    },
+                    inputPayment5: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                    },
+                    inputSales5: {
+                        required: true
+                    },
+                    inputWorkers5: {
+                        required: true
+                    }
+                },
+                messages: {
+                    inputTitle5: {
+                        required: "请输入标题"
+                    },
+                    inputPayment5: {
+                        required: "请输入现金金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputSales5: {
+                        required: "请选择美容顾问"
+                    },
+                    inputWorkers5: {
+                        required: "请选择美容师"
+                    }
+                }
+            });
+
+            // 拓客优惠卡-表单提交
+            $("#frmTuoke4").submit(function () {
+                if ($("#frmTuoke4").validate().form()) {
+                    // 项目列表
+                    if (project_list.length == 0) {
+                        alert("请选择项目！");
+                        return false;
+                    } else {
+                        route = 7;
+                        $.mobile.changePage("#nextPage");
+                    }
+                }
+                return false;
+            });
+
+            // 储值卡-表单验证
+            $("#frmChuzhi").validate({
+                rules: {
+                    inputTitle6: {
+                        required: true,
+                    },
+                    inputPayment6: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                    },
+                    inputPoint6: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    inputBook6: {
+                        number: true,
+                        min: 0,
+                        ltdeposit: '#inputPayment6',
+                    },
+                    inputIncrease6: {
+                        number: true
+                    },
+                    inputSales6: {
+                        required: true
+                    },
+                    inputWorkers6: {
+                        required: true
+                    }
+                },
+                messages: {
+                    inputTitle6: {
+                        required: "请输入标题"
+                    },
+                    inputPayment6: {
+                        required: "请输入现金金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputPoint6: {
+                        required: "请输入赠送积分",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputBook6: {
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputIncrease6: {
+                        number: "请输入数字"
+                    },
+                    inputSales6: {
+                        required: "请选择美容顾问"
+                    },
+                    inputWorkers6: {
+                        required: "请选择美容顾问"
+                    }
+                }
+            });
+
+            // 储值卡-表单提交
+            $("#frmChuzhi").submit(function () {
+                if ($("#frmChuzhi").validate().form()) {
+                    route = 0;
+                    $.mobile.changePage("#nextPage");
+                }
+                return false;
+            });
+
+            // 综合卡 限时/限次切换
+            $('input[name="radio-choice-v-2"]').click(function () {
+                if ($(this).val() == "on") {
+                    // 限次
+                    $("#div-v-2a").show();
+                    $("#div-v-2b").hide();
+
+                    // 提取固定卡  [重复]
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        timeout: 10000,
+                        data: { "hostId": userObject.host, "type": "5" },
+                        url: serverUrl + "/CardTmpl/GetList",
+                        success: function (data) {
+                            $("#inputCardTmpl3").empty();
+                            $("#inputCardTmpl3").append("<option value=\"\">-请选择-</option>");
+                            tmpl_list = new Array();
+                            $(data).each(function (i, item) {
+                                var option = "<option value=\"" + item.id + "\">" + item.title + "--" + item.amount + "</option>";
+                                $("#inputCardTmpl3").append(option);
+                                $("#inputCardTmpl3").selectmenu("refresh");
+                                tmpl_list.push(item);
+                            });
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                        // 重复结束
+                    });
+                } else if ($(this).val() == "off") {
+                    // 限时
+                    $("#div-v-2a").hide();
+                    $("#div-v-2b").show();
+                    // 提取固定卡  [重复]
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        timeout: 10000,
+                        data: { "hostId": userObject.host, "type": "4" },
+                        url: serverUrl + "/CardTmpl/GetList",
+                        success: function (data) {
+                            $("#inputCardTmpl3").empty();
+                            $("#inputCardTmpl3").append("<option value=\"\">-请选择-</option>");
+                            tmpl_list = new Array();
+                            $(data).each(function (i, item) {
+                                var option = "<option value=\"" + item.id + "\">" + item.title + "--" + item.amount + "</option>";
+                                $("#inputCardTmpl3").append(option);
+                                $("#inputCardTmpl3").selectmenu("refresh");
+                                tmpl_list.push(item);
+                            });
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                } else {
+                    // 限时
+                    $("#div-v-2a").show();
+                    $("#div-v-2b").show();
+                    // 提取固定卡  [重复]
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        timeout: 10000,
+                        data: { "hostId": userObject.host, "type": "8" },
+                        url: serverUrl + "/CardTmpl/GetList",
+                        success: function (data) {
+                            $("#inputCardTmpl3").empty();
+                            $("#inputCardTmpl3").append("<option value=\"\">-请选择-</option>");
+                            tmpl_list = new Array();
+                            $(data).each(function (i, item) {
+                                var option = "<option value=\"" + item.id + "\">" + item.title + "--" + item.amount + "</option>";
+                                $("#inputCardTmpl3").append(option);
+                                $("#inputCardTmpl3").selectmenu("refresh");
+                                tmpl_list.push(item);
+                            });
+                        },
+                        error: function (request, error) {
+                            // This callback function will trigger on unsuccessful action
+                            showNetErrMsg();
+                        }
+                    });
+                    // 重复结束
+                }
+            });
+
+            // 表单验证
+            $("#frmPasswd").validate({
+                rules: {
+                    inputCustPwd: {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+                messages: {
+                    inputCustPwd: {
+                        required: "请输入密码",
+                        minlength: "请输入至少6位字符的密码"
+                    }
+                }
+            });
+
+            // 提交表单
+            $("#frmPasswd").submit(function () {
+
+                $('#btnSave').button('disable');
+                $.mobile.loading('show', { text: '加载中...', textVisible: true });
+                if ($("#frmPasswd").validate().form()) {
+
+                    // 根据路径定义参数
+                    var param = {};
+                    var sales = "";
+                    var projects = "";
+                    for (var i = 0; i < project_list.length; i++) {
+                        projects += project_list[i][0] + "," + project_list[i][2] + "," + project_list[i][3] + "," + project_list[i][4] + "," + project_list[i][5] + ";";
+                    }
+
+                    var others = "";
+                    for (var i = 0; i < payment_list.length; i++) {
+                        others += payment_list[i][1] + "," + payment_list[i][2] + "," + payment_list[i][3] + ";";
+                    }
+
+                    var p1 = userObject.majorPercentage;
+                    var p2 = userObject.majorBeauticianPercentage;
+
+                    if (route == 0) {  // 储值卡
+
+                        $('#inputWorkers6 :selected').each(function (i, selected) {
+                            sales += $(selected).val() + ",";
+                        });
+
+                        if (userObject.percentageLock != "1") {
+                            p1 = $("#inputSalesRadix6").val();
+                            p2 = $("#inputWorkerRadix6").val();
+                        }
+
+                        param = {
+                            route: 0,  // 0:储值卡 1: 疗程卡 2: 单次卡 3: 留客卡 4: 综合限时卡 5:综合限次卡 6:拓客增值卡 7:拓客优惠卡
+                            MemberId: memberObject.MemberID,
+                            Title: $("#inputTitle6").val(),
+                            Payment: $("#inputPayment6").val(),
+                            BookPrice: $("#inputBook6").val(),
+                            IncreasePrice: $("#inputIncrease6").val(),
+                            Type: $("#inputType6").val(),
+                            Password: $("#inputCustPwd").val(),
+                            user: userObject.userid,
+                            remark: "",
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Salesman: $("#inputSales6").val(),
+                            Beautician: sales,
+                            ProjectList: projects,
+                            TmplID: $("#inputCardTmpl6").val(),
+                            SalesRadix: p1,
+                            WorkerRadix: p2,
+                            Points: $("#inputPoint6").val(),
+                            OtherPay: others
+                        };
+                    } else if (route == 1) {  // 疗程卡
+
+                        $('#inputWorkers :selected').each(function (i, selected) {
+                            sales += $(selected).val() + ",";
+                        });
+                        if (userObject.percentageLock != "1") {
+                            p1 = $("#inputSalesRadix").val();
+                            p2 = $("#inputWorkerRadix").val();
+                        }
+
+                        param = {
+                            route: 1,  //  0:储值卡 1: 疗程卡 2: 单次卡 3: 留客卡 4: 综合限时卡 5:综合限次卡 6:拓客增值卡 7:拓客优惠卡
+                            MemberId: memberObject.MemberID,
+                            Title: $("#inputTitle").val(),
+                            Payment: $("#inputPayment").val(),
+                            BookPrice: $("#inputBook").val(),
+                            Type: $("#inputType").val(),
+                            Points: $("#inputPoint").val(),
+                            Password: $("#inputCustPwd").val(),
+                            user: userObject.userid,
+                            remark: "",
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Salesman: $("#inputSales").val(),
+                            Beautician: sales,
+                            ProjectList: projects,
+                            TmplID: $("#inputCardTmpl").val(),
+                            MemberCardId: $("#inputCard").val(),
+                            SalesRadix: p1,
+                            WorkerRadix: p2,
+                            OtherPay: others
+                        };
+
+                    } else if (route == 2) {  // 单次卡
+
+                        $('#inputWorkers2 :selected').each(function (i, selected) {
+                            sales += $(selected).val() + ",";
+                        });
+                        if (userObject.percentageLock != "1") {
+                            p1 = $("#inputSalesRadix2").val();
+                            p2 = $("#inputWorkerRadix2").val();
+                        }
+
+                        param = {
+                            route: 2,  // 0:储值卡 1: 疗程卡 2: 单次卡 3: 留客卡 4: 综合限时卡 5:综合限次卡 6:拓客增值卡 7:拓客优惠卡
+                            MemberId: memberObject.MemberID,
+                            Title: $("#inputTitle2").val(),
+                            Payment: $("#inputPayment2").val(),
+                            Type: $("#inputType2").val(),
+                            BookPrice: $("#inputBook2").val(),
+                            Points: $("#inputPoint2").val(),
+                            Password: $("#inputCustPwd").val(),
+                            user: userObject.userid,
+                            remark: "",
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Salesman: $("#inputSales2").val(),
+                            Beautician: sales,
+                            ProjectList: projects,
+                            TmplID: $("#inputCardTmpl2").val(),
+                            MemberCardId: $("#inputCard2").val(),
+                            SalesRadix: p1,
+                            WorkerRadix: p2,
+                            OtherPay: others
+                        };
+
+                    } else if (route == 3) {  // 留客卡
+
+                        $('#inputWorkers1 :selected').each(function (i, selected) {
+                            sales += $(selected).val() + ",";
+                        });
+                        if (userObject.percentageLock != "1") {
+                            p1 = $("#inputSalesRadix1").val();
+                            p2 = $("#inputWorkerRadix1").val();
+                        }
+
+                        param = {
+                            route: 3,   // 0:储值卡 1: 疗程卡 2: 单次卡 3: 留客卡 4: 综合限时卡 5:综合限次卡 6:拓客增值卡 7:拓客优惠卡
+                            MemberId: memberObject.MemberID,
+                            Title: $("#inputTitle1").val(),
+                            Payment: $("#inputPayment1").val(),
+                            Type: $("#inputType1").val(),
+                            BookPrice: $("#inputBook1").val(),
+                            Points: $("#inputPoint1").val(),
+                            Password: $("#inputCustPwd").val(),
+                            user: userObject.userid,
+                            remark: "",
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Salesman: $("#inputSales1").val(),
+                            Beautician: sales,
+                            ProjectList: projects,
+                            TmplID: $("#inputCardTmpl1").val(),
+                            MemberCardId: $("#inputCard1").val(),
+                            SalesRadix: p1,
+                            WorkerRadix: p2,
+                            OtherPay: others
+                        };
+
+
+                    } else if (route == 4) {  // 综合卡
+                        $('#inputWorkers3 :selected').each(function (i, selected) {
+                            sales += $(selected).val() + ",";
+                        });
+                        var v2a = $('#frmZonghe input[name="radio-choice-v-2"]:checked ').val();
+                        if (v2a == "on")
+                            rr = 5;
+                        else if (v2a == "off")
+                            rr = 4;
+                        else
+                            rr = 8;
+
+                        if (userObject.percentageLock != "1") {
+                            p1 = $("#inputSalesRadix3").val();
+                            p2 = $("#inputWorkerRadix3").val();
+                        }
+
+                        param = {
+                            route: rr,  // 0:储值卡 1: 疗程卡 2: 单次卡 3: 留客卡 4: 综合限时卡 5:综合限次卡 6:拓客增值卡 7:拓客优惠卡
+                            MemberId: memberObject.MemberID,
+                            Title: $("#inputTitle3").val(),
+                            Payment: $("#inputPayment3").val(),
+                            BookPrice: $("#inputBook3").val(),
+                            Type: $("#inputType3").val(),
+                            Points: $("#inputPoint3").val(),
+                            Count: (rr == 4 ? '0' : $("#inputCount3").val()),
+                            ExpiryDate: (rr == 5 ? '' : $("#inputTime").val()),
+                            Password: $("#inputCustPwd").val(),
+                            user: userObject.userid,
+                            remark: "",
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Salesman: $("#inputSales3").val(),
+                            Beautician: sales,
+                            ProjectList: projects,
+                            TmplID: $("#inputCardTmpl3").val(),
+                            MemberCardId: $("#inputCard3").val(),
+                            SalesRadix: p1,
+                            WorkerRadix: p2,
+                            OtherPay: others
+                        };
+
+                    } else if (route == 6) {  // 拓客增值卡
+
+                        $('#inputWorkers4 :selected').each(function (i, selected) {
+                            sales += $(selected).val() + ",";
+                        });
+                        if (userObject.percentageLock != "1") {
+                            p1 = $("#inputSalesRadix4").val();
+                            p2 = $("#inputWorkerRadix4").val();
+                        }
+
+                        param = {
+                            route: 6,  // 0:储值卡 1: 疗程卡 2: 单次卡 3: 留客卡 4: 综合限时卡 5:综合限次卡 6:拓客增值卡 7:拓客优惠卡
+                            MemberId: memberObject.MemberID,
+                            Title: $("#inputTitle4").val(),
+                            Payment: $("#inputPayment4").val(),
+                            IncreasePrice: $("#inputBook4").val(),  // 增值金额
+                            Password: $("#inputCustPwd").val(),
+                            Type: $("#inputType4").val(),
+                            user: userObject.userid,
+                            remark: "",
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Salesman: $("#inputSales4").val(),
+                            Beautician: sales,
+                            SalesRadix: p1,
+                            WorkerRadix: p2,
+                            OtherPay: others
+                        };
+
+                    } else if (route == 7) {  // 拓客优惠卡
+
+                        $('#inputWorkers5 :selected').each(function (i, selected) {
+                            sales += $(selected).val() + ",";
+                        });
+                        if (userObject.percentageLock != "1") {
+                            p1 = $("#inputSalesRadix5").val();
+                            p2 = $("#inputWorkerRadix5").val();
+                        }
+
+                        param = {
+                            route: 7,  // 0:储值卡 1: 疗程卡 2: 单次卡 3: 留客卡 4: 综合限时卡 5:综合限次卡 6:拓客增值卡 7:拓客优惠卡
+                            MemberId: memberObject.MemberID,
+                            Title: $("#inputTitle5").val(),
+                            Payment: $("#inputPayment5").val(),
+                            Type: $("#inputType5").val(),
+                            Password: $("#inputCustPwd").val(),
+                            user: userObject.userid,
+                            remark: "",
+                            BranchId: userObject.branch,
+                            ClientId: userObject.uuid,
+                            Salesman: $("#inputSales5").val(),
+                            Beautician: sales,
+                            ProjectList: projects,
+                            TmplID: $("#inputCardTmpl5").val(),
+                            SalesRadix: p1,
+                            WorkerRadix: p2,
+                            OtherPay: others
+                        };
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: param,
+                        timeout: 10000,
+                        url: serverUrl + "/MemberAdmin/AppBuyCard",
+                        success: function (result) {
+                            if (result.code != 1) {
+                                //购买失败
+                                console.log("BuyProject Fail");
+                                $("#failPage div.warning p:last").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else if (result.code != 1) {
+                                //购买失败
+                                console.log("BuyProject Fail");
+                                $("#failPage div.warning p:last").text(result.message);
+                                $.mobile.changePage("#failPage", 'pop');
+                            } else {
+                                //购买成功
+                                console.log("BuyProject Success");
+                                $.mobile.changePage("#successPage", 'pop');
+                            }
+                            $.mobile.loading('hide');
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            showNetErrMsg();
+                            $.mobile.loading('hide');
+
+                            //购买失败
+                            //console.log("BuyProject Fail");
+                            //$("#failPage div.warning p:last").text(XMLHttpRequest.responseText);
+                            //$.mobile.changePage("#failPage", 'pop');
+                        }
+                    });
+
+                    $("#btnSave").button("enable");
+                    return false;
+                }
+                $("#btnSave").button("enable");
+                return false;
+            });
+
+            // 表单验证
+            $("#frmBuyProject").validate({
+                rules: {
+                    inputProject: "required",
+                    inputAmount: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                        ltcost: ""
+                    },
+                    inputNum: {
+                        required: true,
+                        digits: true,
+                        min: 1,
+                        ltcost: ""
+                    }
+                },
+                messages: {
+                    inputProject: "请选择项目",
+                    inputAmount: {
+                        required: "请输入购买金额",
+                        number: "请输入数字",
+                        min: "请输入大于零的数字"
+                    },
+                    inputNum: {
+                        required: "请输入购买次数",
+                        digits: "请输入非零的整数",
+                        min: "请输入非零的整数"
+                    }
+                }
+            });
+
+            // 提交项目
+            $("#frmBuyProject").submit(function () {
+
+                // 检查相同项目
+                if ($("#frmBuyProject").validate().form()) {
+
+                    var categoryid = $("#inputCategory").val();
+                    var projectid = $("#inputProject").val();
+                    var unit = $("#inputProject option:selected").attr("data-unit");
+                    var projectname = $("#inputProject option:selected").text();
+                    var num = $('#inputNum').val();
+                    var amount = $("#inputAmount").val();
+                    var isEntity = $("#flipEntity").val();
+
+                    // 数据审查
+                    if (projectid == "") {
+                        alert("请选择消费项目.");
+                        return false;
+                    }
+                    if (amount == "") {
+                        alert("请填写金额.");
+                        return false;
+                    }
+                    if (num == "") {
+                        alert("请选择消费项目次数.")
+                        return false;
+                    }
+                    if (parseInt(unit) * parseInt(num) > parseInt(amount)) {
+                        alert("项目单价不能低于最低销售价.")
+                        return false;
+                    }
+
+                    var nohas = true;
+                    var cashamount = 0;
+                    for (var i = 0; i < project_list.length; i++) {
+
+                        // 已含 修改数据
+                        if (project_list[i][0] == projectid) {
+                            project_list[i][1] = categoryid;  // 类型
+                            project_list[i][2] = num;         // 次数
+                            project_list[i][3] = amount;      // 金额
+                            project_list[i][4] = isEntity
+                            project_list[i][5] = Number(amount) / Number(num);
+                            nohas = false;
+                            cashamount += Number(amount);
+                        } else {
+                            cashamount += Number(project_list[i][3]);
+                        }
+
+                        // 重新标记金额
+                        $("#p" + route + projectid + " a span").text("￥" + amount + "/" + num);
+                    }
+
+                    // 添加到数组
+                    if (nohas) {
+                        var plt = [projectid, categoryid, num, amount, isEntity, Number(amount) / Number(num)];
+                        project_list.push(plt);
+
+                        cashamount += Number(amount);
+
+                        if (route == 1) {
+                            //$("#listProject").find("li:last").remove();
+                            $("#listProject").append('<li id="p' + route + projectid + '"><a href="#projectDialog?&pid=' + projectid + '"><h2>' + projectname + '</h2><p></p><span class="ui-li-count">￥' + amount + '/' + num + '</span></a></li>');
+                            $('#listProject').listview('refresh');
+                        } else if (route == 2) {
+                            $("#listProject2").append('<li id="p' + route + projectid + '"><a href="#projectDialog?&pid=' + projectid + '"><h2>' + projectname + '</h2><p></p><span class="ui-li-count">￥' + amount + '/' + num + '</span></a></li>');
+                            $('#listProject2').listview('refresh');
+                        } else if (route == 3) {
+                            $("#listProject1").append('<li id="p' + route + projectid + '"><a href="#projectDialog?&pid=' + projectid + '"><h2>' + projectname + '</h2><p></p><span class="ui-li-count">￥' + amount + '/' + num + '</span></a></li>');
+                            $('#listProject1').listview('refresh');
+                        } else if (route == 7) {
+                            $("#listProject5").append('<li id="p' + route + projectid + '"><a href="#projectDialog?&pid=' + projectid + '"><h2>' + projectname + '</h2><p></p><span class="ui-li-count">￥' + amount + '/' + num + '</span></a></li>');
+                            $('#listProject5').listview('refresh');
+                        }
+                    }
+
+                    if (route == 1) {
+                        $("#inputPayment").val(cashamount);  // 合计金额
+                        $.mobile.changePage("#liaocheng", { transition: "slide" });
+                    } else if (route == 2) {
+                        $("#inputPayment2").val(cashamount);  // 合计金额
+                        $.mobile.changePage("#danci", { transition: "slide" });
+                    } else if (route == 3) {
+                        $("#inputPayment1").val(cashamount);  // 合计金额
+                        $.mobile.changePage("#liuke", { transition: "slide" });
+                    } else if (route == 7) {
+                        $("#inputPayment5").val(cashamount);  // 合计金额
+                        $.mobile.changePage("#tuoke3", { transition: "slide" });
+                    }
+                }
+                return false;
+            });
+
+            // 提交项目
+            $("#btn_add_product").click(function () {
+                // 检查相同项目
+                try {
+                    var categoryid = $("#inputCategory2").val();
+                    var projectid = $("#inputProject2").val();
+                    var projectname = $("#inputProject2 option:selected").text();
+                    //var unit = new Number($("#inputProject2 option:selected").attr("data-unit"));
+
+                    // 数据审查
+                    if (projectid == "") {
+                        alert("请选择消费项目.");
+                        return false;
+                    }
+
+                    var nohas = true;
+                    for (var i = 0; i < project_list.length; i++) {
+
+                        // 已含 修改数据
+                        if (project_list[i][0] == projectid) {
+                            project_list[i][1] = categoryid;  // 类型
+                            nohas = false;
+                        }
+                    }
+
+                    // 添加到数组
+                    if (nohas) {
+                        var plt = [projectid, categoryid, 0, 0, 0, 0];
+                        project_list.push(plt);
+
+                        $("#listProject3").append('<li id="pi' + projectid + '"><a href="#productDialog?&pid=' + projectid + '"><h2>' + projectname + '</h2><p></p></a></li>');
+                        $('#listProject3').listview('refresh');
+                    }
+                    $.mobile.changePage("#zonghe", { transition: "slide" });
+                    return false;
+
+                } catch (e) {
+                    $.mobile.toast({
+                        message: "操作失败，稍后再试!",
+                        position: "top"
+                    });
+                }
+            });
+
+            // 取得项目列表
+            $("#inputCategory").change(function () {
+                CategoryChange();
+            });
+
+            $("#inputExtCategory").change(function () {
+                CategoryChange();
+            });
+
+            $("#inputProject").change(function () {
+                var entity = $(this).find("option:selected").attr("data-entity");
+                $("#flipEntity").val(entity);
+                $("#flipEntity").slider("refresh");
+                //if (entity == "1") {
+                //    $("#flipEntity").slider("disable");
+                //} else {
+                //    $("#flipEntity").slider("enable");
+                //}
+            });
+
+            // 综合卡选择项目
+            $("#inputCategory2").change(function () {
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    timeout: 10000,
+                    async: false,
+                    data: { hostId: userObject.host, Category: $("#inputCategory2").val() },
+                    url: serverUrl + "/Project/AppList",
+                    success: function (data) {
+                        $(data).each(function (i, item) {
+                            var option = "<option value=\"" + item.id + "\" data-unit=\"" + item.unit + "\" data-entity=\"" + item.entity + "\">" + item.name + "</option>";
+                            $("#inputProject2").append(option);
+                        });
+                        $("#inputProject2").selectmenu("refresh");
+                    },
+                    error: function (request, error) {
+                        // This callback function will trigger on unsuccessful action
+                        showNetErrMsg();
+                    }
+                });
+            });
+
+            // 跳转到项目选择页面
+            $.mobile.paramsHandler.addPage("projectDialog", ["pid"], [], function (args) {
+                //数组回写到页面
+                for (var i = 0; i < project_list.length; i++) {
+                    if (project_list[i][0] == args.pid) {
+                        // 根据分类初始化项目列表
+
+                        $("#inputAmount").val(project_list[i][3]);
+                        $("#inputNum").val(project_list[i][2]);
+                        $("#inputCategory").val(project_list[i][1]);
+                        $("#inputCategory").trigger("change");
+                        $("#inputProject").val(project_list[i][0]);
+                        $("#flipEntity").val(project_list[i][4]);
+                        if (page3Init) {
+                            $("#inputProject").selectmenu("refresh");
+                            $("#flipEntity").slider("refresh");
+                        }
+                    }
+                }
+                page3Init = true;
+                // $("#page4 div h1").text($("#pi" + args.pid + " a h2").text());
+            });
+
+            // 跳转到项目选择页面
+            $.mobile.paramsHandler.addPage("productDialog", ["pid"], [], function (args) {
+                //数组回写到页面
+                for (var i = 0; i < project_list.length; i++) {
+                    if (project_list[i][0] == args.pid) {
+                        $("#inputCategory2").val(project_list[i][1]);
+                        $("#inputCategory2").trigger("change");
+                        $("#inputProject2").val(project_list[i][0]);
+                        if (page4Init)
+                            $("#inputProject2").selectmenu("refresh");
+                    }
+                }
+
+                page4Init = true;
+                // $("#page4 div h1").text($("#pi" + args.pid + " a h2").text());
+            });
+
+            // 跳转到付款选择页面
+            $.mobile.paramsHandler.addPage("paymentDialog", ["pid"], [], function (args) {
+                //数组回写到页面
+                for (var i = 0; i < payment_list.length; i++) {
+                    if (payment_list[i][0] == args.pid) {
+                        // 根据分类初始化项目列表
+
+                        $("#inputPayType").val(payment_list[i][1]);
+                        $("#inputPayCard").val(payment_list[i][3]);
+                        $("#inputPayPayment").val(payment_list[i][2]);
+
+                        $("#inputPayType").selectmenu("refresh");
+                        $("#inputPayCard").selectmenu("refresh");
+
+                        if (payment_list[i][1] != '4') {
+                            $("#divPayCard").hide();
+                        } else {
+                            $("#divPayCard").show();
+                        }
+                    }
+                }
+
+            });
+
+            $.mobile.paramsHandler.init();
+        });
+
+        function CategoryChange() {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                async: false,
+                data: { hostId: userObject.host, Category: $("#inputCategory").val(), ExtCategory: $("#inputExtCategory").val() },
+                url: serverUrl + "/Project/AppList",
+                success: function (data) {
+                    $("#inputProject").empty();
+                    var option = "<option value=\"\">请选择...</option>";
+                    $("#inputProject").append(option);
+
+                    $(data).each(function (i) {
+                        var option = "<option value=\"" + data[i].id + "\" data-unit=\"" + data[i].unit + "\" data-entity=\"" + data[i].entity + "\">" + data[i].name + "</option>";
+                        $("#inputProject").append(option);
+                    });
+                    $("#inputProject").selectmenu("refresh");
+                },
+                error: function (request, error) {
+                    // This callback function will trigger on unsuccessful action
+                    showNetErrMsg();
+                }
+            });
+        }
+
+
+        $("#btn_add_payment").click(function () {
+            // 检查相同项目
+            try {
+                var type = $("#inputPayType").val();
+                var typev = $("#inputPayType option:selected").text();
+                var payVal = $("#inputPayPayment").val();
+                var cardid = $("#inputPayCard").val();
+                var cardVal = $("#inputPayCard option:selected").attr("data-amt");
+                var cardName = $("#inputPayCard option:selected").text();
+
+                // 数据审查
+                if (payVal == "") {
+                    alert("请添加付款金额.");
+                    return false;
+                }
+
+                if (parseInt(payVal) > parseFloat(cardVal)) {
+                    alert("卡内余额不足.");
+                    return false;
+                }
+
+                var nohas = true;
+                for (var i = 0; i < payment_list.length; i++) {
+                    // 已含 修改数据
+                    if (payment_list[i][1] == type) {
+                        if (type != "4") {
+                            payment_list[i][2] = payVal;
+                            nohas = false;
+                        } else if (payment_list[i][3] == cardid) {
+                            nohas = false;
+                            payment_list[i][2] = payVal;
+
+                            $("#pi" + type + cardVal + " a h2").html(cardName + ":" + payVal);
+                        }
+                    }
+                }
+
+                // 添加到数组
+                if (nohas) {
+                    var plt = [payment_list.length, type, payVal, cardid];
+                    payment_list.push(plt);
+                    if (type == "4") {
+                        $(page_main_list).append('<li id="pi' + type + cardVal + '"><a href="#paymentDialog?&pid=' + plt[0] + '"><h2>' + cardName + ":" + payVal + '</h2><p></p></a></li>');
+                    } else {
+                        $(page_main_list).append('<li id="pi' + type + cardVal + '"><a href="#paymentDialog?&pid=' + plt[0] + '"><h2>' + typev + ":" + payVal + '</h2><p></p></a></li>');
+                    }
+                    $(page_main_list).listview('refresh');
+                }
+                // 清理选择
+                $("#inputPayType").val("");
+                $("#inputPayType").selectmenu("refresh");
+                $("#inputPayCard").val("");
+                $("#inputPayCard").selectmenu("refresh");
+                $("#inputPayPayment").val("");
+
+                $.mobile.changePage(page_main, { transition: "slide" });
+                return false;
+
+            } catch (e) {
+                $.mobile.toast({
+                    message: "操作失败，稍后再试!",
+                    position: "top"
+                });
+            }
+        });
+
+        //var route = 1;  // 0:储值卡 1: 疗程卡 2: 单次卡 3: 留客卡 4: 综合限时卡 5:综合限次卡 6:拓客增值卡 7:拓客优惠卡
+        var project_list = new Array();
+        var tmpl_list = new Array();
+        // 多种付款方式
+        var payment_list = new Array();
+
+        var page3Init = false;
+        var page4Init = false;
+
+        var page_main = "";
+        var page_main_list = "";
+    </script>
+
+</body>
+</html>
+<!--
+    总结： [ 1疗程卡 2单次卡 3留客卡 7拓客优惠卡 ] 结构相同  都是购买项目*次数
+           6拓客增值卡 暂时不用
+
+-->

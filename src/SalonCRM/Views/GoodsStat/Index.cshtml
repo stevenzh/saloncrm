@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "货品消耗统计";
+}
+@model SalonCRM.Models.GoodsQModel
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<div class="main-content">
+    @using (Html.BeginForm("Index", "GoodsStat", FormMethod.Post))
+    {
+        <table class="">
+            <tr style="height: 45px;">
+                <td style="padding-right: 4px">门店</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.BranchID,
+                     settings =>
+                     {
+                         settings.Name = "BranchId";
+                         settings.Width = 180;
+                         settings.Properties.TextField = "Text";
+                         settings.Properties.ValueField = "Value";
+                         settings.Properties.ValueType = typeof(Int32);
+                     }).BindList(ViewBag.OrganId).GetHtml()
+                </td>
+                @*<td style="padding-right: 4px">品牌</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.BrandCode,
+                     settings =>
+                     {
+                         settings.Name = "BrandCode";
+                         settings.Width = 180;
+                         settings.Properties.TextField = "Text";
+                         settings.Properties.ValueField = "Value";
+                         settings.Properties.ValueType = typeof(string);
+                     }).BindList(ViewBag.BrandList).GetHtml()
+                </td>*@
+                <td style="padding-right: 4px">类别</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.Category,
+                     settings =>
+                     {
+                         settings.Name = "Category";
+                         settings.Width = 180;
+                         settings.Properties.TextField = "Text";
+                         settings.Properties.ValueField = "Value";
+                         settings.Properties.ValueType = typeof(string);
+                     }).BindList(ViewBag.CategoryList).GetHtml()
+                </td>
+                <td style="padding-right: 4px">名称</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.GoodsName).GetHtml()
+                </td>
+                <td style="padding-right: 4px">起始日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.StartDate, settings =>
+               {
+                   settings.Width = 100;
+               }).GetHtml()
+                </td>
+                <td style="padding-right: 4px">起始日期</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().DateEditFor(m => m.EndDate, settings =>
+               {
+                   settings.Width = 100;
+               }).GetHtml()
+                </td>
+                <td style="padding-right: 4px">
+                    <input type="submit" class="btn btn-default" value="统计" />
+                    @*<dx:ASPxButton ID="btnXlsExport" runat="server" Text="导出Excel" UseSubmitBehavior="False" OnClick="btnXlsExport_Click" />*@
+                </td>
+            </tr>
+        </table>
+    }
+    <br />
+    @Html.Partial("PageList", Model.GoodsList)
+</div>

@@ -1,0 +1,8 @@
+﻿.portrait label.error, .landscape label.error { color: red; font-size: 16px; font-weight: normal; line-height: 1.4; margin-top: 0.5em; width: 100%; float: none; }
+.landscape label.error { display: inline-block; margin-left: 22%; }
+.portrait label.error { margin-left: 0; display: block; }
+em { color: red; font-weight: bold; padding-right: .25em; }
+.success { background-color: #DFF0D8; border-color: #D6E9C6; padding: 1em; border: 1px solid transparent; border-radius: 4px; }
+.warning { background-color: #F2DEDE; border-color: #EBCCD1; padding: 1em; border: 1px solid transparent; border-radius: 4px; }
+.success img, .warning img { float: left; padding-right: .45em; }
+.success h3, .warning h3 { line-height: 2em; }

@@ -1,0 +1,134 @@
+﻿@model SalonCRM.Models.Project
+@{
+    ViewBag.Title = "编辑项目";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+
+<script type="text/javascript">
+    function OnSelectedCountryChanged() {
+        gvSplit.GetEditor("Goods.Name").PerformCallback();
+    }
+    function CityComboBox_BeginCallback(s, e) {
+        e.customArgs["Category"] = gvSplit.GetEditor("Goods.Category").GetValue();
+    }
+</script>
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li><a href="/project/Index">项目列表</a> </li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+</div>
+<div class="main-content">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ProjectID)
+        @Html.ValidationSummary("", new { @class = "text-error" })
+        <div class="form-horizontal">
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.Code, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Code, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Code)
+                </div>
+            </div>*@
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Brand, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.Brand, (SelectList)ViewBag.BrandList, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Category, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.Category, (SelectList)ViewBag.CategoryList, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ExtCategory, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.ExtCategory, (SelectList)ViewBag.ExtCategoryList, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.IsEntity, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DevExpress().RadioButtonListFor(m => m.IsEntity, settings =>
+               {
+                   settings.Name = "IsEntity";
+                   settings.Width = 180;
+                   settings.Properties.Items.Add("是", 1);
+                   settings.Properties.Items.Add("否", 0);
+                   settings.Properties.RepeatDirection = System.Web.UI.WebControls.RepeatDirection.Horizontal;
+                   settings.Properties.ValueType = typeof(Int32);
+               }).GetHtml()
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Status, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.Status, (SelectList)ViewBag.StatusList, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.MinUnit, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.MinUnit, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.HandicraftFee, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.HandicraftFee, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.LowHandicraftFee, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.LowHandicraftFee, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="保存" class="btn btn-default" />
+                </div>
+            </div>
+
+
+        </div>
+    }
+    <div class="row">
+        <div class="col-md-2 control-label">使用货品</div>
+        <div class="col-md-10">
+            @Html.Partial("GoodsList", Model.ProjectGoods)
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

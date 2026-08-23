@@ -1,0 +1,72 @@
+﻿@using System.Web.UI.WebControls;
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "GoodsStat",
+            Action = "GoodsList",
+            BranchID = ViewData["BranchID"],
+            WorkerName = ViewData["GoodsName"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            BrandCode = ViewData["BrandCode"],
+            Category = ViewData["Category"]
+        };
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+        settings.KeyFieldName = "GoodsID";
+
+        //settings.Columns.Add("GoodsID", "ID");
+        settings.Columns.Add("Name", "货品名称");
+        settings.Columns.Add("CategoryText", "货品类型");
+        settings.Columns.Add("Quantity", "数量");
+        settings.Columns.Add("Unit", "计量单位");
+
+
+        settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+        settings.SettingsDetail.ShowDetailRow = true;
+        settings.SetDetailRowTemplateContent(c =>
+        {
+            //ViewContext.Writer.Write(
+            //    "Contact Phone: <b>" +
+            //        DataBinder.Eval(c.DataItem, "Phone") + "</b>, Fax: <b>" +
+            //            DataBinder.Eval(c.DataItem, "Fax") + "</b>" +
+            //    "<br />" +
+            //    "<br />"
+            //);
+            string type = Convert.ToString(DataBinder.Eval(c.DataItem, "Category"));
+            //if (type != "C04")
+            //{
+            Html.RenderAction("ProjectList", new
+            {
+                GoodsID = DataBinder.Eval(c.DataItem, "GoodsID"),
+                StartDate = ViewData["StartDate"],
+                EndDate = ViewData["EndDate"],
+            });
+            //}
+        });
+
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = "操作";
+        //    column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+        //    {
+        //        ViewContext.Writer.Write(Html.ActionLink("详细", "Details", "GoodsStat", new
+        //        {
+        //            ID = DataBinder.Eval(c.DataItem, "GoodsID"),
+        //            StartDate = ViewData["StartDate"],
+        //            EndDate = ViewData["EndDate"],
+        //            BranchID = ViewData["BranchID"]
+        //        }, new { target = "_self" }).ToHtmlString());
+        //    });
+        //});
+
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+    }).Bind(Model).GetHtml()

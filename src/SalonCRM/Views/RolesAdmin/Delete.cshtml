@@ -1,0 +1,31 @@
+﻿@model SalonCRM.Models.ApplicationRole
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<h3>是否真的要删除角色? </h3>
+<p>删除角色前要移除应用该角色的用户.不会删除用户数据.</p>
+<div>
+    <h4>Role.</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

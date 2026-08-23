@@ -1,0 +1,176 @@
+﻿@model SalonCRM.Models.WorkerViewModel
+@{
+    ViewBag.Title = "添加员工";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<div class="header">
+    <h1>@ViewBag.Title.</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li><a href="/worker">员工列表</a> </li>
+        <li class="active">新建员工</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    @using (Html.BeginForm("Create", "Worker", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new { @class = "text-error" })
+        @Html.HiddenFor(m => m.Password)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+            </div>
+        </div>
+            @*
+                <div class="form-group">
+                     @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                     <div class="col-md-10">
+                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                     </div>
+                 </div>*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.UserCnName, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.UserCnName, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.MobileNumber, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MobileNumber)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.IsMajorOrgan, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.CheckBoxFor(m => m.IsMajorOrgan, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                </div>
+            </div>
+
+        if (User.IsInRole("超级管理员"))
+        {
+            <div class="form-group">
+                <label class="col-md-2 control-label">
+                    选择商户
+                </label>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.HostId, (SelectList)ViewBag.HostList, new { @class = "form-control" })
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.Hidden("HostId", SalonCRM.Web.GlobalContext.Current.UserHost.HostID)
+        }
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">
+                选择门店
+            </label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.OrganId, (SelectList)ViewBag.OrganList, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Type, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.Type, (List<SelectListItem>)ViewBag.Types, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Position, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Position, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Position)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Status, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.Status, (List<SelectListItem>)ViewBag.StatusList, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.JoinDate, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DevExpress().DateEditFor(m => m.JoinDate).GetHtml()
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ResignDate, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DevExpress().DateEditFor(m => m.ResignDate).GetHtml()
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">
+                设置角色
+            </label>
+            <div class="col-md-10">
+                @foreach (var item in (SelectList)ViewBag.RoleId)
+                {
+                    <input type="checkbox" name="selectedRoles" value="@item.Value" class="checkbox-inline" />
+                    @Html.Label(item.Value, new { @class = "control-label" })
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="添加" />
+            </div>
+        </div>
+    }
+
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript">
+    $().ready(function () {
+
+        $("#HostId").change(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: { hostId: $(this).val() },
+                url: "/Branch/AppList",
+                success: function (data) {
+                    $("#OrganId").empty();
+                    //var option = "<option value=\"\">请选择...</option>";
+                    //$("#OrganId").append(option);
+
+                    $(data).each(function (i) {
+                        var option = "<option value=\"" + data[i].Value + "\">" + data[i].Text + "</option>";
+                        $("#OrganId").append(option);
+                    });
+                }
+            });
+        });
+    });
+</script>

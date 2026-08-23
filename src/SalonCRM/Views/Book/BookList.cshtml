@@ -1,0 +1,97 @@
+﻿@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "Book",
+            Action = "BookList",
+            CardNo = ViewData["CardNo"],
+            BranchId = ViewData["BranchId"],
+            StartDate = ViewData["StartDate"],
+            EndDate = ViewData["EndDate"],
+            SalesId = ViewData["SalesId"],
+            MemberName = ViewData["MemberName"],
+            BeauticianId = ViewData["BeauticianId"],
+            Category = ViewData["Category"]
+        };
+
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+        settings.Columns.Add("BookID", "消耗ID");
+        settings.Columns.Add("Branch.Name", "门店名称");
+        settings.Columns.Add("StateValue", "状态");
+        settings.Columns.Add("Member.Name", "客户姓名");
+        settings.Columns.Add("Member.CardNo", "客户卡号");
+        settings.Columns.Add("Salesman.UserCnName", "美容顾问");
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "消耗项目";
+            column.Width = 200;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                var bps = DataBinder.Eval(c.DataItem, "BookProjects") as ICollection<SalonCRM.Models.BookProject>;
+                var bpsn = string.Join(",", bps.Select(tt => tt.Project.Name).ToArray());
+                ViewContext.Writer.Write(bpsn);
+            });
+        });
+
+        settings.Columns.Add("Amount", "消耗金额");
+        settings.Columns.Add(column =>
+        {
+            column.Width = 150;
+            column.FieldName = "CreatedDate";
+            column.Caption = "操作时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd HH:mm:ss";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "操作";
+            column.Width = 80;
+            column.SetDataItemTemplateContent(delegate (GridViewDataItemTemplateContainer c)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("打印", "Details", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "BookID")
+                }, new { target = "_self" }).ToHtmlString());
+
+                ViewContext.Writer.Write("&nbsp;");
+                ViewContext.Writer.Write(Html.ActionLink("编辑", "Edit", "Book", new
+                {
+                    Id = DataBinder.Eval(c.DataItem, "BookID")
+                }, new { target = "_self" }).ToHtmlString());
+
+            });
+        });
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+        settings.SettingsPager.PageSize = 20;
+
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "BookID");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Amount").DisplayFormat = "c";
+        settings.Settings.ShowFooter = true;
+
+        settings.HtmlRowPrepared = (sender, e) =>
+        {
+            try
+            {
+                if (e.RowType != GridViewRowType.Data) return;
+                string value = e.GetValue("State").ToString();
+                // 下单流程 0 下单 10 进行中  20 已结算 30 已取消
+
+                if (value == "10")
+                    e.Row.BackColor = System.Drawing.Color.PaleGreen;
+                else if (value == "30")
+                    e.Row.BackColor = System.Drawing.Color.Moccasin;
+                //else if (value == "休眠会员" || value == "沉睡会员")
+                //    e.Row.BackColor = System.Drawing.Color.LightBlue;
+                //else if (value == "流失会员")
+                //    e.Row.BackColor = System.Drawing.Color.DarkSalmon;
+            }
+            catch { }
+        };
+
+    }).Bind(Model).GetHtml()

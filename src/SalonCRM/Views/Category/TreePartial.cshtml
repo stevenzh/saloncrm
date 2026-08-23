@@ -1,0 +1,45 @@
+﻿@model IEnumerable<SalonCRM.Models.CategoryViewModel>
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+
+    var treeList = Html.DevExpress().TreeList(
+            settings =>
+            {
+                settings.Name = "treeList";
+                settings.CallbackRouteValues = new { Controller = "Category", Action = "TreePartial" };
+                settings.AutoGenerateColumns = false;
+                settings.SettingsEditing.Mode = TreeListEditMode.EditFormAndDisplayNode;
+                settings.KeyFieldName = "CategoryId";
+                settings.ParentFieldName = "ParentId";
+                settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+                settings.Columns.Add("Name", "名称");
+                settings.Columns.Add("Description", "说明");
+                settings.Columns.Add("Level","级别");
+                settings.Columns.Add("IsActive", "激活", MVCxTreeListColumnType.CheckBox);
+
+                settings.CommandColumn.Visible = true;
+                settings.CommandColumn.ShowNewButtonInHeader = true;
+                settings.CommandColumn.NewButton.Visible = true;
+                settings.CommandColumn.DeleteButton.Visible = true;
+                settings.CommandColumn.EditButton.Visible = true;
+
+                settings.SettingsEditing.AddNewNodeRouteValues = new { Controller = "Category", Action = "AddNewMenuPartial" };
+                settings.SettingsEditing.UpdateNodeRouteValues = new { Controller = "Category", Action = "UpdateMenuPartial" };
+                settings.SettingsEditing.DeleteNodeRouteValues = new { Controller = "Category", Action = "DeleteMenuPartial" };
+                settings.SettingsEditing.ConfirmDelete = true;
+
+                settings.Settings.ShowFooter = false;
+                settings.Settings.GridLines = System.Web.UI.WebControls.GridLines.Both;
+                settings.SettingsBehavior.AutoExpandAllNodes = true;
+                settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;
+
+            });
+    if (ViewData["EditNodeError"] != null)
+    {
+        treeList.SetEditErrorText((string)ViewData["EditNodeError"]);
+    }
+}
+@treeList.Bind(Model).GetHtml()

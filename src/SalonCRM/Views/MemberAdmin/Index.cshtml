@@ -1,0 +1,275 @@
+﻿@model SalonCRM.Models.MemberQModel
+@using SalonCRM.Identity
+@{
+    ViewBag.Title = "客户管理";
+    // 门店用户登录
+    CustomPrincipal cu = (CustomPrincipal)User;
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+    )
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+    )
+
+
+<script type="text/javascript">
+        function SelectionChanged(s, e) {
+            s.GetSelectedFieldValues("MemberID", GetSelectedFieldValuesCallback);
+        }
+        function GetSelectedFieldValuesCallback(values) {
+            $("#count").val(values);
+        }
+
+        function MemberBatchClean(bookids) {
+
+            if (confirm("确认清理数据") == true) {
+                $.ajax({
+                    url: '/MemberAdmin/BatchClean',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { records: bookids },
+                    success: function (data) {
+                        if (data.code == "1") {
+                            alert("清理成功");
+
+                            gvSorting.Refresh();
+                        }
+                    }
+                });
+            }
+        }
+</script>
+}
+
+<div class="header">
+    <h1 class="page-title">客户管理</h1>
+    <ul class="breadcrumb">
+        <li><a href="/home">首页</a> </li>
+        <li class="active">客户管理</li>
+    </ul>
+</div>
+<div>
+    <div class="alert-error">@ViewBag.Message</div>
+    @using (Html.BeginForm("ExportToPDF", "MemberAdmin", FormMethod.Post))
+    {
+        <input type="hidden" name="Name" value="@Model.Name" />
+        <input type="hidden" name="Type" value="@Model.Type" />
+        <input type="hidden" name="BranchId" value="@Model.BranchId" />
+        <div class="btn-toolbar list-toolbar">
+            <a class="btn btn-primary" href="/MemberAdmin/Create"><i class="fa fa-plus"></i> 添加客户</a>
+            <input class="btn btn-default" type="submit" value="导出" />
+            <div class="btn-group">
+            </div>
+        </div>
+    }
+    @using (Html.BeginForm("Index", "MemberAdmin", FormMethod.Post))
+    {
+        <table class="">
+            <tr style="height:40px;">
+                <td style="padding-right: 4px">门店</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "2")
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.BranchId,
+                             settings =>
+                             {
+                                 settings.Name = "BranchId";
+                                 settings.Width = 150;
+                                 settings.Properties.TextField = "Text";
+                                 settings.Properties.ValueField = "Value";
+                                 settings.Properties.ValueType = typeof(Int32);
+                             }).BindList(ViewBag.OrganId).GetHtml();
+                    }
+                    else
+                    {
+                        @Html.DevExpress().TextBox(settings =>
+                          {
+                              settings.Name = "BranchName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserDepartment.Name;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.BranchId);
+                    }
+                </td>
+                <td style="padding-right: 4px">姓名</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.Name, settings => { settings.Name = "Name"; }).GetHtml()
+                </td>
+                <td style="padding-right: 4px">卡号</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.CardNo).GetHtml()
+                </td>
+                <td style="padding-right: 4px">客户手机</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().TextBoxFor(m => m.Mobile).GetHtml()
+                </td>
+            </tr>
+            <tr style="height:40px;">
+                <td style="padding-right: 4px">客户类型</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.Type,
+                      settings =>
+                      {
+                          settings.Name = "Type";
+                          settings.Width = 150;
+                          settings.Properties.TextField = "Text";
+                          settings.Properties.ValueField = "Value";
+                          settings.Properties.ValueType = typeof(string);
+                      }).BindList(ViewBag.MemberType).GetHtml()
+                </td>
+                <td style="padding-right: 4px">客户等级</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.Level,
+                      settings =>
+                      {
+                          settings.Name = "Level";
+                          settings.Width = 150;
+                          settings.Properties.TextField = "Text";
+                          settings.Properties.ValueField = "Value";
+                          settings.Properties.ValueType = typeof(string);
+                      }).BindList(ViewBag.MemberLevel).GetHtml()
+                </td>
+                <td style="padding-right: 4px">美容师</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "1")
+                    {
+                        @Html.DevExpress().TextBox(
+                         settings =>
+                          {
+                              settings.Name = "BeauticianName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserInfo.UserCnName;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.BeauticianId);
+                    }
+                    else
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.BeauticianId,
+                       settings =>
+                       {
+                           settings.Name = "BeauticianId";
+                           settings.Width = 150;
+                           settings.Properties.TextField = "Text";
+                           settings.Properties.ValueField = "Value";
+                           settings.Properties.ValueType = typeof(string);
+                       }).BindList(ViewBag.Beautician).GetHtml()
+                    }
+                </td>
+                <td style="padding-right: 4px">美容顾问</td>
+                <td style="padding-right: 4px">
+                    @if (cu.Type == "3")
+                    {
+                        @Html.DevExpress().TextBox(
+                         settings =>
+                          {
+                              settings.Name = "SalesmanName";
+                              settings.ReadOnly = true;
+                              settings.Text = SalonCRM.Web.GlobalContext.Current.UserInfo.UserCnName;
+                          }).GetHtml()
+                        @Html.HiddenFor(m => m.SalesmanId);
+                    }
+                    else
+                    {
+                        @Html.DevExpress().ComboBoxFor(m => m.SalesmanId,
+                       settings =>
+                       {
+                           settings.Name = "SalesmanId";
+                           settings.Width = 150;
+                           settings.Properties.TextField = "Text";
+                           settings.Properties.ValueField = "Value";
+                           settings.Properties.ValueType = typeof(string);
+                       }).BindList(ViewBag.Salesman).GetHtml()
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-right: 4px">客户状态</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.Status,
+                      settings =>
+                      {
+                          settings.Name = "Status";
+                          settings.Width = 150;
+                          settings.Properties.TextField = "Text";
+                          settings.Properties.ValueField = "Value";
+                          settings.Properties.ValueType = typeof(string);
+                      }).BindList(ViewBag.MemberStatus).GetHtml()
+                </td>
+                <td style="padding-right: 4px">新老客户</td>
+                <td style="padding-right: 4px">
+                    @Html.DevExpress().ComboBoxFor(m => m.IsNew,
+                      settings =>
+                      {
+                          settings.Name = "IsNew";
+                          settings.Width = 150;
+                          settings.Properties.TextField = "Text";
+                          settings.Properties.ValueField = "Value";
+                          settings.Properties.ValueType = typeof(Int32);
+                      }).BindList(ViewBag.NewList).GetHtml()
+                </td>
+                <td colspan="3"></td>
+                <td style="padding-right: 4px">
+                    <input type="submit" class="btn btn-default" value="查询" />
+                </td>
+            </tr>
+        </table>
+    }
+    <br />
+    @Html.Partial("MemberList", Model.MemberList)
+
+    @if (User.IsInRole("管理员"))
+    {
+        <div class="box-footer">
+            <form action="#">
+                <div class="input-group">
+                    <input id="count" name="message" placeholder="选择客户记录" readonly="readonly" class="form-control" type="text">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-warning btn-flat" onclick="MemberBatchClean($('#count').val());">批量清理</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    }
+    <br />
+    @using (Html.BeginForm("XlsImport", "MemberAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <table class="">
+            <tr>
+                <td style="padding-right: 4px">
+                    <a href="~/UploadFiles/客户导入模板.xls">客户导入模板下载</a>
+                </td>
+                <td style="padding-right: 4px">
+                    <a href="~/UploadFiles/客户卡项导入模板.xls">客户卡项导入模板</a>
+                </td>
+             
+                <td>
+                    Excel文件：
+                </td>
+                <td style="padding-right: 4px">
+                    <input type="file" name="postedFile" />
+                </td>
+                <td>
+                    <select name="Type">
+                        <option value="ImportCheck" selected="selected">数据检验</option>
+                        <option value="Import">导入</option>
+                        <option value="AppendCheck">补充数据检验</option>
+                        <option value="Append">数据扩充</option>
+                    </select>
+                </td>
+                <td style="padding-right: 4px">
+                    <input id="ButtonUpload" type="submit" value="导入到数据库" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>

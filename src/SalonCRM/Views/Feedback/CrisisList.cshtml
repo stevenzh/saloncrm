@@ -1,0 +1,170 @@
+﻿@using System.Web.UI.WebControls;
+@using SalonCRM.Models;
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+    ApplicationDbContext dbcontent = new ApplicationDbContext();
+    int hostId = SalonCRM.Web.GlobalContext.Current.UserHost.HostID;
+}
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "gvSorting";
+        settings.KeyFieldName = "MemberId";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "Feedback",
+            Action = "CrisisList",
+            Name = ViewData["Name"],
+            BranchId = ViewData["BranchId"],
+            CardNo = ViewData["CardNo"],
+            Mobile = ViewData["Mobile"],
+            FeedbackDate = ViewData["FeedbackDate"],
+            Purpose = ViewData["Purpose"],
+            SalesmanId = ViewData["SalesmanId"],
+            BeauticianId = ViewData["BeauticianId"]
+        };
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 20;
+        settings.SettingsEditing.UpdateRowRouteValues = new
+        {
+            Controller = "Feedback",
+            Action = "EditModesUpdatePartial",
+            Name1 = ViewData["Name"],
+            BranchId1 = ViewData["BranchId"],
+            CardNo1 = ViewData["CardNo"],
+            Mobile1 = ViewData["Mobile"],
+            FeedbackDate1 = ViewData["FeedbackDate"],
+            Purpose1 = ViewData["Purpose"]
+        };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = 40;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "门店名称";
+            column.FieldName = "BranchName";
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+            column.Width = 150;
+        });
+        settings.Columns.Add("CardNo", "卡号").EditFormSettings.Visible = DefaultBoolean.False;
+        //settings.Columns.Add("MemberName", "姓名").EditFormSettings.Visible = DefaultBoolean.False;
+        var clumn = settings.Columns.Add("MemberId", "姓名", MVCxGridViewColumnType.HyperLink);
+        var hyperLinkProperties = clumn.PropertiesEdit as HyperLinkProperties;
+        hyperLinkProperties.NavigateUrlFormatString = "~/MemberAdmin/Details/{0}";
+        hyperLinkProperties.TextFormatString = "{0}";
+        hyperLinkProperties.TextField = "MemberName";
+        clumn.CellStyle.HorizontalAlign = HorizontalAlign.Left;
+        clumn.EditFormSettings.Visible = DefaultBoolean.False;
+
+        settings.Columns.Add("MobileNumber", "电话").EditFormSettings.Visible = DefaultBoolean.False;
+        settings.Columns.Add("Status").Visible = false;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "类别";
+            column.FieldName = "StatusValue";
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+            column.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+            column.SortIndex = 2;
+        });
+        settings.Columns.Add("LevelValue", "级别").EditFormSettings.Visible = DefaultBoolean.False;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "FeedbackDate";
+            column.Caption = "最后回访时间";
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd HH:mm:ss";
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+            column.Width = 135;
+        });
+        settings.Columns.Add("Result", "最后回访结果").EditFormSettings.Visible = DefaultBoolean.False;
+        settings.Columns.Add(column =>
+        {
+            column.Caption = "下次访问目的";
+            column.FieldName = "Purpose";
+            // column.Width = 80;
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.DataSource = dbcontent.Dictionaries.Where(t => t.Identifier == "FeedbackType" && t.HostId == hostId).ToList();
+            comboBoxProperties.TextField = "Contents";
+            comboBoxProperties.ValueField = "KeyValue";
+            comboBoxProperties.ValueType = typeof(string);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "NextDate";
+            column.Caption = "下次访问时间";
+            column.Width = 80;
+            column.PropertiesEdit.DisplayFormatString = "yyyy-MM-dd";
+            column.SortOrder = DevExpress.Data.ColumnSortOrder.Descending;
+            column.SortIndex = 1;
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;
+        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.Caption = "操作";
+        //    column.Width = 60;
+        //    column.SetDataItemTemplateContent(delegate(GridViewDataItemTemplateContainer c)
+        //    {
+        //        ViewContext.Writer.Write(Html.ActionLink("客户详细", "Details", "MemberAdmin", new
+        //        {
+        //            Id = DataBinder.Eval(c.DataItem, "MemberID")
+        //        }, new { target = "_self" }).ToHtmlString());
+        //    });
+        //});
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.ShowFilterRow = true;
+        //settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsPopup.HeaderFilter.Height = 200;
+
+        //settings.HeaderFilterFillItems = (sender, e) =>
+        //{
+        //    ASPxGridView grid = (ASPxGridView)sender;
+        //    if (e.Column.FieldName == "Amt")
+        //    {
+        //        e.Values.Clear();
+        //        if (e.Column.Settings.HeaderFilterMode == HeaderFilterMode.List)
+        //            e.AddShowAll();
+        //        e.AddValue("欠款", string.Empty, "[Amt] < 0");
+        //    }
+        //};
+
+        settings.HtmlRowPrepared = (sender, e) =>
+        {
+            try
+            {
+                if (e.RowType != GridViewRowType.Data) return;
+                string value = e.GetValue("StatusValue").ToString();
+
+                if (value == "有效会员" || value == "准有效会员")
+                    e.Row.BackColor = System.Drawing.Color.PaleGreen;
+                else if (value == "休眠会员" || value == "沉睡会员")
+                    e.Row.BackColor = System.Drawing.Color.Moccasin;
+                else if (value == "流失会员")
+                    e.Row.BackColor = System.Drawing.Color.DarkSalmon;
+            }
+            catch { }
+        };
+
+        settings.CustomColumnSort = (sender, e) =>
+        {
+            if (e.Column.FieldName == "StatusValue")
+            {
+                e.Result = String.Compare(e.GetRow1Value("Status").ToString(), e.GetRow2Value("Status").ToString());
+                e.Handled = true;
+            }
+        };
+
+        //settings.CellEditorInitialize = (sender, e) =>
+        //{
+        //    if (e.Column.ReadOnly)
+        //        e.Editor.ClientEnabled = false;
+        //};
+        //settings.PreRender = (sender, e) =>
+        //{
+        //    ((MVCxGridView)sender).StartEdit(0);
+        //};
+    }).Bind(Model).GetHtml()

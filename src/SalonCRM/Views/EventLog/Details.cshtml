@@ -1,0 +1,43 @@
+﻿@model SalonCRM.Models.EventLogQModel
+@{
+    ViewBag.Title = "操作详细";
+}
+@section AdditionalResources {
+    @Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+)
+    @Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
+    new Script { ExtensionSuite = ExtensionSuite.TreeList }
+)
+}
+<h1 class="text-center"> @ViewBag.Title</h1>
+
+<div class="main-content">
+    @Html.Partial("CardList", Model.CardList)
+    <br />
+    @Html.Partial("RecordList", Model.RecordList)
+</div>
+@if (Model.EventLog.TypeId == 8 || Model.EventLog.TypeId == 9)
+{
+    using (Html.BeginForm("Delete", "EventLog", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.HiddenFor(m => m.EventLog.LogId)
+        <button type="submit">删除</button>
+    }
+}
+<p>
+    @Html.ActionLink("返回客户列表", "Index", "MemberAdmin")
+</p>
+<script type="text/javascript">
+    $(function () {
+
+    });
+</script>
