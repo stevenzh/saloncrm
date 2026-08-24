@@ -22,6 +22,7 @@
 # 克隆仓库
 git clone https://github.com/stevenzh/saloncrm.git
 cd saloncrm
+```
 
 # 安装依赖
 启动 Microsoft Visual Studio 打开项目文件 src/SalonCRM.sln
